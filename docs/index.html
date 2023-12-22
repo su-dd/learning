@@ -15,7 +15,7 @@
   <script>
     window.$docsify = {
       el: '#app',
-      name: '学习笔记', // 导航栏标题
+      name: 'Learning', // 导航栏标题
       repo: 'https://github.com/su-dd/learning/',
       search: {
         maxAge: 86400000, // 过期时间，单位毫秒，默认一天
@@ -39,6 +39,59 @@
       // loadNavbar: true, // 导航栏
       // logo: '/_media/logo.png', // 导航栏logo
       // navbar: '#FFFFFF', // 导航栏背景色
+      plugins: [
+        function (hook, vm) {
+          var footer = [
+            '<hr/>',
+            '<footer>',
+            '<span><a href="https://github.com/su-dd">su-dd</a> &copy;2023.</span>',
+            '<span>Proudly published with <a href="https://github.com/su-dd/learning" target="_blank">Learning</a>.</span>',
+            '</footer>'
+          ].join('');
+
+          hook.init(function () {
+            // 初始化完成后调用，只调用一次，没有参数。
+          });
+
+          hook.beforeEach(function (content) {
+            // 每次开始解析 Markdown 内容时调用
+            // ...
+            var url =
+              'https://github.com/su-dd/learning/master/docs/' +
+              vm.route.file;
+            var editHtml = '[📝 编辑文档](' + url + ')\n';
+            return (
+              editHtml +
+              content +
+              '\n----\n' +
+              'Last modified {docsify-updated} ' +
+              editHtml
+            );
+            // return content;
+          });
+
+          hook.afterEach(function (html, next) {
+            // 解析成 html 后调用。
+            // beforeEach 和 afterEach 支持处理异步逻辑
+            // ...
+            // 异步处理完成后调用 next(html) 返回结果
+            next(html + footer);
+          });
+
+          hook.doneEach(function () {
+            // 每次路由切换时数据全部加载完成后调用，没有参数。
+            // ...
+          });
+
+          hook.mounted(function () {
+            // 初始化并第一次加载完成数据后调用，只触发一次，没有参数。
+          });
+
+          hook.ready(function () {
+            // 初始化并第一次加载完成数据后调用，没有参数。
+          });
+        }
+      ]
     }
   </script>
   <!-- Docsify v4 -->
@@ -47,7 +100,9 @@
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>s
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c++.min.js"></script>
 </body>
 
 </html>
