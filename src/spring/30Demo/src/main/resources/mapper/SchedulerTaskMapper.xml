@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.demo30.mapper.SchedulerTaskMapper">
+    <insert id="add" parameterType="com.spring.demo30.pojo.Task">
+        insert into schedule_task(`name`, `desc`, `expr`, `status`, `runnableId`, `params`)
+        values (#{name}, #{desc}, #{expr}, #{status}, #{runnableId}, #{params})
+    </insert>
+    <update id="update" parameterType="com.spring.demo30.pojo.Task">
+        update schedule_task
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="desc != null">
+                `desc` = #{desc},
+            </if>
+            <if test="expr != null">
+                `expr` = #{expr},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="runnableId != null">
+                `runnableId` = #{runnableId},
+            </if>
+            <if test="params != null">
+                `params` = #{params},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        delete from schedule_task where id = #{id};
+    </delete>
+    <select id="findAll" resultType="com.spring.demo30.pojo.Task">
+        select * from schedule_task
+    </select>
+    <select id="findById" parameterType="Long" resultType="com.spring.demo30.pojo.Task">
+        select * from schedule_task where id = #{id};
+    </select>
+</mapper>

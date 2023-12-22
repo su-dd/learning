@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.demo30.mapper.TaskRunnableMapper">
+    <select id="findAll" resultType="com.spring.demo30.pojo.TaskRunnable">
+        select * from runnable
+    </select>
+    <select id="findById" parameterType="Long" resultType="com.spring.demo30.pojo.TaskRunnable">
+        select * from runnable where id = #{id};
+    </select>
+</mapper>
