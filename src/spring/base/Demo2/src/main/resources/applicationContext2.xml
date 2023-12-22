@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="appliactionContext-Student.xml"/>
+
+    <bean id="school" class="com.study.injection.School">
+        <property name="name" value="希望小学"/>
+        <property name="studentNames">
+            <list>
+                <value>小红</value>
+                <value>小明</value>
+                <value>小芳</value>
+                <value>小王</value>
+            </list>
+        </property>
+        <property name="mathClass">
+            <list>
+                <bean id="studentXiaoWang" class="com.study.injection.Student" p:name="小王" p:age="17" p:information-ref="information112"/>
+                <ref bean="studentXiaoMing"/>
+            </list>
+        </property>
+        <property name="studentMap">
+            <map>
+                <entry key="小明" value-ref="studentXiaoMing"/>
+                <entry key="小红" value-ref="studentXiaoHong"/>
+                <entry key="小芳" value-ref="studentXiaoFang"/>
+                <!-- 小王无法引用，因为不在一个作用域不可见 -->
+                <!--<entry key="小王" value-ref="studentXiaoWang"/>-->
+            </map>
+        </property>
+        <property name="classTeacher">
+            <props>
+                <prop key="math">大王</prop>
+                <prop key="chinese">大明</prop>
+                <prop key="english">大芳</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

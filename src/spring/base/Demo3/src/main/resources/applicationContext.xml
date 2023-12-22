@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--  目标类  -->
+    <bean id="student" class="com.study.aop.Student"/>
+    <!--  切面类  -->
+    <bean id="studentAspect" class="com.study.aop.StudentAspect"/>
+
+    <aop:config>
+        <aop:aspect ref="studentAspect">
+            <aop:before method="before" pointcut="execution(void com.study.aop.Student.study(..))"/>
+            <aop:after-returning method="after" pointcut="execution( * com.study.aop.Student.study(String,String)) and args(course, teacher)"/>
+<!--            <aop:around method="around" pointcut="execution( * com.study.aop.Student.study(..))"/>-->
+            <aop:after-throwing method="throwing" pointcut="execution( * com.study.aop.Student.study(..))"/>
+            <aop:after method="afterAll" pointcut="execution( * com.study.aop.Student.study(..))"/>
+            <aop:declare-parents
+                    types-matching="com.study.aop.Student"
+                    implement-interface="com.study.aop.imp.People"
+                    delegate-ref="studentAspect"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

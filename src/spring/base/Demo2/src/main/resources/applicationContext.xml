@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--  instantiation 实例化  -->
+    <!--  无参构造  -->
+    <bean id="school" class="com.study.instantiation.School" scope="singleton" init-method="initValue" destroy-method="destroyValue"></bean>
+    <bean id="student" class="com.study.instantiation.Student" scope="prototype" init-method="initValue" destroy-method="destroyValue"></bean>
+    <!--  静态工厂方法  -->
+    <bean id="staticFactorySchool" class="com.study.instantiation.StaticFactoryBean" factory-method="createSchool"/>
+    <bean id="staticFactoryStudent" class="com.study.instantiation.StaticFactoryBean" factory-method="createStudent"/>
+    <!--  工厂实例方法  -->
+    <bean id="dynamicFactoryBean" class="com.study.instantiation.DynamicFactoryBean"/>
+    <bean id="dynamicFactorySchool" factory-bean="dynamicFactoryBean" factory-method="createSchool"/>
+    <bean id="dynamicFactoryStudent" factory-bean="dynamicFactoryBean" factory-method="createStudent"/>
+</beans>

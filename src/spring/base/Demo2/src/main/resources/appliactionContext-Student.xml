@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--  通过构造方法注入  -->
+    <!--  需要存在对应构造函数  -->
+    <bean id="information110" class="com.study.injection.Information">
+        <constructor-arg name="phoneNum" value="110"/>
+    </bean>
+    <bean id="information112" class="com.study.injection.Information">
+        <constructor-arg name="phoneNum" value="112"/>
+    </bean>
+
+    <bean id="studentXiaoMing" class="com.study.injection.Student">
+        <constructor-arg name="name" value="小明"/>
+        <constructor-arg name="age" value="16"/>
+        <constructor-arg name="information" ref="information112"/>
+    </bean>
+
+    <!--  通过Set方法注入  -->
+    <!--  需要无参构造  -->
+    <bean id="studentXiaoHong" class="com.study.injection.Student">
+        <property name="name" value="小红"/>
+        <property name="age" value="15"/>
+        <property name="information" ref="information110"/>
+    </bean>
+
+    <!--  P命名空间  -->
+    <bean id="studentXiaoFang" class="com.study.injection.Student" p:name="小芳" p:age="15" p:information-ref="information110"/>
+
+</beans>
