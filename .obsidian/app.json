@@ -1,0 +1,9 @@
+{
+  "strictLineBreaks": true,
+  "showLineNumber": false,
+  "alwaysUpdateLinks": true,
+  "newFileLocation": "current",
+  "attachmentFolderPath": "./attachments",
+  "showUnsupportedFiles": true,
+  "newLinkFormat": "relative"
+}

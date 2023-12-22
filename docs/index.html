@@ -57,15 +57,13 @@
             // 每次开始解析 Markdown 内容时调用
             // ...
             var url =
-              'https://github.com/su-dd/learning/master/docs/' +
+              'https://github.com/su-dd/learning/blob/master/docs/' +
               vm.route.file;
             var editHtml = '[📝 编辑文档](' + url + ')\n';
             return (
-              editHtml +
+              editHtml + '\n' +
               content +
-              '\n----\n' +
-              'Last modified {docsify-updated} ' +
-              editHtml
+              '\n\n----\n' + editHtml
             );
             // return content;
           });
