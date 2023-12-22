@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/java/spring/spring_base/2.Spring_Xml配置.md",
+                "file": "docs/java/spring/spring_topic/10.spring_restful注解.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/java/spring/spring_base/2.Spring_Xml配置.md",
+                "file": "docs/java/spring/spring_topic/10.spring_restful注解.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/java/spring/spring_base/2.Spring_Xml配置.md",
+                "file": "docs/java/spring/spring_topic/10.spring_restful注解.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/java/spring/spring_base/2.Spring_Xml配置.md"
+                "file": "docs/java/spring/spring_topic/10.spring_restful注解.md"
               }
             }
           },
@@ -145,8 +145,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 333.5,
-    "collapsed": true
+    "width": 333.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -160,6 +159,17 @@
   },
   "active": "757926462477814d",
   "lastOpenFiles": [
+    "docs/java/spring/spring_topic/50.SpringAPI文档knife4j.md",
+    "docs/java/spring/spring_topic/40.Spring注册失败.md",
+    "docs/java/spring/spring_topic/30.Spring动态定时任务.md",
+    "docs/java/spring/spring_topic/20.Spring定时任务.md",
+    "docs/java/spring/spring_topic/10.spring_restful注解.md",
+    "docs/java/spring/spring_base/6.Spring_AOP的注解实现.md",
+    "docs/java/spring/spring_base/5.Spring_IOC的注解实现.md",
+    "docs/java/spring/spring_base/4.Spring_AOP的XML实现.md",
+    "docs/java/spring/spring_base/3.Spring_IOC的XML实现.md",
+    "docs/java/spring/spring_base/2.Spring_Xml配置.md",
+    "docs/java/spring/spring_base/1.Spring初识.md",
     "src/spring/topic/30Demo/src/main/java/com/spring/demo30/service/impl/TaskSchedulerServiceImpl.java",
     "src/spring/topic/30Demo/src/main/java/com/spring/demo30/runnable/impl/MyRunnable2.java",
     "src/spring/topic/30Demo/src/main/java/com/spring/demo30/runnable/impl/MyRunnable1.java",
@@ -170,29 +180,17 @@
     "src/spring/topic/30Demo/src/main/java/com/spring/demo30/pojo/TaskRunnable.java",
     "src/spring/topic/30Demo/src/main/java/com/spring/demo30/pojo/TaskDTO.java",
     "src/spring/topic/30Demo/src/main/java/com/spring/demo30/pojo/Task.java",
-    "src/spring/topic/30Demo/src/main/java/com/spring/demo30/mapper/TaskRunnableMapper.java",
-    "docs/java/spring/spring_base/1.Spring初识.md",
-    "docs/java/spring/spring_base/4.Spring_AOP的XML实现.md",
-    "docs/java/spring/spring_base/3.Spring_IOC的XML实现.md",
-    "docs/java/spring/spring_base/6.Spring_AOP的注解实现.md",
-    "docs/java/spring/spring_topic/40.Spring注册失败.md",
-    "docs/java/spring/spring_topic/50.SpringAPI文档knife4j.md",
     "docs/java/spring/spring_topic/attachments/20231223013839.png",
     "docs/java/spring/spring_topic/attachments/20231223013756.png",
     "docs/java/spring/spring_topic/attachments/20231223013645.png",
     "docs/java/spring/spring_topic/attachments/20231223013553.png",
     "docs/java/spring/spring_topic/attachments/20231223013509.png",
     "docs/README.md",
-    "docs/java/spring/spring_topic/30.Spring动态定时任务.md",
-    "docs/java/spring/spring_topic/20.Spring定时任务.md",
-    "docs/java/spring/spring_topic/10.spring_restful注解.md",
     "docs/java/spring/spring_topic/attachments/20231223013208.png",
     "docs/java/spring/spring_topic/attachments/20231223013114.png",
     "docs/java/spring/spring_base/attachments/20231223011613.png",
     "docs/java/spring/spring_base/attachments/20231223010201.png",
     "docs/java/spring/6.Spring_AOP的注解实现.md",
-    "docs/java/spring/spring_base/5.Spring_IOC的注解实现.md",
-    "docs/java/spring/spring_base/2.Spring_Xml配置.md",
     "docs/java/spring/50.SpringAPI文档knife4j.md",
     "docs/java/spring/40.Spring注册失败.md",
     "docs/java/spring/30.Spring动态定时任务.md",
