@@ -35,7 +35,6 @@
       // sidebarColor: '#000000', // 侧边栏背景色
       subMaxLevel: 2, // 侧边栏标题
       autoHeader: true, // 自动显示标题
-      auto2top: true,// 自动生成目录
       // loadNavbar: true, // 导航栏
       // logo: '/_media/logo.png', // 导航栏logo
       // navbar: '#FFFFFF', // 导航栏背景色
@@ -62,8 +61,7 @@
             var editHtml = '[📝 编辑文档](' + url + ')\n';
             return (
               editHtml + '\n' +
-              content +
-              '\n\n----\n' + editHtml
+              content
             );
             // return content;
           });
@@ -100,7 +98,8 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c++.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
 </body>
 
 </html>
