@@ -89,20 +89,22 @@
   - [实体、领域服务、应用服务](ddd/50.实体、领域服务、应用服务.md)
   - [基于Cola的初步实践](ddd/60.基于Cola的初步实践.md)
 **工具**
-  - [nvm](tool/nvm/1.NVM使用.md)
-  - Git
-    - [Git基础与命令](tool/git/10.Git基础与命令.md)
-    - [Git分支-分支原理](tool/git/20.Git分支-分支原理.md)
-    - [Git分支的新建与合并-分支操作](tool/git/30.Git分支的新建与合并-分支操作.md)
-    - [Git分支管理-查看分支](tool/git/40.Git分支管理-查看分支.md)
-    - [Git分支开发工作流](tool/git/50.Git分支开发工作流.md)
-    - [Git分支-远程分支](tool/git/60.Git分支-远程分支.md)
-    - [Git分支-变基](tool/git/70.Git分支-变基.md)
-    - [Git工具-查看修订版本](tool/git/80.Git工具-查看修订版本.md)
-    - [Git工具-交互式暂存](tool/git/90.Git工具-交互式暂存.md)
-    - [Git工具-重写历史](tool/git/100.Git工具-重写历史.md)
-    - [Git工具-重置揭密](tool/git/110.Git工具-重置揭密.md)
+- [nvm](tool/nvm/1.NVM使用.md)
+- Git
+  - [Git基础与命令](tool/git/10.Git基础与命令.md)
+  - [Git分支-分支原理](tool/git/20.Git分支-分支原理.md)
+  - [Git分支的新建与合并-分支操作](tool/git/30.Git分支的新建与合并-分支操作.md)
+  - [Git分支管理-查看分支](tool/git/40.Git分支管理-查看分支.md)
+  - [Git分支开发工作流](tool/git/50.Git分支开发工作流.md)
+  - [Git分支-远程分支](tool/git/60.Git分支-远程分支.md)
+  - [Git分支-变基](tool/git/70.Git分支-变基.md)
+  - [Git工具-查看修订版本](tool/git/80.Git工具-查看修订版本.md)
+  - [Git工具-交互式暂存](tool/git/90.Git工具-交互式暂存.md)
+  - [Git工具-重写历史](tool/git/100.Git工具-重写历史.md)
+  - [Git工具-重置揭密](tool/git/110.Git工具-重置揭密.md)
 
-----
+**项目**
+
+-----
 
 不求于佛，但求于心

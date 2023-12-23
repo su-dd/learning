@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/java/spring/spring_base/1.Spring初识.md",
+                "file": "docs/README.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/java/spring/spring_base/1.Spring初识.md",
+                "file": "docs/README.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/java/spring/spring_base/1.Spring初识.md",
+                "file": "docs/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/java/spring/spring_base/1.Spring初识.md"
+                "file": "docs/README.md"
               }
             }
           },
@@ -159,6 +159,7 @@
   },
   "active": "6684cd7dd21168ce",
   "lastOpenFiles": [
+    "docs/java/spring/spring_base/1.Spring初识.md",
     "docs/java/spring/spring_base/2.Spring_Xml配置.md",
     "docs/java/spring/spring_base/5.Spring_IOC的注解实现.md",
     "docs/java/spring/spring_base/4.Spring_AOP的XML实现.md",
@@ -203,7 +204,6 @@
     "docs/java/java_base/21.容器类型/2.set.md",
     "docs/java/java_base/21.容器类型/1.List.md",
     "docs/java/java_base/30.泛型和数据结构.md",
-    "docs/java/java_base/20.Java容器.md",
-    "docs/java/java_base/15.JavaBean.md"
+    "docs/java/java_base/20.Java容器.md"
   ]
 }
