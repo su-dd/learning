@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/ddd/60.基于Cola的初步实践.md",
+                "file": "docs/java/spring/spring_base/1.Spring初识.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/ddd/60.基于Cola的初步实践.md",
+                "file": "docs/java/spring/spring_base/1.Spring初识.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/ddd/60.基于Cola的初步实践.md",
+                "file": "docs/java/spring/spring_base/1.Spring初识.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/ddd/60.基于Cola的初步实践.md"
+                "file": "docs/java/spring/spring_base/1.Spring初识.md"
               }
             }
           },
@@ -159,8 +159,22 @@
   },
   "active": "6684cd7dd21168ce",
   "lastOpenFiles": [
-    "docs/ddd/attachments/20231223130733.png",
+    "docs/java/spring/spring_base/2.Spring_Xml配置.md",
+    "docs/java/spring/spring_base/5.Spring_IOC的注解实现.md",
+    "docs/java/spring/spring_base/4.Spring_AOP的XML实现.md",
+    "docs/java/spring/spring_base/3.Spring_IOC的XML实现.md",
+    "docs/java/spring/spring_base/6.Spring_AOP的注解实现.md",
+    "docs/java/spring/spring_topic/10.spring_restful注解.md",
+    "docs/java/spring/spring_topic/20.Spring定时任务.md",
+    "docs/java/spring/spring_topic/30.Spring动态定时任务.md",
+    "docs/java/spring/spring_topic/40.Spring注册失败.md",
+    "docs/java/spring/spring_topic/50.SpringAPI文档knife4j.md",
+    "docs/ddd/30.贫血模型和充血模型.md",
+    "docs/ddd/40.值对象、DP.md",
+    "docs/ddd/50.实体、领域服务、应用服务.md",
     "docs/ddd/60.基于Cola的初步实践.md",
+    "docs/README.md",
+    "docs/ddd/attachments/20231223130733.png",
     "docs/ddd/attachments/20231223130721.png",
     "docs/ddd/attachments/20231223130710.png",
     "docs/ddd/attachments/20231223130604.png",
@@ -171,9 +185,7 @@
     "docs/ddd/attachments/20231223130333.png",
     "docs/ddd/attachments/20231223130252.png",
     "docs/ddd/attachments/20231223130157.png",
-    "docs/ddd/50.实体、领域服务、应用服务.md",
     "docs/ddd/attachments/20231223130032.png",
-    "docs/ddd/40.值对象、DP.md",
     "docs/ddd/attachments",
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/mapper/UserMapper.java",
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/mapper/SalesMapper.java",
@@ -183,26 +195,15 @@
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/dataobject/RewardDO.java",
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/app/User/executor/query/FindUsersQryExe.java",
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/app/User/executor/query/FindUserQryExe.java",
-    "docs/ddd/30.贫血模型和充血模型.md",
     "docs/ddd/20.统一语言.md",
     "docs/ddd/10.初识DDD.md",
     "docs/ddd/20.DDD概览.md",
-    "docs/README.md",
     "docs/java/java_base/60.Java内存.md",
     "docs/java/java_base/21.容器类型/3.map.md",
     "docs/java/java_base/21.容器类型/2.set.md",
     "docs/java/java_base/21.容器类型/1.List.md",
     "docs/java/java_base/30.泛型和数据结构.md",
     "docs/java/java_base/20.Java容器.md",
-    "docs/java/java_base/15.JavaBean.md",
-    "docs/java/java_base/10.Java基础.md",
-    "docs/java/java_base/50.JUnit单元测试.md",
-    "docs/tool/nvm/1.NVM使用.md",
-    "docs/tool/cmake/2.CMake详解.md",
-    "docs/tool/cmake/1.CMake简述.md",
-    "docs/java/spring/spring_topic/10.spring_restful注解.md",
-    "docs/java/spring/spring_topic/50.SpringAPI文档knife4j.md",
-    "docs/java/spring/spring_topic/40.Spring注册失败.md",
-    "docs/java/spring/spring_topic/30.Spring动态定时任务.md"
+    "docs/java/java_base/15.JavaBean.md"
   ]
 }
