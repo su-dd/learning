@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/README.md",
+                "file": "docs/readbook/掌控谈话/掌控谈话.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/README.md",
+                "file": "docs/readbook/掌控谈话/掌控谈话.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/README.md",
+                "file": "docs/readbook/掌控谈话/掌控谈话.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/README.md"
+                "file": "docs/readbook/掌控谈话/掌控谈话.md"
               }
             }
           },
@@ -145,7 +145,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 261.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -159,12 +159,12 @@
   },
   "active": "6684cd7dd21168ce",
   "lastOpenFiles": [
+    "docs/readbook/我不是教你诈/我不是教你诈.md",
+    "docs/README.md",
     "docs/readbook/掌控谈话/掌控谈话.md",
     "docs/readbook/掌控谈话/第一章_新规则.md",
     "docs/readbook/掌控谈话/第二章 重复对方的话.md",
-    "docs/readbook/我不是教你诈/我不是教你诈-.md",
     "docs/readbook/我不是教你诈",
-    "docs/README.md",
     "docs/readbook/掌控谈话/第一章_",
     "docs/readbook/掌控谈话/掌控谈话简读.md",
     "docs/readbook/掌控谈话",
