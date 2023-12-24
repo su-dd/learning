@@ -19,35 +19,8 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "35669f6c1531e061",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docs/readbook/掌控谈话/掌控谈话.md",
-                "mode": "source",
-                "backlinks": true,
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "6ec512547f288a13",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docs/readbook/掌控谈话/第一章_新规则.md",
-                "mode": "source",
-                "backlinks": true,
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -97,8 +70,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 399.5,
-    "collapsed": true
+    "width": 327.5
   },
   "right": {
     "id": "1db0c3695a508abd",
@@ -114,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/readbook/掌控谈话/第一章_新规则.md",
+                "file": "docs/README.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -131,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/readbook/掌控谈话/第一章_新规则.md",
+                "file": "docs/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -154,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/readbook/掌控谈话/第一章_新规则.md"
+                "file": "docs/README.md"
               }
             }
           },
@@ -173,8 +145,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -186,11 +157,14 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "6ec512547f288a13",
+  "active": "6684cd7dd21168ce",
   "lastOpenFiles": [
     "docs/readbook/掌控谈话/掌控谈话.md",
-    "docs/README.md",
     "docs/readbook/掌控谈话/第一章_新规则.md",
+    "docs/readbook/掌控谈话/第二章 重复对方的话.md",
+    "docs/readbook/我不是教你诈/我不是教你诈-.md",
+    "docs/readbook/我不是教你诈",
+    "docs/README.md",
     "docs/readbook/掌控谈话/第一章_",
     "docs/readbook/掌控谈话/掌控谈话简读.md",
     "docs/readbook/掌控谈话",
@@ -227,12 +201,8 @@
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/mapper/UserMapper.java",
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/mapper/SalesMapper.java",
     "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/mapper/RewardMapper.java",
-    "src/spring/ddd/30Demo/src/main/java/com/demo30/case2/infrastructure/gatewayimpl/database/dataobject/UserDO.java",
     "docs/ddd/20.统一语言.md",
     "docs/ddd/10.初识DDD.md",
-    "docs/ddd/20.DDD概览.md",
-    "docs/java/java_base/60.Java内存.md",
-    "docs/java/java_base/21.容器类型/3.map.md",
-    "docs/java/java_base/21.容器类型/2.set.md"
+    "docs/ddd/20.DDD概览.md"
   ]
 }
