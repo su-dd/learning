@@ -52,7 +52,6 @@
       - [Spring动态定时任务](java/spring/spring_topic/30.Spring动态定时任务.md)
       - [Spring注册失败](java/spring/spring_topic/40.Spring注册失败.md)
       - [SpringAPI文档knife4j](java/spring/spring_topic/50.SpringAPI文档knife4j.md)
-
 **软件设计**
 - 设计模式
   - [设计模式之总览](design_pattern/00设计模式总览.md)
@@ -88,6 +87,9 @@
   - [值对象、DP](ddd/40.值对象、DP.md)
   - [实体、领域服务、应用服务](ddd/50.实体、领域服务、应用服务.md)
   - [基于Cola的初步实践](ddd/60.基于Cola的初步实践.md)
+**数据结构算法**
+- 数据结构
+- 算法
 **工具**
 - [nvm](tool/nvm/1.NVM使用.md)
 - Git
@@ -105,6 +107,9 @@
 **读书**
 - [《我不是教你诈》](readbook/我不是教你诈/我不是教你诈.md)
 - [《掌控谈话》](readbook/掌控谈话/掌控谈话.md)
+**儿童读物**
+- 成语故事
+  - [亡羊补牢](forchild/成语故事/亡羊补牢.md)
 
 -----
 
