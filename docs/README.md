@@ -10,15 +10,10 @@
     - [C++枚举和枚举类](cpp/cpp_base/7.C++枚举和枚举类.md)
     - [C++头文件](cpp/cpp_base/8.C++头文件.md)
   - C++进阶
-    - [C++11的类型推导详解--auto&decltype](cpp/cpp_advance/01.C++11的类型推导详解--auto&decltype.md)
-    - [C++11列表初始化](cpp/cpp_advance/02.C++11列表初始化.md)
-    - [C++11左值引用、右值引用、移动语义、完美转发](cpp/cpp_advance/03.C++11左值引用、右值引用、移动语义、完美转发.md)
-    - [C++11的占位符std-placeholders](cpp/cpp_advance/04.C++11的占位符std-placeholders.md)
-    - [C++11新特性std-function和lambda表达式](cpp/cpp_advance/05.C++11新特性std-function和lambda表达式.md)
-    - [C++11的mutable和volatile](cpp/cpp_advance/06.C++11的mutable和volatile.md)
-    - [C++11智能指针](cpp/cpp_advance/07.C++11智能指针.md)
-    - [C++11的模板改进](cpp/cpp_advance/08.C++11的模板改进.md)
-    - [C++11新特性之线程相关](cpp/cpp_advance/09.C++11新特性之线程相关.md)
+    - [C++11](cpp/cpp_advance/C++11.md)
+    - [C++14](cpp/cpp_advance/C++14.md)
+    - [C++17](cpp/cpp_advance/C++17.md)
+    - [C++20](cpp/cpp_advance/C++20.md)
   - C++专题
     - [C++之RAII](cpp/cpp_topic/C++之RAII.md)
     - [C++内存模型](cpp/cpp_topic/C++内存模型.md)
@@ -38,7 +33,7 @@
     - [Java反射](java/java_base/40.Java反射.md)
     - [JUnit单元测试](java/java_base/50.JUnit单元测试.md)
     - [Java内存](java/java_base/60.Java内存.md)
-  - Spring
+  - Spring框架
     - Spring入门
       - [Spring初识](java/spring/spring_base/1.Spring初识.md)
       - [Spring_Xml配置](java/spring/spring_base/2.Spring_Xml配置.md)
@@ -88,8 +83,8 @@
   - [实体、领域服务、应用服务](ddd/50.实体、领域服务、应用服务.md)
   - [基于Cola的初步实践](ddd/60.基于Cola的初步实践.md)
 **数据结构算法**
-- 数据结构
-- 算法
+- [数据结构](dataStruct_algorithm/数据结构.md)
+- [算法](dataStruct_algorithm/算法.md)
 **工具**
 - [nvm](tool/nvm/1.NVM使用.md)
 - Git
@@ -108,9 +103,7 @@
 - [《我不是教你诈》](readbook/我不是教你诈/我不是教你诈.md)
 - [《掌控谈话》](readbook/掌控谈话/掌控谈话.md)
 **儿童读物**
-- 成语故事
-  - [亡羊补牢](forchild/成语故事/亡羊补牢.md)
-  - [凿壁偷光](forchild/成语故事/凿壁偷光.md)
+- [成语故事](forchild/成语故事.md)
 
 -----
 
