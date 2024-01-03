@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/README.md",
+                "file": "docs/cpp/cpp_advance/C++11.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -70,7 +70,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 327.5
+    "width": 268.5
   },
   "right": {
     "id": "1db0c3695a508abd",
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/README.md",
+                "file": "docs/cpp/cpp_advance/C++11.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/README.md",
+                "file": "docs/cpp/cpp_advance/C++11.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/README.md"
+                "file": "docs/cpp/cpp_advance/C++11.md"
               }
             }
           },
@@ -145,7 +145,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 261.5
+    "width": 295.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -159,23 +159,30 @@
   },
   "active": "3492e10ae9da7bd2",
   "lastOpenFiles": [
-    "docs/forchild/成语故事/凿壁偷光.md",
+    "src/cpp/advance/demo1/CMakeLists.txt.user.ZZMcSz",
+    "src/cpp/advance/demo1/CMakeLists.txt.user.KJouHg",
+    "src/cpp/advance/demo1/main.cpp.PQCPxX",
+    "docs/cpp/cpp_topic/C++疑问.md",
+    "docs/cpp/cpp_topic/C++变量、引用、指针.md",
+    "docs/cpp/cpp_topic/C++之RAII.md",
+    "docs/cpp/cpp_advance/C++11.md",
+    "src/cpp/advance/build-demo1-Desktop_Qt_6_2_4_MinGW_64_bit-Release/CMakeFiles/demo1.dir/main.cpp.obj.d",
+    "src/cpp/advance/demo1/main.cpp.IITZhd",
+    "src/cpp/advance/demo1/main.cpp.MMTrzo",
+    "src/cpp/advance/demo1/main.cpp.ICziYQ",
+    "src/cpp/advance/demo1/main.cpp.DcBuRA",
+    "src/cpp/advance/demo1/main.cpp.QUykRw",
+    "src/cpp/advance/build-demo1-Desktop_Qt_6_2_4_MinGW_64_bit-Release/Testing/Temporary/LastTest.log.tmp",
+    "docs/cpp/cpp_advance/C++14.md",
+    "src/cpp/advance/demo1/CMakeLists.txt.user.BbcpDG",
     "docs/README.md",
+    "docs/forchild/成语故事/凿壁偷光.md",
     "docs/forchild/成语故事/亡羊补牢.md",
-    "docs/algorithm",
-    "docs/data_structure",
     "docs/readbook/掌控谈话/掌控谈话.md",
-    "docs/forchild/成语故事",
-    "docs/forchild",
     "docs/readbook/我不是教你诈/我不是教你诈.md",
     "docs/readbook/掌控谈话/掌控谈话简读.md",
     "docs/readbook/掌控谈话/第一章_新规则.md",
     "docs/readbook/掌控谈话/第二章 重复对方的话.md",
-    "docs/readbook/我不是教你诈",
-    "docs/readbook/掌控谈话/第一章_",
-    "docs/readbook/掌控谈话",
-    "docs/read/未命名",
-    "docs/readbook",
     "docs/java/spring/spring_base/1.Spring初识.md",
     "docs/java/spring/spring_base/2.Spring_Xml配置.md",
     "docs/java/spring/spring_base/5.Spring_IOC的注解实现.md",
@@ -188,22 +195,15 @@
     "docs/java/spring/spring_topic/40.Spring注册失败.md",
     "docs/java/spring/spring_topic/50.SpringAPI文档knife4j.md",
     "docs/ddd/30.贫血模型和充血模型.md",
-    "docs/ddd/40.值对象、DP.md",
-    "docs/ddd/50.实体、领域服务、应用服务.md",
-    "docs/ddd/60.基于Cola的初步实践.md",
     "docs/ddd/attachments/20231223130733.png",
     "docs/ddd/attachments/20231223130721.png",
     "docs/ddd/attachments/20231223130710.png",
     "docs/ddd/attachments/20231223130604.png",
     "docs/ddd/attachments/20231223130521.png",
     "docs/ddd/attachments/20231223130425.png",
-    "attachments/Pasted.md",
-    "attachments",
     "docs/ddd/attachments/20231223130333.png",
     "docs/ddd/attachments/20231223130252.png",
     "docs/ddd/attachments/20231223130157.png",
-    "docs/ddd/attachments/20231223130032.png",
-    "docs/ddd/20.统一语言.md",
-    "docs/ddd/10.初识DDD.md"
+    "docs/ddd/attachments/20231223130032.png"
   ]
 }
