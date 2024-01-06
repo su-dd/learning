@@ -1,19 +1,11 @@
 **编程语言**
 - C++语言
-  - C++入门
-    - [Hello World](cpp/cpp_base/1.C++HelloWorld.md)
-    - [C++基础概念](cpp/cpp_base/2.C++基础概念.md)
-    - [C++基础语法](cpp/cpp_base/3.C++基础语法.md)
-    - [C++结构体联合体](cpp/cpp_base/4.C++结构体联合体.md)
-    - [C++抽象类接口](cpp/cpp_base/5.C++抽象类接口.md)
-    - [C++类：封装、继承、多态](cpp/cpp_base/6.C++类的封装、继承、多态.md)
-    - [C++枚举和枚举类](cpp/cpp_base/7.C++枚举和枚举类.md)
-    - [C++头文件](cpp/cpp_base/8.C++头文件.md)
-  - C++进阶
-    - [C++11](cpp/cpp_advance/C++11.md)
-    - [C++14](cpp/cpp_advance/C++14.md)
-    - [C++17](cpp/cpp_advance/C++17.md)
-    - [C++20](cpp/cpp_advance/C++20.md)
+  - C++语法
+    - [C++基础](cpp/cpp_language/C++基础.md)
+    - [C++11](cpp/cpp_language/C++11.md)
+    - [C++14](cpp/cpp_language/C++14.md)
+    - [C++17](cpp/cpp_language/C++17.md)
+    - [C++20](cpp/cpp_language/C++20.md)
   - C++专题
     - [C++之RAII](cpp/cpp_topic/C++之RAII.md)
     - [C++内存模型](cpp/cpp_topic/C++内存模型.md)
