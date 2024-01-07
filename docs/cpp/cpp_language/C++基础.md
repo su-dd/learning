@@ -28,8 +28,6 @@ int main(int argc, char* argv[])
 }
 ```
 
-
-
 c++程序都是由main函数开始的;
 
 main函数的返回值类型一般为int类型，返回0表示执行成功。
@@ -43,8 +41,6 @@ int main(int argc, char* argv[])
   return 0;
 }
 ```
-
-
 
 ### 基本输入输出
 
@@ -434,8 +430,6 @@ C++中 一共有两对关键字：
 
 同理，在声明一个指针是，通常就应该初始化；如果暂不确定值，可以赋空，防止野指针。
 
-
-
 #### malloc & free
 
 malloc 和 free 的一般形式：
@@ -444,9 +438,6 @@ malloc 和 free 的一般形式：
 void *malloc(size_t size) 
 void free(void *ptr)
 ```
-
-1
-2
 
 malloc 分配指定大小为 size字节的内存空间，返回一个指向该空间的void*指针。 由于返回 void* 指针，所以需要强制类型转换后才能引用其中的值。
 
@@ -534,11 +525,7 @@ void test4()
 类型  参数[数量]
 ```
 
-
-
 访问数组时，使用数组下标，下标从0开始。
-
-
 
 ##### 初始化1
 
@@ -553,8 +540,6 @@ void demo()
 }
 ```
 
-
-
 **结果：**
 
 > 1
@@ -562,8 +547,6 @@ void demo()
 > 2
 
 这种情况下也可以省略数组大小不写，结果等价。
-
-
 
 ##### 初始化2
 
@@ -578,18 +561,10 @@ void demo()
 }
 ```
 
-
-
 **结果：**
-
 > 1
->
 > 1
-
-
-
 ##### 初始化3
-
 已知数组大小，值暂不清晰。
 
 ```cpp
@@ -602,8 +577,6 @@ void demo()
   cout << array[1] << endl;
 }
 ```
-
-
 
 ##### 未初始化
 
@@ -625,8 +598,6 @@ void demo()
 }
 ```
 
-
-
 **结果：**
 
 ```text
@@ -637,8 +608,6 @@ void demo()
 0
 -135408993
 ```
-
-
 
 #### 栈数组和堆数组（数组动态分配）
 
@@ -651,8 +620,6 @@ void demo()
 **malloc**，**free** （C++，兼容C；所以可以用C的关键字）
 
 **new**，**delete** （C++新增，常用这一对）
-
-
 
 具体理解查看下面的demo：
 
@@ -707,7 +674,7 @@ void demo5()
 
 ##### new & delete
 
-需要注意的是 数组的操作符方式为： new[] 和 delete[]
+需要注意的是 数组的操作符方式为： new\[\] 和 delete\[\]
 
 一般形式为：
 
@@ -1123,12 +1090,8 @@ int main(int argc, char* argv[])
 **结果：**
 
 > This is before throw
->
 > This is catch int
->
 > this is after demo
-
-
 
 **demo2：** 由...命中异常
 

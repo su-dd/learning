@@ -3,8 +3,9 @@
   "showLineNumber": false,
   "alwaysUpdateLinks": true,
   "newFileLocation": "current",
-  "attachmentFolderPath": "docs/未命名 1",
+  "attachmentFolderPath": "./attachment",
   "showUnsupportedFiles": true,
   "newLinkFormat": "relative",
-  "promptDelete": false
+  "promptDelete": false,
+  "useMarkdownLinks": true
 }
