@@ -14,8 +14,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_executable(DataStructure
   main.cpp
-  SqStack.h SqStack.cpp
-  SqList.h SqList.cpp
+  SqHead.h
+  SqStack.cpp
+  SqList.cpp
+  LinkList.cpp
+  LinkList_with_head.cpp
 )
 target_link_libraries(DataStructure Qt${QT_VERSION_MAJOR}::Core)
 

@@ -1,4 +1,4 @@
-#include "SqList.h"
+#include "SqHead.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "malloc.h"
@@ -100,7 +100,14 @@ Status PutElem_Sq(SqList &L, int i, ElemType e) {
 
 //在顺序表L表尾添加元素e
 Status Append_Sq(SqList &L, ElemType e) {
-    if (L.length >= L.size) return ERROR;
+    ElemType *newBase;
+    if (L.length >= L.size) // 如果不够，给扩容
+    {
+        newBase = (ElemType *)realloc(L.elem, (L.size + L.increment) * sizeof(ElemType));
+        if (NULL == newBase) return OVERFLOW;
+        L.elem = newBase;
+        L.size += L.increment;
+    }
     L.elem[L.length] = e;
     L.length++;
     return OK;
@@ -152,6 +159,8 @@ int test() {
         if (ERROR == Append_Sq(L, eArray[i])) printf("入表失败\n");;
     }
     printf("入表成功\n");
+
+    Append_Sq(L, 6);
 
     //遍历顺序表L
     printf("此时表内元素为：\n");

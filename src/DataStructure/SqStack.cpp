@@ -1,4 +1,4 @@
-#include "SqStack.h"
+#include "SqHead.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "malloc.h"
