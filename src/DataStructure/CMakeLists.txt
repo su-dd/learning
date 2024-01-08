@@ -9,9 +9,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
-
 add_executable(DataStructure
   main.cpp
   SqHead.h
@@ -19,8 +16,8 @@ add_executable(DataStructure
   SqList.cpp
   LinkList.cpp
   LinkList_with_head.cpp
+  HashTable.cpp
 )
-target_link_libraries(DataStructure Qt${QT_VERSION_MAJOR}::Core)
 
 include(GNUInstallDirs)
 install(TARGETS DataStructure

@@ -16,4 +16,8 @@ int test();
 namespace LinkList_with_head{
 int test();
 };
+
+namespace HashTable {
+	int test();
+};
 #endif // SQHEAD_H
