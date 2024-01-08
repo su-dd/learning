@@ -1,30 +1,30 @@
-#include "SqHead.h"
+ï»¿#include "SqHead.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "malloc.h"
 
 namespace LinkList_with_head {
-//5¸ö³£Á¿¶¨Òå
+//5ä¸ªå¸¸é‡å®šä¹‰
 #define TRUE 1
 #define FALSE 0
 #define OK 1
 #define ERROR 0
 #define OVERFLOW -1
 
-//ÀàĞÍ¶¨Òå
+//ç±»å‹å®šä¹‰
 typedef int Status;
 typedef int ElemType;
 
-//²âÊÔ³ÌĞò³¤¶È¶¨Òå
+//æµ‹è¯•ç¨‹åºé•¿åº¦å®šä¹‰
 #define LONGTH 5
 
-//Á´±íµÄÀàĞÍ
+//é“¾è¡¨çš„ç±»å‹
 typedef struct LNode {
     ElemType data;
     struct LNode *next;
 } LNode, *LinkList;
 
-//´´½¨°üº¬n¸öÔªËØµÄÁ´±íL£¬ÔªËØÖµ´æ´¢ÔÚdataÊı×éÖĞ
+//åˆ›å»ºåŒ…å«nä¸ªå…ƒç´ çš„é“¾è¡¨Lï¼Œå…ƒç´ å€¼å­˜å‚¨åœ¨dataæ•°ç»„ä¸­
 Status create(LinkList &L, ElemType *data, int n) {
     LNode *p, *q;
     int i;
@@ -48,7 +48,7 @@ Status create(LinkList &L, ElemType *data, int n) {
     return OK;
 }
 
-//e´ÓÁ´±íÄ©Î²ÈëÁ´±í
+//eä»é“¾è¡¨æœ«å°¾å…¥é“¾è¡¨
 Status EnQueue_LQ(LinkList &L, ElemType &e) {
     LinkList p, q;
 
@@ -78,7 +78,7 @@ Status EnQueue_LQ(LinkList &L, ElemType &e) {
 }
 
 
-//´ÓÁ´±íÍ·½Úµã³öÁ´±íµ½e
+//ä»é“¾è¡¨å¤´èŠ‚ç‚¹å‡ºé“¾è¡¨åˆ°e
 Status DeQueue_LQ(LinkList &L, ElemType &e) {
     if (NULL == L || NULL == L->next) return ERROR;
     LinkList p;
@@ -89,13 +89,13 @@ Status DeQueue_LQ(LinkList &L, ElemType &e) {
     return OK;
 }
 
-//±éÀúµ÷ÓÃ
+//éå†è°ƒç”¨
 Status visit(ElemType e) {
     printf("%d\t", e);
     return OK;
 }
 
-//±éÀúµ¥Á´±í
+//éå†å•é“¾è¡¨
 void ListTraverse_L(LinkList L, Status(*visit)(ElemType e))
 {
     if (NULL == L || NULL == L->next) return;
@@ -109,41 +109,41 @@ int test() {
     ElemType e, data[LONGTH] = { 1, 2, 3, 4, 5 };
     LinkList L;
 
-    //ÏÔÊ¾²âÊÔÖµ
-    printf("---¡¾ÓĞÍ·½áµãµÄµ¥Á´±í¡¿---\n");
-    printf("´ı²âÊÔÔªËØÎª£º\n");
+    //æ˜¾ç¤ºæµ‹è¯•å€¼
+    printf("---ã€æœ‰å¤´ç»“ç‚¹çš„å•é“¾è¡¨ã€‘---\n");
+    printf("å¾…æµ‹è¯•å…ƒç´ ä¸ºï¼š\n");
     for (i = 0; i < LONGTH; i++) printf("%d\t", data[i]);
     printf("\n");
 
-    //´´½¨Á´±íL
-    printf("´´½¨Á´±íL\n");
+    //åˆ›å»ºé“¾è¡¨L
+    printf("åˆ›å»ºé“¾è¡¨L\n");
     if (ERROR == create(L, data, LONGTH))
     {
-        printf("´´½¨Á´±íLÊ§°Ü\n");
+        printf("åˆ›å»ºé“¾è¡¨Lå¤±è´¥\n");
         return -1;
     }
-    printf("³É¹¦´´½¨°üº¬1¸öÍ·½áµã¡¢%d¸öÔªËØµÄÁ´±íL\nÔªËØÖµ´æ´¢ÔÚdataÊı×éÖĞ\n", LONGTH);
+    printf("æˆåŠŸåˆ›å»ºåŒ…å«1ä¸ªå¤´ç»“ç‚¹ã€%dä¸ªå…ƒç´ çš„é“¾è¡¨L\nå…ƒç´ å€¼å­˜å‚¨åœ¨dataæ•°ç»„ä¸­\n", LONGTH);
 
-    //±éÀúµ¥Á´±í
-    printf("´ËÊ±Á´±íÖĞÔªËØÎª£º\n");
+    //éå†å•é“¾è¡¨
+    printf("æ­¤æ—¶é“¾è¡¨ä¸­å…ƒç´ ä¸ºï¼š\n");
     ListTraverse_L(L, visit);
 
-    //´ÓÁ´±íÍ·½Úµã³öÁ´±íµ½e
-    printf("\n³öÁ´±íµ½e\n");
+    //ä»é“¾è¡¨å¤´èŠ‚ç‚¹å‡ºé“¾è¡¨åˆ°e
+    printf("\nå‡ºé“¾è¡¨åˆ°e\n");
     DeQueue_LQ(L, e);
-    printf("³öÁ´±íµÄÔªËØÎª£º%d\n", e);
-    printf("´ËÊ±Á´±íÖĞÔªËØÎª£º\n");
+    printf("å‡ºé“¾è¡¨çš„å…ƒç´ ä¸ºï¼š%d\n", e);
+    printf("æ­¤æ—¶é“¾è¡¨ä¸­å…ƒç´ ä¸ºï¼š\n");
 
-    //±éÀúµ¥Á´±í
+    //éå†å•é“¾è¡¨
     ListTraverse_L(L, visit);
 
-    //e´ÓÁ´±íÄ©Î²ÈëÁ´±í
-    printf("\neÈëÁ´±í\n");
+    //eä»é“¾è¡¨æœ«å°¾å…¥é“¾è¡¨
+    printf("\neå…¥é“¾è¡¨\n");
     EnQueue_LQ(L, e);
-    printf("ÈëÁ´±íµÄÔªËØÎª£º%d\n", e);
-    printf("´ËÊ±Á´±íÖĞÔªËØÎª£º\n");
+    printf("å…¥é“¾è¡¨çš„å…ƒç´ ä¸ºï¼š%d\n", e);
+    printf("æ­¤æ—¶é“¾è¡¨ä¸­å…ƒç´ ä¸ºï¼š\n");
 
-    //±éÀúµ¥Á´±í
+    //éå†å•é“¾è¡¨
     ListTraverse_L(L, visit);
     printf("\n");
 

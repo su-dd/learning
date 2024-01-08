@@ -31,9 +31,12 @@
 *.out
 *.app
 
-
 # 编译配置
 *.txt.user
 *.pro.user
+src/*/.vs/
+src/*/*/.vs/
 src/*/*/*/.vs/
-
+src/*/out/
+src/*/*/out/
+src/*/*/*/out/

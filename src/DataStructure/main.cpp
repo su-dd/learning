@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include "SqHead.h"
 int main(int argc, char *argv[])
 {
@@ -6,4 +6,5 @@ int main(int argc, char *argv[])
     // SqList::test();
     LinkList::test();
     // LinkList_with_head::test();
+    return 0;
 }
