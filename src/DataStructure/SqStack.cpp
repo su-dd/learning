@@ -1,33 +1,33 @@
-#include "SqHead.h"
+ï»¿#include "Head.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "malloc.h"
 
 namespace SqStack
 {
-//5¸ö³£Á¿¶¨Òå
+//5ä¸ªå¸¸é‡å®šä¹‰
 #define TRUE 1
 #define FALSE 0
 #define OK 1
 #define ERROR 0
 #define OVERFLOW -1
 
-//²âÊÔ³ÌĞò³¤¶È¶¨Òå
+//æµ‹è¯•ç¨‹åºé•¿åº¦å®šä¹‰
 #define LONGTH 5
 
-//ÀàĞÍ¶¨Òå
+//ç±»å‹å®šä¹‰
 typedef int Status;
 typedef int ElemType;
 
-//Ë³ĞòÕ»µÄÀàĞÍ
+//é¡ºåºæ ˆçš„ç±»å‹
 typedef struct {
-    ElemType *elem; // Õ»µ×Ö¸Õë
-    int top;        // Õ»¶¥
-    int size;       // µ±Ç°´óĞ¡
-    int increment;  // À©Ôö
+    ElemType *elem; // æ ˆåº•æŒ‡é’ˆ
+    int top;        // æ ˆé¡¶
+    int size;       // å½“å‰å¤§å°
+    int increment;  // æ‰©å¢
 } SqSrack;
 
-//³õÊ¼»¯Ë³ĞòÕ»
+//åˆå§‹åŒ–é¡ºåºæ ˆ
 Status InitStack_Sq(SqSrack &S, int size, int inc) {
     S.elem = (ElemType *)malloc(size * sizeof(ElemType));
     if (NULL == S.elem) return OVERFLOW;
@@ -37,30 +37,30 @@ Status InitStack_Sq(SqSrack &S, int size, int inc) {
     return OK;
 }
 
-//Ïú»ÙË³ĞòÕ»
+//é”€æ¯é¡ºåºæ ˆ
 Status DestroyStack_Sq(SqSrack &S) {
     free(S.elem);
     S.elem = NULL;
     return OK;
 }
 
-//ÅĞ¶ÏSÊÇ·ñ¿Õ£¬Èô¿ÕÔò·µ»ØTRUE£¬·ñÔò·µ»ØFALSE
+//åˆ¤æ–­Sæ˜¯å¦ç©ºï¼Œè‹¥ç©ºåˆ™è¿”å›TRUEï¼Œå¦åˆ™è¿”å›FALSE
 Status StackEmpty_Sq(SqSrack S) {
     if (0 == S.top) return TRUE;
     return FALSE;
 }
 
-//Çå¿ÕÕ»S
+//æ¸…ç©ºæ ˆS
 void ClearStack_Sq(SqSrack &S) {
     if (0 == S.top) return;
     S.size = 0;
     S.top = 0;
 }
 
-//ÔªËØeÑ¹ÈëÕ»S
+//å…ƒç´ eå‹å…¥æ ˆS
 Status Push_Sq(SqSrack &S, ElemType e) {
     ElemType *newbase;
-    // Èç¹û´óĞ¡³¬ÏŞ£¬¾Í½øĞĞÀ©Ôö
+    // å¦‚æœå¤§å°è¶…é™ï¼Œå°±è¿›è¡Œæ‰©å¢
     if (S.top >= S.size) {
         newbase = (ElemType *)realloc(S.elem, (S.size + S.increment) * sizeof(ElemType));
         if (NULL == newbase) return OVERFLOW;
@@ -71,14 +71,14 @@ Status Push_Sq(SqSrack &S, ElemType e) {
     return OK;
 }
 
-//È¡Õ»SµÄÕ»¶¥ÔªËØ£¬²¢ÓÃe·µ»Ø
+//å–æ ˆSçš„æ ˆé¡¶å…ƒç´ ï¼Œå¹¶ç”¨eè¿”å›
 Status GetTop_Sq(SqSrack S, ElemType &e) {
     if (0 == S.top) return ERROR;
     e = S.elem[S.top - 1];
     return e;
 }
 
-//Õ»SµÄÕ»¶¥ÔªËØ³öÕ»£¬²¢ÓÃe·µ»Ø
+//æ ˆSçš„æ ˆé¡¶å…ƒç´ å‡ºæ ˆï¼Œå¹¶ç”¨eè¿”å›
 Status Pop_Sq(SqSrack &S, ElemType &e) {
     if (0 == S.top) return ERROR;
     e = S.elem[S.top - 1];
@@ -87,60 +87,60 @@ Status Pop_Sq(SqSrack &S, ElemType &e) {
 }
 
 int test() {
-    //¶¨ÒåÕ»S
+    //å®šä¹‰æ ˆS
     SqSrack S;
 
-    //¶¨Òå²âÁ¿Öµ
+    //å®šä¹‰æµ‹é‡å€¼
     int size, increment, i;
 
-    //³õÊ¼»¯²âÊÔÖµ
+    //åˆå§‹åŒ–æµ‹è¯•å€¼
     size = LONGTH;
     increment = LONGTH;
     ElemType e, eArray[LONGTH] = { 1, 2, 3, 4, 5 };
 
-    //ÏÔÊ¾²âÊÔÖµ
-    printf("---¡¾Ë³ĞòÕ»¡¿---\n");
-    printf("Õ»SµÄsizeÎª£º%d\nÕ»SµÄincrementÎª£º%d\n", size, increment);
-    printf("´ı²âÊÔÔªËØÎª£º\n");
+    //æ˜¾ç¤ºæµ‹è¯•å€¼
+    printf("---ã€é¡ºåºæ ˆã€‘---\n");
+    printf("æ ˆSçš„sizeä¸ºï¼š%d\næ ˆSçš„incrementä¸ºï¼š%d\n", size, increment);
+    printf("å¾…æµ‹è¯•å…ƒç´ ä¸ºï¼š\n");
     for (i = 0; i < LONGTH; i++) {
         printf("%d\t", eArray[i]);
     }
     printf("\n");
 
-    //³õÊ¼»¯Ë³ĞòÕ»
+    //åˆå§‹åŒ–é¡ºåºæ ˆ
     if (!InitStack_Sq(S, size, increment)) {
-        printf("³õÊ¼»¯Ë³ĞòÕ»Ê§°Ü\n");
+        printf("åˆå§‹åŒ–é¡ºåºæ ˆå¤±è´¥\n");
         exit(0);
     }
-    printf("ÒÑ³õÊ¼»¯Ë³ĞòÕ»\n");
+    printf("å·²åˆå§‹åŒ–é¡ºåºæ ˆ\n");
 
-    //ÈëÕ»
+    //å…¥æ ˆ
     for (i = 0; i < S.size; i++) {
         if (!Push_Sq(S, eArray[i])) {
-            printf("%dÈëÕ»Ê§°Ü\n", eArray[i]);
+            printf("%då…¥æ ˆå¤±è´¥\n", eArray[i]);
             exit(0);
         }
     }
-    printf("ÒÑÈëÕ»\n");
+    printf("å·²å…¥æ ˆ\n");
 
-    //ÅĞ¶Ï·Ç¿Õ
-    if (StackEmpty_Sq(S)) printf("SÕ»Îª¿Õ\n");
-    else printf("SÕ»·Ç¿Õ\n");
+    //åˆ¤æ–­éç©º
+    if (StackEmpty_Sq(S)) printf("Sæ ˆä¸ºç©º\n");
+    else printf("Sæ ˆéç©º\n");
 
-    //È¡Õ»SµÄÕ»¶¥ÔªËØ
-    printf("Õ»SµÄÕ»¶¥ÔªËØÎª£º\n");
+    //å–æ ˆSçš„æ ˆé¡¶å…ƒç´ 
+    printf("æ ˆSçš„æ ˆé¡¶å…ƒç´ ä¸ºï¼š\n");
     printf("%d\n", GetTop_Sq(S, e));
 
-    //Õ»SÔªËØ³öÕ»
-    printf("Õ»SÔªËØ³öÕ»Îª£º\n");
+    //æ ˆSå…ƒç´ å‡ºæ ˆ
+    printf("æ ˆSå…ƒç´ å‡ºæ ˆä¸ºï¼š\n");
     for (i = 0, e = 0; i < S.size; i++) {
         printf("%d\t", Pop_Sq(S, e));
     }
     printf("\n");
 
-    //Çå¿ÕÕ»S
+    //æ¸…ç©ºæ ˆS
     ClearStack_Sq(S);
-    printf("ÒÑÇå¿ÕÕ»S\n");
+    printf("å·²æ¸…ç©ºæ ˆS\n");
 
     getchar();
     return 0;

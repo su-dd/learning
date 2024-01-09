@@ -1,23 +1,27 @@
-#ifndef SQHEAD_H
+﻿#ifndef SQHEAD_H
 #define SQHEAD_H
 
 namespace SqList {
-int test();
+	int test();
 };
 
 namespace SqStack {
-int test();
+	int test();
 };
 
 namespace LinkList {
-int test();
+	int test();
 };
 
-namespace LinkList_with_head{
-int test();
+namespace LinkList_with_head {
+	int test();
 };
 
 namespace HashTable {
+	int test();
+};
+
+namespace BinaryTree {
 	int test();
 };
 #endif // SQHEAD_H

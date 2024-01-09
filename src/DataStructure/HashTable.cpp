@@ -1,4 +1,4 @@
-#include "SqHead.h"
+ï»¿#include "Head.h"
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -9,29 +9,29 @@ namespace HashTable {
 #define OVERFLOW -1
 #define OK 1
 #define ERROR -1
-#define MAXNUM 9999		// ÓÃÓÚ³õÊ¼»¯¹şÏ£±íµÄ¼ÇÂ¼ key
+#define MAXNUM 9999		// ç”¨äºåˆå§‹åŒ–å“ˆå¸Œè¡¨çš„è®°å½• key
 
 	typedef int Status;
 	typedef int KeyType;
 
-	// ¹şÏ£±íÖĞµÄ¼ÇÂ¼ÀàĞÍ
+	// å“ˆå¸Œè¡¨ä¸­çš„è®°å½•ç±»å‹
 	typedef struct {
 		KeyType key;
 	}RcdType;
 
-	// ¹şÏ£±íÀàĞÍ
+	// å“ˆå¸Œè¡¨ç±»å‹
 	typedef struct {
-		RcdType* rcd;	// ¹şÏ£ÈİÆ÷Ö¸Õë
-		int size;	// ÈİÁ¿
-		int count;	// µ±Ç°´óĞ¡
-		int* tag;	// Âú¿Õ±êÊ¶£¬ÓĞÖµ1£¬ÎŞÖµ0£¬É¾³ı-1
+		RcdType* rcd;	// å“ˆå¸Œå®¹å™¨æŒ‡é’ˆ
+		int size;	// å®¹é‡
+		int count;	// å½“å‰å¤§å°
+		int* tag;	// æ»¡ç©ºæ ‡è¯†ï¼Œæœ‰å€¼1ï¼Œæ— å€¼0ï¼Œåˆ é™¤-1
 	}HashTable;
 
-	// ¹şÏ£±íÃ¿´ÎÖØ½¨Ôö³¤ºóµÄ´óĞ¡
+	// å“ˆå¸Œè¡¨æ¯æ¬¡é‡å»ºå¢é•¿åçš„å¤§å°
 	int hashsize[] = { 11, 31, 61, 127, 251, 503 };
 	int index = 0;
 
-	// ³õÊ¼¹şÏ£±í
+	// åˆå§‹å“ˆå¸Œè¡¨
 	Status InitHashTable(HashTable& H, int size) {
 		int i;
 		H.rcd = (RcdType*)malloc(sizeof(RcdType) * size);
@@ -47,17 +47,17 @@ namespace HashTable {
 		return OK;
 	}
 
-	// ¹şÏ£º¯Êı£º³ıÁôÓàÊı·¨
+	// å“ˆå¸Œå‡½æ•°ï¼šé™¤ç•™ä½™æ•°æ³•
 	int Hash(KeyType key, int m) {
 		return (3 * key) % m;
 	}
 
-	// ´¦Àí¹şÏ£³åÍ»£ºÏßĞÔÌ½²â
+	// å¤„ç†å“ˆå¸Œå†²çªï¼šçº¿æ€§æ¢æµ‹
 	void collision(int& p, int m) {
 		p = (p + 1) % m;
 	}
 
-	// ÔÚ¹şÏ£±íÖĞ²éÑ¯
+	// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥è¯¢
 	Status SearchHash(HashTable H, KeyType key, int& p, int& c) {
 		p = Hash(key, H.size);
 		int h = p;
@@ -70,7 +70,7 @@ namespace HashTable {
 		else return UNSUCCESS;
 	}
 
-	//´òÓ¡¹şÏ£±í
+	//æ‰“å°å“ˆå¸Œè¡¨
 	void printHash(HashTable H)
 	{
 		int  i;
@@ -84,10 +84,10 @@ namespace HashTable {
 		printf("\n\n");
 	}
 
-	// º¯ÊıÉùÃ÷£º²åÈë¹şÏ£±í
+	// å‡½æ•°å£°æ˜ï¼šæ’å…¥å“ˆå¸Œè¡¨
 	Status InsertHash(HashTable& H, KeyType key);
 
-	// ÖØ½¨¹şÏ£±í
+	// é‡å»ºå“ˆå¸Œè¡¨
 	Status recreateHash(HashTable& H) {
 		RcdType* orcd;
 		int* otag, osize, i;
@@ -96,7 +96,7 @@ namespace HashTable {
 		osize = H.size;
 
 		InitHashTable(H, hashsize[index++]);
-		//°ÑËùÓĞÔªËØ£¬°´ÕÕĞÂ¹şÏ£º¯Êı·Åµ½ĞÂ±íÖĞ
+		//æŠŠæ‰€æœ‰å…ƒç´ ï¼ŒæŒ‰ç…§æ–°å“ˆå¸Œå‡½æ•°æ”¾åˆ°æ–°è¡¨ä¸­
 		for (i = 0; i < osize; i++) {
 			if (1 == otag[i]) {
 				InsertHash(H, orcd[i].key);
@@ -105,27 +105,27 @@ namespace HashTable {
 		return OK;
 	}
 
-	// ²åÈë¹şÏ£±í
+	// æ’å…¥å“ˆå¸Œè¡¨
 	Status InsertHash(HashTable& H, KeyType key) {
 		int p, c;
-		if (UNSUCCESS == SearchHash(H, key, p, c)) { //Ã»ÓĞÏàÍ¬key
-			if (c * 1.0 / H.size < 0.5) { //³åÍ»´ÎÊıÎ´´ïµ½ÉÏÏß
-				//²åÈë´úÂë
+		if (UNSUCCESS == SearchHash(H, key, p, c)) { //æ²¡æœ‰ç›¸åŒkey
+			if (c * 1.0 / H.size < 0.5) { //å†²çªæ¬¡æ•°æœªè¾¾åˆ°ä¸Šçº¿
+				//æ’å…¥ä»£ç 
 				H.rcd[p].key = key;
 				H.tag[p] = 1;
 				H.count++;
 				return SUCCESS;
 			}
-			else recreateHash(H); //ÖØ¹¹¹şÏ£±í 
+			else recreateHash(H); //é‡æ„å“ˆå¸Œè¡¨ 
 		}
 		return UNSUCCESS;
 	}
 
-	// É¾³ı¹şÏ£±í
+	// åˆ é™¤å“ˆå¸Œè¡¨
 	Status DeleteHash(HashTable& H, KeyType key) {
 		int p, c;
 		if (SUCCESS == SearchHash(H, key, p, c)) {
-			//É¾³ı´úÂë
+			//åˆ é™¤ä»£ç 
 			H.tag[p] = -1;
 			H.count--;
 			return SUCCESS;
@@ -135,39 +135,39 @@ namespace HashTable {
 
 	int test()
 	{
-		printf("-----¹şÏ£±í-----\n");
+		printf("-----å“ˆå¸Œè¡¨-----\n");
 		HashTable H;
 		int i;
 		int size = 11;
 		KeyType array[8] = { 22, 41, 53, 46, 30, 13, 12, 67 };
 		KeyType key;
 
-		//³õÊ¼»¯¹şÏ£±í
-		printf("³õÊ¼»¯¹şÏ£±í\n");
-		if (SUCCESS == InitHashTable(H, hashsize[index++])) printf("³õÊ¼»¯³É¹¦\n");
+		//åˆå§‹åŒ–å“ˆå¸Œè¡¨
+		printf("åˆå§‹åŒ–å“ˆå¸Œè¡¨\n");
+		if (SUCCESS == InitHashTable(H, hashsize[index++])) printf("åˆå§‹åŒ–æˆåŠŸ\n");
 
-		//²åÈë¹şÏ£±í
-		printf("²åÈë¹şÏ£±í\n");
+		//æ’å…¥å“ˆå¸Œè¡¨
+		printf("æ’å…¥å“ˆå¸Œè¡¨\n");
 		for (i = 0; i <= 7; i++) {
 			key = array[i];
 			InsertHash(H, key);
 			printHash(H);
 		}
 
-		//É¾³ı¹şÏ£±í
-		printf("É¾³ı¹şÏ£±íÖĞkeyÎª12µÄÔªËØ\n");
+		//åˆ é™¤å“ˆå¸Œè¡¨
+		printf("åˆ é™¤å“ˆå¸Œè¡¨ä¸­keyä¸º12çš„å…ƒç´ \n");
 		int p, c;
 		if (SUCCESS == DeleteHash(H, 12)) {
-			printf("É¾³ı³É¹¦£¬´ËÊ±¹şÏ£±íÎª£º\n");
+			printf("åˆ é™¤æˆåŠŸï¼Œæ­¤æ—¶å“ˆå¸Œè¡¨ä¸ºï¼š\n");
 			printHash(H);
 		}
 
-		//²éÑ¯¹şÏ£±í
-		printf("²éÑ¯¹şÏ£±íÖĞkeyÎª67µÄÔªËØ\n");
-		if (SUCCESS == SearchHash(H, 67, p, c)) printf("²éÑ¯³É¹¦\n");
+		//æŸ¥è¯¢å“ˆå¸Œè¡¨
+		printf("æŸ¥è¯¢å“ˆå¸Œè¡¨ä¸­keyä¸º67çš„å…ƒç´ \n");
+		if (SUCCESS == SearchHash(H, 67, p, c)) printf("æŸ¥è¯¢æˆåŠŸ\n");
 
-		//ÔÙ´Î²åÈë£¬²âÊÔ¹şÏ£±íµÄÖØ½¨
-		printf("ÔÙ´Î²åÈë£¬²âÊÔ¹şÏ£±íµÄÖØ½¨£º\n");
+		//å†æ¬¡æ’å…¥ï¼Œæµ‹è¯•å“ˆå¸Œè¡¨çš„é‡å»º
+		printf("å†æ¬¡æ’å…¥ï¼Œæµ‹è¯•å“ˆå¸Œè¡¨çš„é‡å»ºï¼š\n");
 		KeyType array1[8] = { 27, 47, 57, 47, 37, 17, 93, 67 };
 		for (i = 0; i <= 7; i++) {
 			key = array1[i];

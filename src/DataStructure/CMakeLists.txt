@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+﻿cmake_minimum_required(VERSION 3.14)
 
 project(DataStructure LANGUAGES CXX)
 
@@ -10,13 +10,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(DataStructure
-  main.cpp
-  SqHead.h
-  SqStack.cpp
-  SqList.cpp
-  LinkList.cpp
-  LinkList_with_head.cpp
-  HashTable.cpp
+  "main.cpp"
+  "Head.h"
+  "SqStack.cpp"
+  "SqList.cpp"
+  "LinkList.cpp"
+  "LinkList_with_head.cpp"
+  "HashTable.cpp"
+  "BinaryTree.cpp"
 )
 
 include(GNUInstallDirs)
