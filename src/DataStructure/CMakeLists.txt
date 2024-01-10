@@ -18,7 +18,7 @@ add_executable(DataStructure
   "LinkList_with_head.cpp"
   "HashTable.cpp"
   "BinaryTree.cpp"
-)
+ "RedBlackTree.cpp")
 
 include(GNUInstallDirs)
 install(TARGETS DataStructure

@@ -24,4 +24,8 @@ namespace HashTable {
 namespace BinaryTree {
 	int test();
 };
+
+namespace RedBlackTree {
+	int test();
+};
 #endif // SQHEAD_H
