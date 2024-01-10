@@ -148,6 +148,33 @@ namespace BinaryTree {
 		ReplaceRight(Ttemp, R);
 	}
 
+	void pre_order(BiTree Node)//前序遍历递归算法
+	{
+		if (Node == NULL)
+			return;
+		printf("%c ", Node->data);//显示节点数据，可以更改为其他操作。在前面
+		pre_order(Node->lchild);
+		pre_order(Node->rchild);
+	}
+
+	void middle_order(BiTree Node)//中序遍历递归算法
+	{
+		if (Node == NULL)
+			return;
+		middle_order(Node->lchild);
+		printf("%c ", Node->data);//在中间
+		middle_order(Node->rchild);
+	}
+
+	void post_order(BiTree Node)//后序遍历递归算法
+	{
+		if (Node == NULL)
+			return;
+		post_order(Node->lchild);
+		post_order(Node->rchild);
+		printf("%c ", Node->data);//在最后
+	}
+
 	int test()
 	{
 		BiTree T = NULL, Ttemp = NULL;
@@ -176,6 +203,13 @@ namespace BinaryTree {
 		levTraverse(T, visit1, lev);
 
 		printf("高度是 %d\n", depTraverse(T));
+
+		printf("前序遍历：");
+		pre_order(T);
+		printf("中序遍历：");
+		middle_order(T);
+		printf("后序遍历：");
+		post_order(T);
 
 		getchar();
 		return 0;
