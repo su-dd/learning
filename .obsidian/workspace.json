@@ -159,6 +159,7 @@
   },
   "active": "1bbf8f87ea646c1f",
   "lastOpenFiles": [
+    "src/DataStructure/RedBlackTree.cpp~RF5d7efe6.TMP",
     "docs/dataStruct_algorithm/attachment/96a7aa160f13424abb4acd1ada47edbf.webp",
     "docs/dataStruct_algorithm/attachment/ba1adc2895cf4b1aaef2e7088d9f6a69.webp",
     "docs/dataStruct_algorithm/attachment/20240110234942.png",
@@ -180,7 +181,6 @@
     "docs/dataStruct_algorithm/attachment/20240110140555.png",
     "docs/dataStruct_algorithm/attachment/20240110140345.png",
     "docs/dataStruct_algorithm/attachment/20240110140242.png",
-    "docs/dataStruct_algorithm/attachment/20240110140144.png",
     "docs/dataStruct_algorithm/算法.md",
     "docs/cpp/cpp_language/C++11.md",
     "docs/cpp/cpp_language/C++14.md",

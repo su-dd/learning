@@ -134,6 +134,8 @@ namespace RedBlackTree {
 				return delete_child(p->rightChild, data);
 			}
 			else if (p->value == data) {
+				// 找到对应的节点p
+				// 通过二叉查找书的方式，将调整放到叶子节点临近位置
 				if (p->rightChild == NIL) {
 					delete_one_child(p);
 					return true;
@@ -157,7 +159,7 @@ namespace RedBlackTree {
 				return;
 			}
 
-			Node* child = d->leftChild == NIL ? d->rightChild : d->leftChild;	// 优先取leftChild
+			Node* child = d->leftChild == NIL ? d->rightChild : d->leftChild;	// 
 			if (d->parent == NULL) {
 				// 当前是节点是root，有child
 				delete  d;
