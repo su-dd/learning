@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 
 namespace RedBlackTree {
 
@@ -13,9 +13,9 @@ namespace RedBlackTree {
 		struct Node {
 			int value;
 			bool color;
-			Node* leftTree, * rightTree, * parent;
+			Node* leftChild, * rightChild, * parent;
 
-			Node() : value(0), color(RED), leftTree(NULL), rightTree(NULL), parent(NULL) { }
+			Node() : value(0), color(RED), leftChild(NULL), rightChild(NULL), parent(NULL) { }
 
 			Node* grandparent() {
 				if (parent == NULL) {
@@ -28,114 +28,117 @@ namespace RedBlackTree {
 				if (grandparent() == NULL) {
 					return NULL;
 				}
-				if (parent == grandparent()->rightTree)
-					return grandparent()->leftTree;
+				if (parent == grandparent()->rightChild)
+					return grandparent()->leftChild;
 				else
-					return grandparent()->rightTree;
+					return grandparent()->rightChild;
 			}
 
 			Node* sibling() {
-				if (parent->leftTree == this)
-					return parent->rightTree;
+				if (parent->leftChild == this)
+					return parent->rightChild;
 				else
-					return parent->leftTree;
+					return parent->leftChild;
 			}
 		};
 
-		void rotate_right(Node* p) {
-			Node* gp = p->grandparent();
-			Node* fa = p->parent;
-			Node* y = p->rightTree;
+		// 右转
+		void rotate_right(Node* x) {
+			Node* gp = x->grandparent();
+			Node* p = x->parent;
+			Node* rChild = x->rightChild;
 
-			fa->leftTree = y;
+			p->leftChild = rChild;
+			if (rChild != NIL)
+				rChild->parent = p;
 
-			if (y != NIL)
-				y->parent = fa;
-			p->rightTree = fa;
-			fa->parent = p;
+			x->rightChild = p;
+			p->parent = x;
 
-			if (root == fa)
-				root = p;
-			p->parent = gp;
+			if (root == p)
+				root = x;
+			x->parent = gp;
 
 			if (gp != NULL) {
-				if (gp->leftTree == fa)
-					gp->leftTree = p;
+				if (gp->leftChild == p)
+					gp->leftChild = x;
 				else
-					gp->rightTree = p;
+					gp->rightChild = x;
 			}
 		}
 
-		void rotate_left(Node* p) {
-			if (p->parent == NULL) {
-				root = p;
+		// 左转
+		void rotate_left(Node* x) {
+			if (x->parent == NULL) {
+				root = x;
 				return;
 			}
-			Node* gp = p->grandparent();
-			Node* fa = p->parent;
-			Node* y = p->leftTree;
+			Node* gp = x->grandparent();
+			Node* p = x->parent;
+			Node* lChild = x->leftChild;
 
-			fa->rightTree = y;
+			p->rightChild = lChild;
+			if (lChild != NIL)
+				lChild->parent = p;
 
-			if (y != NIL)
-				y->parent = fa;
-			p->leftTree = fa;
-			fa->parent = p;
+			x->leftChild = p;
+			p->parent = x;
 
-			if (root == fa)
-				root = p;
-			p->parent = gp;
+			if (root == p)
+				root = x;
+			x->parent = gp;
 
 			if (gp != NULL) {
-				if (gp->leftTree == fa)
-					gp->leftTree = p;
+				if (gp->leftChild == p)
+					gp->leftChild = x;
 				else
-					gp->rightTree = p;
+					gp->rightChild = x;
 			}
 		}
 
+		// 中序遍历，左->父->右
 		void inorder(Node* p) {
 			if (p == NIL)
 				return;
 
-			if (p->leftTree)
-				inorder(p->leftTree);
+			if (p->leftChild)
+				inorder(p->leftChild);
 
-			cout << p->value << " ";
+			cout << p->value << (p->color == RED? "red" : "black") << "  ";
 
-			if (p->rightTree)
-				inorder(p->rightTree);
+			if (p->rightChild)
+				inorder(p->rightChild);
 		}
-
+		// 输出颜色
 		string outputColor(bool color) {
 			return color ? "BLACK" : "RED";
 		}
-
+		// 递归，找到当前树的最左节点
 		Node* getSmallestChild(Node* p) {
-			if (p->leftTree == NIL)
+			if (p->leftChild == NIL)
 				return p;
-			return getSmallestChild(p->leftTree);
+			return getSmallestChild(p->leftChild);
 		}
-
+		// 二叉查找树，查询到后，做删除
 		bool delete_child(Node* p, int data) {
 			if (p->value > data) {
-				if (p->leftTree == NIL) {
+				if (p->leftChild == NIL) {
 					return false;
 				}
-				return delete_child(p->leftTree, data);
+				return delete_child(p->leftChild, data);
 			}
 			else if (p->value < data) {
-				if (p->rightTree == NIL) {
+				if (p->rightChild == NIL) {
 					return false;
 				}
-				return delete_child(p->rightTree, data);
+				return delete_child(p->rightChild, data);
 			}
 			else if (p->value == data) {
-				if (p->rightTree == NIL) {
+				if (p->rightChild == NIL) {
 					delete_one_child(p);
 					return true;
 				}
-				Node* smallest = getSmallestChild(p->rightTree);
+				Node* smallest = getSmallestChild(p->rightChild);
 				swap(p->value, smallest->value);
 				delete_one_child(smallest);
 
@@ -145,164 +148,177 @@ namespace RedBlackTree {
 				return false;
 			}
 		}
-
-		void delete_one_child(Node* p) {
-			Node* child = p->leftTree == NIL ? p->rightTree : p->leftTree;
-			if (p->parent == NULL && p->leftTree == NIL && p->rightTree == NIL) {
-				p = NULL;
-				root = p;
+		// 删除一个节点
+		void delete_one_child(Node* d) {
+			if (d->parent == NULL && d->leftChild == NIL && d->rightChild == NIL) {
+				// 当前是节点是root，且无child，直接删除
+				d = NULL;
+				root = d;
 				return;
 			}
 
-			if (p->parent == NULL) {
-				delete  p;
+			Node* child = d->leftChild == NIL ? d->rightChild : d->leftChild;	// 优先取leftChild
+			if (d->parent == NULL) {
+				// 当前是节点是root，有child
+				delete  d;
 				child->parent = NULL;
 				root = child;
 				root->color = BLACK;
 				return;
 			}
 
-			if (p->parent->leftTree == p) {
-				p->parent->leftTree = child;
+			// 链接 parent和child
+			if (d->parent->leftChild == d) {
+				d->parent->leftChild = child;
 			}
 			else {
-				p->parent->rightTree = child;
+				d->parent->rightChild = child;
 			}
-			child->parent = p->parent;
+			child->parent = d->parent;
 
-			if (p->color == BLACK) {
+			if (d->color == BLACK) {
 				if (child->color == RED) {
+					// 删除节点是黑色，child为红色
 					child->color = BLACK;
 				}
 				else
+					// 删除节点是黑色，child为黑色
 					delete_case(child);
 			}
-			delete p;
+			delete d;
 		}
-
-		void delete_case(Node* p) {
-			if (p->parent == NULL) {
-				p->color = BLACK;
+		// 处理删除后的变色和旋转
+		void delete_case(Node* d) {
+			if (d->parent == NULL) {
+				d->color = BLACK;
 				return;
 			}
-			if (p->sibling()->color == RED) {
-				p->parent->color = RED;
-				p->sibling()->color = BLACK;
-				if (p == p->parent->leftTree)
-					rotate_left(p->sibling());
+
+			if (d->sibling()->color == RED) {
+				d->parent->color = RED;
+				d->sibling()->color = BLACK;
+				if (d == d->parent->leftChild)
+					rotate_left(d->sibling());
 				else
-					rotate_right(p->sibling());
+					rotate_right(d->sibling());
 			}
-			if (p->parent->color == BLACK && p->sibling()->color == BLACK
-				&& p->sibling()->leftTree->color == BLACK && p->sibling()->rightTree->color == BLACK) {
-				p->sibling()->color = RED;
-				delete_case(p->parent);
+
+			if (d->parent->color == BLACK && d->sibling()->color == BLACK
+				&& d->sibling()->leftChild->color == BLACK && d->sibling()->rightChild->color == BLACK) {
+				d->sibling()->color = RED;
+				delete_case(d->parent);
 			}
-			else if (p->parent->color == RED && p->sibling()->color == BLACK
-				&& p->sibling()->leftTree->color == BLACK && p->sibling()->rightTree->color == BLACK) {
-				p->sibling()->color = RED;
-				p->parent->color = BLACK;
+			else if (d->parent->color == RED && d->sibling()->color == BLACK
+				&& d->sibling()->leftChild->color == BLACK && d->sibling()->rightChild->color == BLACK) {
+				d->sibling()->color = RED;
+				d->parent->color = BLACK;
 			}
 			else {
-				if (p->sibling()->color == BLACK) {
-					if (p == p->parent->leftTree && p->sibling()->leftTree->color == RED
-						&& p->sibling()->rightTree->color == BLACK) {
-						p->sibling()->color = RED;
-						p->sibling()->leftTree->color = BLACK;
-						rotate_right(p->sibling()->leftTree);
+				if (d->sibling()->color == BLACK) {
+					if (d == d->parent->leftChild && d->sibling()->leftChild->color == RED
+						&& d->sibling()->rightChild->color == BLACK) {
+						d->sibling()->color = RED;
+						d->sibling()->leftChild->color = BLACK;
+						rotate_right(d->sibling()->leftChild);
 					}
-					else if (p == p->parent->rightTree && p->sibling()->leftTree->color == BLACK
-						&& p->sibling()->rightTree->color == RED) {
-						p->sibling()->color = RED;
-						p->sibling()->rightTree->color = BLACK;
-						rotate_left(p->sibling()->rightTree);
+					else if (d == d->parent->rightChild && d->sibling()->leftChild->color == BLACK
+						&& d->sibling()->rightChild->color == RED) {
+						d->sibling()->color = RED;
+						d->sibling()->rightChild->color = BLACK;
+						rotate_left(d->sibling()->rightChild);
 					}
 				}
-				p->sibling()->color = p->parent->color;
-				p->parent->color = BLACK;
-				if (p == p->parent->leftTree) {
-					p->sibling()->rightTree->color = BLACK;
-					rotate_left(p->sibling());
+				d->sibling()->color = d->parent->color;
+				d->parent->color = BLACK;
+				if (d == d->parent->leftChild) {
+					d->sibling()->rightChild->color = BLACK;
+					rotate_left(d->sibling());
 				}
 				else {
-					p->sibling()->leftTree->color = BLACK;
-					rotate_right(p->sibling());
+					d->sibling()->leftChild->color = BLACK;
+					rotate_right(d->sibling());
 				}
 			}
 		}
-
+		// 插入 ： 二叉搜索树的查找 + 创建Node
 		void insert(Node* p, int data) {
 			if (p->value >= data) {
-				if (p->leftTree != NIL)
-					insert(p->leftTree, data);
+				if (p->leftChild != NIL)
+					insert(p->leftChild, data);
 				else {
 					Node* tmp = new Node();
 					tmp->value = data;
-					tmp->leftTree = tmp->rightTree = NIL;
+					tmp->leftChild = tmp->rightChild = NIL;
 					tmp->parent = p;
-					p->leftTree = tmp;
+					p->leftChild = tmp;
 					insert_case(tmp);
 				}
 			}
 			else {
-				if (p->rightTree != NIL)
-					insert(p->rightTree, data);
+				if (p->rightChild != NIL)
+					insert(p->rightChild, data);
 				else {
 					Node* tmp = new Node();
 					tmp->value = data;
-					tmp->leftTree = tmp->rightTree = NIL;
+					tmp->leftChild = tmp->rightChild = NIL;
 					tmp->parent = p;
-					p->rightTree = tmp;
+					p->rightChild = tmp;
 					insert_case(tmp);
 				}
 			}
 		}
-
-		void insert_case(Node* p) {
-			if (p->parent == NULL) {
-				root = p;
-				p->color = BLACK;
+		// 插入： 处理 变色和转换
+		void insert_case(Node* x) {
+			if (x->parent == NULL) {
+				// x 为根节点，直接设置为黑色
+				root = x;
+				x->color = BLACK;
 				return;
 			}
-			if (p->parent->color == RED) {
-				if (p->uncle()->color == RED) {
-					p->parent->color = p->uncle()->color = BLACK;
-					p->grandparent()->color = RED;
-					insert_case(p->grandparent());
+			if (x->parent->color == RED) {
+				if (x->uncle()->color == RED) {
+					// x 为的Parent为红，且uncle为红；变色后做递归
+					x->parent->color = x->uncle()->color = BLACK;
+					x->grandparent()->color = RED;
+					insert_case(x->grandparent());
 				}
-				else {
-					if (p->parent->rightTree == p && p->grandparent()->leftTree == p->parent) {
-						rotate_left(p);
-						rotate_right(p);
-						p->color = BLACK;
-						p->leftTree->color = p->rightTree->color = RED;
+				else {//  x 的 parent 为红，同时 uncle是黑色
+					if (x->parent->rightChild == x && x->grandparent()->leftChild == x->parent) {
+						// LR，做先x节点左旋，再右旋，变色
+						rotate_left(x);
+						rotate_right(x);
+						x->color = BLACK;
+						x->leftChild->color = x->rightChild->color = RED;
 					}
-					else if (p->parent->leftTree == p && p->grandparent()->rightTree == p->parent) {
-						rotate_right(p);
-						rotate_left(p);
-						p->color = BLACK;
-						p->leftTree->color = p->rightTree->color = RED;
+					else if (x->parent->leftChild == x && x->grandparent()->rightChild == x->parent) {
+						// RL，先X节点右旋，再左旋，变色
+						rotate_right(x);
+						rotate_left(x);
+						x->color = BLACK;
+						x->leftChild->color = x->rightChild->color = RED;
 					}
-					else if (p->parent->leftTree == p && p->grandparent()->leftTree == p->parent) {
-						p->parent->color = BLACK;
-						p->grandparent()->color = RED;
-						rotate_right(p->parent);
+					else if (x->parent->leftChild == x && x->grandparent()->leftChild == x->parent) {
+						// LL，Parent节点右旋，变色
+						x->parent->color = BLACK;
+						x->grandparent()->color = RED;
+						rotate_right(x->parent);
 					}
-					else if (p->parent->rightTree == p && p->grandparent()->rightTree == p->parent) {
-						p->parent->color = BLACK;
-						p->grandparent()->color = RED;
-						rotate_left(p->parent);
+					else if (x->parent->rightChild == x && x->grandparent()->rightChild == x->parent) {
+						// RR，Parent节点左旋，变色
+						x->parent->color = BLACK;
+						x->grandparent()->color = RED;
+						rotate_left(x->parent);
 					}
 				}
 			}
 		}
-
+		// 删除树
 		void DeleteTree(Node* p) {
 			if (!p || p == NIL) {
 				return;
 			}
-			DeleteTree(p->leftTree);
-			DeleteTree(p->rightTree);
+			DeleteTree(p->leftChild);
+			DeleteTree(p->rightChild);
 			delete p;
 		}
 	public:
@@ -330,7 +346,7 @@ namespace RedBlackTree {
 			if (root == NULL) {
 				root = new Node();
 				root->color = BLACK;
-				root->leftTree = root->rightTree = NIL;
+				root->leftChild = root->rightChild = NIL;
 				root->value = x;
 			}
 			else {
@@ -347,30 +363,38 @@ namespace RedBlackTree {
 
 	int test()
 	{
-		cout << "---���������---" << endl;
-		// ���������
+		cout << "---【红黑树】---" << endl;
+		// 创建红黑树
 		bst tree;
 
-		// ����Ԫ��
+		// 顺序打印红黑树
+		cout << "插入元素后的红黑树：" << endl;
+		// 插入元素
 		tree.insert(2);
-		tree.insert(9);
-		tree.insert(-10);
-		tree.insert(0);
-		tree.insert(33);
-		tree.insert(-19);
-
-		// ˳���ӡ�����
-		cout << "����Ԫ�غ�ĺ������" << endl;
+		tree.inorder();
+		tree.insert(1);
+		tree.inorder();
+		tree.insert(3);
+		tree.inorder();
+		tree.insert(4);
+		tree.inorder();
+		tree.insert(5);
+		tree.inorder();
+		tree.insert(6);
+		tree.inorder();
+		tree.insert(7);
+		tree.inorder();
+		tree.insert(8);
 		tree.inorder();
 
-		// ɾ��Ԫ��
+		// 删除元素
 		tree.delete_value(2);
 
-		// ˳���ӡ�����
-		cout << "ɾ��Ԫ�� 2 ��ĺ������" << endl;
+		// 顺序打印红黑树
+		cout << "删除元素 2 后的红黑树：" << endl;
 		tree.inorder();
 
-		// ����
+		// 析构
 		tree.~bst();
 
 		getchar();

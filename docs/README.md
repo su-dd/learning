@@ -1,14 +1,8 @@
 **编程语言**
 - C++语言
-  - C++语法
-    - [C++基础](cpp/cpp_language/C++基础.md)
-    - [C++11](cpp/cpp_language/C++11.md)
-    - [C++14](cpp/cpp_language/C++14.md)
-    - [C++17](cpp/cpp_language/C++17.md)
-    - [C++20](cpp/cpp_language/C++20.md)
-  - C++专题
-    - [C++之RAII](cpp/cpp_topic/C++之RAII.md)
-    - [C++内存模型](cpp/cpp_topic/C++内存模型.md)
+  - [C++语法](cpp/cpp_language/C++.md)
+  - [C++之RAII](cpp/cpp_topic/C++之RAII.md)
+  - [C++内存模型](cpp/cpp_topic/C++内存模型.md)
   - 工具
     - cmake
       - [简述](tool/cmake/1.CMake简述.md)

@@ -148,7 +148,7 @@ namespace BinaryTree {
 		ReplaceRight(Ttemp, R);
 	}
 
-	void pre_order(BiTree Node)//前序遍历递归算法
+	void pre_order(BiTree Node)//前序遍历递归算法，父->左->右
 	{
 		if (Node == NULL)
 			return;
@@ -157,7 +157,7 @@ namespace BinaryTree {
 		pre_order(Node->rchild);
 	}
 
-	void middle_order(BiTree Node)//中序遍历递归算法
+	void middle_order(BiTree Node)//中序遍历递归算法，左->父->右
 	{
 		if (Node == NULL)
 			return;
@@ -166,7 +166,7 @@ namespace BinaryTree {
 		middle_order(Node->rchild);
 	}
 
-	void post_order(BiTree Node)//后序遍历递归算法
+	void post_order(BiTree Node)//后序遍历递归算法,左->右->父
 	{
 		if (Node == NULL)
 			return;
