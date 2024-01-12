@@ -284,7 +284,8 @@ namespace RedBlackTree {
 					x->grandparent()->color = RED;
 					insert_case(x->grandparent());
 				}
-				else {//  x 的 parent 为红，同时 uncle是黑色
+				else {
+					//  x 的 parent 为红，同时 uncle是黑色
 					if (x->parent->rightChild == x && x->grandparent()->leftChild == x->parent) {
 						// LR，做先x节点左旋，再右旋，变色
 						rotate_left(x);
@@ -323,6 +324,7 @@ namespace RedBlackTree {
 			DeleteTree(p->rightChild);
 			delete p;
 		}
+
 	public:
 
 		bst() {

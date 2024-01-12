@@ -1,4 +1,4 @@
-# 深入理解：C++内存分配
+## 深入理解：C++内存分配
 
 程序一般都是在内存中跑的，这章主要讲c++程序运行时的内存分配问题。
 
@@ -6,7 +6,7 @@
 
 这篇会从网络中多篇文档中汲取能量，如果未能罗列引用望海涵
 
-## 什么是内存模型
+### 什么是内存模型
 
 内存模型就是一种语言它独特的管理者一套程序的机制
 
@@ -16,7 +16,7 @@ C++则分为堆、栈、自由存储区、全局/静态变量区、常量存储�
 
 划分的目的是为了能够方便编译器的管理和运行
 
-## 内存的分类
+### 内存的分类
 
 | 分类标准    | 分区数量                                        |
 | :---------- | :---------------------------------------------- |
@@ -27,7 +27,7 @@ C++则分为堆、栈、自由存储区、全局/静态变量区、常量存储�
 
 内存模型根据生命周期的不同分区 自由存储区、动态区、静态区 我们就按照C++语言的内存划分区域来讲解内存管理机制
 
-![内存分配](C++内存模型.assets/202304092008990-16951745273521.png)
+![内存分配](img/c++的技巧和感悟/202304092008991.png)
 
 **文本段（ELF）：** 主要用于存放我们编写的代码，但是不是按照代码文本的形式存放，而是将代码文本编译成二进制代码，存放的是二进制代码，在编译时就已经确定这个区域存放的内容是什么了，并且这个区域是只读区域
 
@@ -41,9 +41,9 @@ C++则分为堆、栈、自由存储区、全局/静态变量区、常量存储�
 
 **内核空间（env）环境变量：** 这个区域是系统内部的区域，我们是不可编辑的
 
-## 各分区例程
+### 各分区例程
 
-### 全局/静态存储区
+#### 全局/静态存储区
 
 这个区域有两个段，分别是 `BSS段` 和 `DATA段` ，均存放着`全局变量`和`静态变量`（包括`全局静态变量`和`局部静态变量`）
 
@@ -93,7 +93,7 @@ The address of serven_4:00007FF7F3C2E004, The data of serven_4:4
 
 **结果分析：** 程序定义了两个全局变量 `serven_1` 和 `serven_2` ，两个静态变量 `serven_3` 和 `serven_4` ，其中 `serven_2` 和 `serven_4` 是初始化的，所以 `serven_1` 和 `serven_3` 是存放在 `BSS段` ，并且编译器会将这两个未初始化的变量默认初始化为 `0` ；而 `serven_2` 和 `serven_4` 这两个变量是初始化的，存放在 `DATA段`
 
-### 常量区
+#### 常量区
 
 上面说到常量是存放在DATA段区域的，下面我们来看一下例子：
 
@@ -159,7 +159,7 @@ The Pointer of s2 :00000096D82FFE80
 
 总结就是： `s` 和 `s2` 是定义在局部函数里面的变量，所以存放在栈区域，`serven_6` ~ `serven_8` 是定义在局部里面的指针，指向的是常量，所以指向的常量存放在DATA区域，而指针本身存放在栈中
 
-### 栈（Stack）区域
+#### 栈（Stack）区域
 
 栈区域是编译器自动根据变量进行分配的，不是由程序员进行开辟的，所以编译器即会自动分配也会将其释放，这个区域主要存放函数的参数值、局部变量、形参等等。
 
@@ -226,7 +226,7 @@ The Pointer of serven_12(MAIN) is: 0000002338fff9a0
 
 而且可以看到`serven_12`的地址和`serven_11`是隔壁，由此可以看出，栈的先进后出，也就是调用完函数TEST后会把局部变量`serven_11（TEST）~serven_9（TEST）`、`serv_x~ser_z`全部出栈，然后再将`serven_12`入栈。
 
-![栈地址](C++内存模型.assets/202304100100360-16951745273523.png)
+![栈地址](img/c++的技巧和感悟/202304100100361.png)
 
 但是，我们可以发现了定义`serven_11`之后的调用函数，函数的形参入栈的地址与s`erven_11`定义时的地址相差很远，大概有三个字节，这三个字节中有一个是`serven_11`，那么多出来两个字节是什么呢？
 
@@ -240,13 +240,13 @@ The Pointer of serven_12(MAIN) is: 0000002338fff9a0
 
 函数的局部变量：（ebp）最右参数->中间参数->最左参数->返回地址->运行时参数（esp）；
 
-### 堆（Heap）区域
+#### 堆（Heap）区域
 
 这个区域是由程序员来进行分配内存和释放内存用的，当我们使用malloc/free、new/delete（这是在自由存储区上分配和释放的，某种意义上来说呢，起始自由存储区是堆的一个子集）。
 
 在这里要注意的是，我们申请了空间内存一定要释放，如果没有释放那就会导致内存的泄露，后果很严重！！！你遇到过的电脑蓝屏也许就是内存泄漏引起的。
 
-### 堆和栈的区别
+#### 堆和栈的区别
 
 | 比较类别 | 堆                           | 栈                        |
 | :------- | :--------------------------- | :------------------------ |
@@ -257,13 +257,13 @@ The Pointer of serven_12(MAIN) is: 0000002338fff9a0
 | 分配方式 | malloc、new、calloc、realloc | 编译器管理                |
 | 分配效率 | 低                           | 高                        |
 
-### 堆和自由存储区的区别
+#### 堆和自由存储区的区别
 
 自由存储区其实上是一个逻辑概念
 
 堆是物理概念。
 
-### malloc/free和new/delete的区别
+#### malloc/free和new/delete的区别
 
 （1）new、delete是C++中的操作符，而malloc和free是标准库函数。操作符可以在类的内部重载，malloc/free不行，唯一的关联只是在默认情况下new/delete调用malloc/free
 
@@ -271,7 +271,7 @@ The Pointer of serven_12(MAIN) is: 0000002338fff9a0
 
 （3）new返回的是指定类型的指针，并且可以自动计算所申请内存的大小。而 malloc需要我们计算申请内存的大小，并且在返回时强行转换为实际类型的指针。
 
-### C++中new/delete的工作过程
+#### C++中new/delete的工作过程
 
 **申请的是普通的内置类型的空间：**
 
@@ -299,12 +299,328 @@ The Pointer of serven_12(MAIN) is: 0000002338fff9a0
 
 delete 与new相反，会先调用析构函数再去释放内存（delete 实际调用 operator delete）
 
-operator new[]的形参是 sizeof(T)*N+4就是总大小加上一个4(用来保存个数);空间中前四个字节保存填充长度。然后执行N次operator new
+operator new\[\]的形参是 sizeof(T)*N+4就是总大小加上一个4(用来保存个数);空间中前四个字节保存填充长度。然后执行N次operator new
 
-operator delete[] 类似；
+operator delete\[\] 类似；
 
-## 参考文档
+## 深入理解：变量
 
-[https://zhuanlan.zhihu.com/p/434850899(opens new window)](https://zhuanlan.zhihu.com/p/434850899)
+### 变量
 
-https://blog.csdn.net/weixin_43340455/article/details/124786128
+变量是程序中一个重要的概念。
+
+在了解概念前先，看一段简单的程序。
+
+```cpp
+int a = 0;
+int main(int argc, char* argv[])
+{
+	int b = 1;
+	int c = a + b;
+}
+```
+
+程序的结果也很明了：
+
+```cpp
+c 为 1
+```
+
+问题：变量a、b、c是以什么样的形式存在于程序中的嗯？
+
+
+
+#### vs编译器汇编
+
+这里是win32的x86汇编：
+
+```text
+--- E:\github\githubDemo\C++相关\104_变量\main.cpp ---------------------------------
+int a = 0;
+int main()
+{
+00F61470  push        ebp  
+00F61471  mov         ebp,esp  
+00F61473  sub         esp,8  
+	int b = 1;
+00F61476  mov         dword ptr [b],1  
+	int c = a + b;
+00F6147D  mov         eax,dword ptr [a (0F69138h)]  
+00F61482  add         eax,dword ptr [b]  
+00F61485  mov         dword ptr [c],eax  
+}
+00F61488  xor         eax,eax  
+00F6148A  mov         esp,ebp  
+00F6148C  pop         ebp  
+00F6148D  ret  
+--- 无源文件 -----------------------------------------------------------------------
+```
+
+这里主要关注mov和ptr，mov是汇编中的数据传输指令；ptr为pointer（指针）的缩写。
+
+```text
+	int b = 1;
+00F61476  mov         dword ptr [b],1   
+```
+
+
+
+这里的汇编的意思就是，给内存地址等于 “b寄存器的值” 得位置 存上值 1
+
+明显b是我们的变量。Vs编译器上，我们看到似乎存在一个寄存器b。
+
+即程序运行时存在一个名为变量名的地址位置， 可大致直接理解为一个寄存器。
+
+
+
+#### gcc编译器汇编
+
+ubuntu64位汇编：gcc编译器
+
+```cpp
+main():
+
+0x0000555555555129  endbr64  
+0x000055555555512d  push   %rbp 
+0x000055555555512e  mov    %rsp,%rbp 
+0x0000555555555131  movl   $0x1,-0x8(%rbp) 
+0x0000555555555138  mov    0x2ed6(%rip),%edx        ## 0x555555558014 <a> 
+0x000055555555513e  mov    -0x8(%rbp),%eax 
+0x0000555555555141  add    %edx,%eax 
+0x0000555555555143  mov    %eax,-0x4(%rbp) 
+0x0000555555555146  mov    $0x0,%eax 
+0x000055555555514b  pop    %rbp 
+0x000055555555514c  ret   
+```
+
+
+在这里我们看到： 对于栈变量（b、c），我们是直接使用其在栈中的相对地址位置。 对于全局变量（a），程序是提前分配了一个地址位置，我们也是直接操作的地址。
+
+可见在gcc编译器中，变量只存在于程序的代码编程阶段；在编译器中就会转换为地址，不在存在。这也是我们常用的理解方式。
+
+#### 总结
+
+综上，变量在c++程序中只存在于代码编辑阶段；在程序中表现为地址。
+
+
+## 在Windows下生成Dump文件
+
+Dump 文件是进程的内存镜像 , 可以把程序的执行状态通过调试器保存到dump文件中 ; Dump 文件是用来给驱动程序编写人员调试驱动程序用的 , 这种文件必须用专用工具软件打开 , 比如使用 WinDbg , VisualStudio 打开 ;
+
+当我们的程序发布出去之后 , 在客户机上是无法跟踪自己代码的 BUG 的 , 所以 Dump 文件对于我们来说特别有用 ; 我们可以通过 .dmp 文件把出现 BUG 的情况再现 , 然后再现客户环境 (包括堆栈调用等情况) , 设置源码调试路径 , 可以找到出现 BUG 的语句 ;
+
+C++ 程序设置生成 Dump 文件的代码如下 :
+
+```cpp
+#include "stdafx.h"
+#include "Windows.h"
+#include "DbgHelp.h"
+
+int GenerateMiniDump(PEXCEPTION_POINTERS pExceptionPointers)
+{
+    // 定义函数指针
+    typedef BOOL(WINAPI * MiniDumpWriteDumpT)(
+        HANDLE,
+        DWORD,
+        HANDLE,
+        MINIDUMP_TYPE,
+        PMINIDUMP_EXCEPTION_INFORMATION,
+        PMINIDUMP_USER_STREAM_INFORMATION,
+        PMINIDUMP_CALLBACK_INFORMATION
+        );
+    // 从 "DbgHelp.dll" 库中获取 "MiniDumpWriteDump" 函数
+    MiniDumpWriteDumpT pfnMiniDumpWriteDump = NULL;
+    HMODULE hDbgHelp = LoadLibrary(_T("DbgHelp.dll"));
+    if (NULL == hDbgHelp)
+    {
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    pfnMiniDumpWriteDump = (MiniDumpWriteDumpT)GetProcAddress(hDbgHelp, "MiniDumpWriteDump");
+
+    if (NULL == pfnMiniDumpWriteDump)
+    {
+        FreeLibrary(hDbgHelp);
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    // 创建 dmp 文件件
+    TCHAR szFileName[MAX_PATH] = {0};
+    TCHAR* szVersion = _T("DumpDemo_v1.0");
+    SYSTEMTIME stLocalTime;
+    GetLocalTime(&stLocalTime);
+    wsprintf(szFileName, L"%s-%04d%02d%02d-%02d%02d%02d.dmp",
+        szVersion, stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
+        stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond);
+    HANDLE hDumpFile = CreateFile(szFileName, GENERIC_READ | GENERIC_WRITE, 
+        FILE_SHARE_WRITE | FILE_SHARE_READ, 0, CREATE_ALWAYS, 0, 0);
+    if (INVALID_HANDLE_VALUE == hDumpFile)
+    {
+        FreeLibrary(hDbgHelp);
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    // 写入 dmp 文件
+    MINIDUMP_EXCEPTION_INFORMATION expParam;
+    expParam.ThreadId = GetCurrentThreadId();
+    expParam.ExceptionPointers = pExceptionPointers;
+    expParam.ClientPointers = FALSE;
+    pfnMiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), 
+        hDumpFile, MiniDumpWithDataSegs, (pExceptionPointers ? &expParam : NULL), NULL, NULL);
+    // 释放文件
+    CloseHandle(hDumpFile);
+    FreeLibrary(hDbgHelp);
+    return EXCEPTION_EXECUTE_HANDLER;
+
+}
+
+LONG WINAPI ExceptionFilter(LPEXCEPTION_POINTERS lpExceptionInfo)
+{
+    // 这里做一些异常的过滤或提示
+    if (IsDebuggerPresent())
+    {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+    return GenerateMiniDump(lpExceptionInfo);
+}
+
+int main()
+{
+    // 加入崩溃dump文件功能
+    SetUnhandledExceptionFilter(ExceptionFilter);
+    // 使程序崩溃产生 Dump 文件
+    int *p = NULL;
+    *p=1;
+}
+
+```
+
+
+## RALL
+
+**RAII**，全称为 Resource Acquisition Is Initialization，直译为**资源获取即初始化**。
+
+这是C++的一个编程技术或者说是一种编程哲学。
+
+**其核心思想是将对象的生命周期（对象的创建和销毁）与资源的生命周期（资源的获取和释放）绑定在一起。**
+
+
+
+在C++中，RAII主要通过对象构造函数和析构函数来实现。当创建一个对象时，我们可以在构造函数中获取资源，比如**动态分配内存**、打开文件、**获取锁**等。
+
+当对象不再需要时，我们可以通过析构函数来释放这些资源。
+
+这种方式的**优点**是，它可以自动管理资源的生命周期，防止资源泄露。
+
+因为C++有确定的析构函数调用时间（当对象离开其作用域时），所以我们可以确保在适当的时间释放资源。
+
+这也可以防止因为异常或早期返回而导致的资源泄露。
+
+**例：**
+
+```cpp
+class File {  
+public:  
+    File(const std::string& filename) {  
+        // 打开文件  
+        file_ = fopen(filename.c_str(), "r");  
+        if (!file_) {  
+            throw std::runtime_error("Failed to open file");  
+        }  
+    }  
+      
+    ~File() {  
+        // 关闭文件  
+        fclose(file_);  
+    }  
+      
+private:  
+    FILE* file_;  
+};
+```
+
+### ScopeExit
+
+当退出作用域时，做一些相应的操作；如，资源管理
+
+**实现方案1：**
+
+```cpp
+class ScopeExit {
+   public:
+    ScopeExit() = default;
+
+    ScopeExit(const ScopeExit&) = delete;
+    void operator=(const ScopeExit&) = delete;
+
+    ScopeExit(ScopeExit&&) = default;
+    ScopeExit& operator=(ScopeExit&&) = default;
+
+    template <typename F, typename... Args>
+    ScopeExit(F&& f, Args&&... args) {
+        func_ = std::bind(std::forward<F>(f), std::forward<Args>(args)...);
+    }
+
+    ~ScopeExit() {
+        if (func_) {
+            func_();
+        }
+    };
+
+   private:
+    std::function<void()> func_;
+};
+
+#define _CONCAT(a, b) a##b
+#define _MAKE_SCOPE_(line) ScopeExit _CONCAT(defer, line) = [&]()
+
+#undef SCOPE_GUARD
+#define SCOPE_GUARD _MAKE_SCOPE_(__LINE__)
+```
+
+**实现方案2：**
+
+```cpp
+template <class ReleaseFun>
+class ScopeGuard
+{
+public:
+    ScopeGuard(ReleaseFun fun)
+        : m_releaseFun(fun)
+    {}
+    ~ScopeGuard()
+    {
+        m_releaseFun();
+    }
+
+private:
+    ReleaseFun m_releaseFun;
+};
+
+class ScopeGuardOnExit{};
+template <typename ReleaseFun>
+ScopeGuard<ReleaseFun> operator+(ScopeGuardOnExit, ReleaseFun &&fn)
+{
+    return ScopeGuard<ReleaseFun>(fn);
+}
+
+#define _JOINT(s1, s2) s1##s2
+#define JOINT(s1, s2) _JOINT(s1, s2)
+#define VARIABLE(str) JOINT(str, __LINE__)
+
+#define SCOPE_GUARD \
+    auto VARIABLE(SCOPE_EXIT_STATE) = ScopeGuardOnExit() + [&]()
+```
+
+
+**使用如下：**
+
+```cpp
+void test()
+{
+	int *pInt = new int(9);
+	SCOPE_GUARD
+	{
+		delete pInt;
+	};
+	int a = *pInt + 1; 
+}
+```
+

@@ -1,4 +1,68 @@
-## 什么是 CMake?
+## 1.CMake简述
+
+### CMake
+
+CMake 是一个跨平台的构建系统，可以用于自动生成各种不同平台编译器的构建文件。 CMake 使用一种类似于脚本的语言来描述项目的构建过程，并生成相应的 Makefile 或其他构建工具所需的配置文件。
+
+**下面是一些常见的CMake语法：**
+
+#### 定义变量
+
+使用 `set()` 命令来定义一个变量，如 `set(SOURCE_FILES main.cpp)`。
+
+其中，`SOURCE_FILES` 是变量名，`main.cpp` 是变量值。在CMake中，变量可以是字符串、列表或布尔值。
+
+#### 添加头文件搜索路径
+
+使用 `include_directories()` 命令来添加头文件搜索路径，如 `include_directories(include)`。
+
+其中，`include` 是需要添加的头文件路径。该命令用于指定包含C/C++头文件的目录列表，以便编译器能够找到它们。
+
+#### 添加库文件搜索路径
+
+使用 `link_directories()` 命令来添加库文件搜索路径，如 `link_directories(lib)`。
+
+其中，`lib` 是需要添加的库文件路径。该命令用于指定包含库文件的目录列表，以便链接器能够找到它们。
+
+#### 添加可执行文件
+
+使用 `add_executable()` 命令来添加可执行文件，如 `add_executable(my_executable \${SOURCE_FILES})`。
+
+其中，my_executable 是可执行文件的名称，`\${SOURCE_FILES}` 是需要编译的源代码文件。该命令用于指定要生成的可执行文件的名称以及源代码文件的列表。
+
+#### 添加库文件
+
+使用 `add_library()` 命令来添加库文件，如 `add_library(my_library STATIC \${SOURCE_FILES})`（静态库）或者 `add_library(my_library SHARED \${SOURCE_FILES})`（动态库）。
+
+其中，`my_library` 是库文件的名称，`\${SOURCE_FILES}` 是需要编译的源代码文件。该命令用于指定要生成的库文件的名称、类型以及源代码文件的列表。
+
+#### 链接库文件
+
+使用 `target_link_libraries()` 命令来将库文件链接到目标文件中，如 `target_link_libraries(my_executable my_library)`。
+
+其中，`my_executable` 是可执行文件的名称，`my_library` 是需要链接的库文件名称。该命令用于指定要链接到可执行文件或库文件中的库文件的列表。
+
+#### 控制流语句
+
+CMake支持一些基本的控制流语句，如 `if()`、`else()`、`elseif()`和`endif()`，可用于根据条件设置变量或执行特定的操作。
+
+#### 循环语句
+
+CMake也支持循环语句，如 `foreach()` 和 `while()`，可用于遍历列表或实现特定的循环操作。
+
+#### 自定义命令
+
+CMake允许使用 `add_custom_command()` 和 `add_custom_target()` 命令来定义自定义构建步骤或目标，这些步骤或目标可以在构建过程中执行。
+
+#### 安装规则
+
+CMake 提供了 `install()` 命令用于描述安装规则，包括将可执行文件、库文件和其他资源复制到指定位置等操作。
+
+以上是 CMake 中的一些常见语法，但并不限于此， CMake 还有许多高级特性，如宏、函数、模块化编程等，这些特性可以帮助开发者更方便地管理和构建项目。
+
+## 2.CMake详解
+
+### 什么是 CMake?
 
 你或许听过好几种 `Make` 工具，例如 `GNU Make` ，QT 的 `qmake` ，微软的 `MS nmake`，`BSD Make`（`pmake`），`Makepp`，等等。
 
@@ -14,7 +78,7 @@
 执行命令 `cmake PATH` 或者 `ccmake PATH` 生成 `Makefile`（`ccmake`和 `cmake` 的区别在于前者提供了一个交互式的界面）。其中， `PATH` 是 `CMakeLists.txt` 所在的目录。
 使用 `make` 命令进行编译。
 
-## 入门案例：单个源文件
+### 入门案例：单个源文件
 
 本节对应的源代码所在目录：
 
@@ -63,7 +127,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-### 编写 CMakeLists.txt
+#### 编写 CMakeLists.txt
 
 首先编写 CMakeLists.txt 文件，并保存在与 main.cc 源文件同个目录下：
 
@@ -88,7 +152,7 @@ add_executable(Demo main.cc)
 **project**：参数值是 `Demo1`，该命令表示项目的名称是 `Demo1` 。
 **add_executable**：将名为 `main.cc` 的源文件编译成一个名称为 `Demo` 的可执行文件。
 
-### 编译项目
+#### 编译项目
 
 之后，在当前目录执行 `cmake .` ，得到 `Makefile` 后再使用 `make` 命令编译得到 `Demo1` 可执行文件。
 
@@ -120,9 +184,9 @@ Linking C executable Demo
 2 ^ 10 is 1024
 ```
 
-## 多个源文件
+### 多个源文件
 
-### 同一目录，多个源文件
+#### 同一目录，多个源文件
 
 本小节对应的源代码所在目录：
 
@@ -180,7 +244,7 @@ add_executable(Demo ${DIR_SRCS})
 
 这样，`CMake` 会将当前目录所有源文件的文件名赋值给变量 `DIR_SRCS` ，再指示变量 `DIR_SRCS` 中的源文件需要编译成一个名称为 `Demo` 的可执行文件。
 
-## 多个目录，多个源文件
+### 多个目录，多个源文件
 
 本小节对应的源代码所在目录：
 
@@ -244,7 +308,7 @@ add_library (MathFunctions ${DIR_LIB_SRCS})
 
 在该文件中使用命令 `add_library` 将 `src` 目录中的源文件编译为静态链接库。
 
-## 自定义编译选项
+### 自定义编译选项
 
 本节对应的源代码所在目录：
 
@@ -252,7 +316,7 @@ add_library (MathFunctions ${DIR_LIB_SRCS})
 
 `CMake` 允许为项目增加编译选项，从而可以根据用户的环境和需求选择最合适的编译方案。例如，可以将 `MathFunctions` 库设为一个可选的库，如果该选项为 `ON` ，就使用该库定义的数学函数来进行运算。否则就调用标准库中的数学函数库。
 
-### 修改 CMakeLists 文件
+#### 修改 CMakeLists 文件
 
 我们要做的第一步是在顶层的 CMakeLists.txt 文件中添加该选项：
 
@@ -295,7 +359,7 @@ target_link_libraries (Demo  ${EXTRA_LIBS})
 第13行的 `option` 命令添加了一个 `USE_MYMATH` 选项，并且默认值为 `ON` 。
 第17行根据 `USE_MYMATH` 变量的值来决定是否使用我们自己编写的 `MathFunctions` 库。
 
-### 修改 main.cc 文件
+#### 修改 main.cc 文件
 
 之后修改 main.cc 文件，让其根据 `USE_MYMATH` 的预定义值来决定是否调用标准库还是 MathFunctions 库：
 
@@ -332,7 +396,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-### 编写 config.h.in 文件
+#### 编写 config.h.in 文件
 
 上面的程序值得注意的是第2行，这里引用了一个 `config.h` 文件，这个文件预定义了 `USE_MYMATH` 的值。但我们并不直接编写这个文件，为了方便从 `CMakeLists.txt` 中导入配置，我们编写一个 `config.h.in` 文件，内容如下：
 
@@ -342,7 +406,7 @@ int main(int argc, char *argv[])
 
 这样 `CMake` 会自动根据 `CMakeLists` 配置文件中的设置自动生成 `config.h` 文件。
 
-### 编译项目
+#### 编译项目
 
 现在编译一下这个项目，为了便于交互式的选择该变量的值，可以使用 `ccmake` 命令（也可以使用 `cmake -i` 命令，该命令会提供一个会话式的交互式配置界面）：
 
@@ -351,7 +415,7 @@ int main(int argc, char *argv[])
 `CMake`的交互式配置界面
 `CMake`的交互式配置界面从中可以找到刚刚定义的 `USE_MYMATH` 选项，按键盘的方向键可以在不同的选项窗口间跳转，按下 `enter` 键可以修改该选项。修改完成后可以按下 c 选项完成配置，之后再按 `g` 键确认生成 `Makefile` `。ccmake` 的其他操作可以参考窗口下方给出的指令提示。我们可以试试分别将 `USE_MYMATH` 设为 `ON` 和 `OFF` 得到的结果：
 
-### `USE_MYMATH` 为 `ON`
+#### `USE_MYMATH` 为 `ON`
 
 运行结果：
 
@@ -368,7 +432,7 @@ Now we use our own MathFunctions library.
 #define USE_MYMATH
 ```
 
-### `USE_MYMATH` 为 `OFF`
+#### `USE_MYMATH` 为 `OFF`
 
 运行结果：
 
@@ -386,7 +450,7 @@ Now we use the standard library.
 /* #undef USE_MYMATH */
 ```
 
-## 安装和测试
+### 安装和测试
 
 本节对应的源代码所在目录：
 
@@ -394,7 +458,7 @@ Now we use the standard library.
 
 `CMake` 也可以指定安装规则，以及添加测试。这两个功能分别可以通过在产生 `Makefile` 后使用 `make install` 和 `make test` 来执行。在以前的 `GNU Makefile` 里，你可能需要为此编写 `install` 和 `test` 两个伪目标和相应的规则，但在 `CMake` 里，这样的工作同样只需要简单的调用几条命令。
 
-### 定制安装规则
+#### 定制安装规则
 首先先在` math/CMakeLists.txt` 文件里添加下面两行：
 
 ```cmake
@@ -432,7 +496,7 @@ Demo  libMathFunctions.a
 config.h  MathFunctions.h
 ```
 
-### 为工程添加测试
+#### 为工程添加测试
 
 添加测试同样很简单。CMake 提供了一个称为 CTest 的测试工具。我们要做的只是在项目根目录的 CMakeLists 文件中调用一系列的 add_test 命令。
 
@@ -502,7 +566,7 @@ do_test (2 10 "is 1024")
 
 关于 `CTest` 的更详细的用法可以通过 `man 1 ctest` 参考 CTest 的文档。
 
-## 支持 gdb
+### 支持 gdb
 
 让 `CMake` 支持 `gdb` 的设置也很容易，只需要指定 `Debug` 模式下开启 `-g` 选项：
 
@@ -514,7 +578,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 之后可以直接对生成的程序使用 gdb 来调试。
 
-## 添加环境检查
+### 添加环境检查
 
 本节对应的源代码所在目录：
 
@@ -522,7 +586,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 有时候可能要对系统环境做点检查，例如要使用一个平台相关的特性的时候。在这个例子中，我们检查系统是否自带 `pow` 函数。如果带有 `pow` 函数，就使用它；否则使用我们定义的 `power` 函数。
 
-### 添加 CheckFunctionExists 宏
+#### 添加 CheckFunctionExists 宏
 
 首先在顶层 CMakeLists 文件中添加 CheckFunctionExists.cmake 宏，并调用 check_function_exists 命令测试链接器是否能够在链接阶段找到 pow 函数。
 
@@ -534,7 +598,7 @@ check_function_exists (pow HAVE_POW)
 
 将上面这段代码放在 configure_file 命令前。
 
-### 预定义相关宏变量
+#### 预定义相关宏变量
 
 接下来修改 config.h.in 文件，预定义相关的宏变量。
 
@@ -543,7 +607,7 @@ check_function_exists (pow HAVE_POW)
 #cmakedefine HAVE_POW
 ```
 
-### 在代码中使用宏和函数
+#### 在代码中使用宏和函数
 
 最后一步是修改 main.cc ，在代码中使用宏和函数：
 
@@ -557,7 +621,7 @@ check_function_exists (pow HAVE_POW)
 #endif
 ```
 
-## 添加版本号
+### 添加版本号
 
 本节对应的源代码所在目录：
 
@@ -614,7 +678,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 生成安装包
+### 生成安装包
 
 本节对应的源代码所在目录：
 
@@ -733,31 +797,33 @@ Now we use our own Math library.
 
 关于 `CPack` 的更详细的用法可以通过 `man 1 cpack` 参考 `CPack` 的文档。
 
-## 项目迁移
+### 项目迁移
 
 CMake 可以很轻松地构建出在适合各个平台执行的工程环境。而如果当前的工程环境不是 CMake ，而是基于某个特定的平台，是否可以迁移到 CMake 呢？答案是可能的。下面针对几个常用的平台，列出了它们对应的迁移方案。
 
-### autotools
+#### autotools
 
 - `am2cmake` 可以将 `autotools` 系的项目转换到 `CMake`，这个工具的一个成功案例是 KDE 。
 - `Alternative` `Automake2CMake` 可以转换使用 `automake` 的 `KDevelop` 工程项目。
 - Converting autoconf tests
 
-### qmake
+#### qmake
 
 - `qmake converter` 可以转换使用 QT 的 qmake 的工程。
 
-### Visual Studio
+#### Visual Studio
 
 - `vcproj2cmake.rb` 可以根据 Visual Studio 的工程文件（后缀名是 `.vcproj` 或 `.vcxproj`）生成 `CMakeLists.txt` 文件。
 - `vcproj2cmake.ps1` `vcproj2cmake` 的 `PowerShell` 版本。
 - `folders4cmake` 根据 Visual Studio 项目文件生成相应的 “source_group” 信息，这些信息可以很方便的在 `CMake` 脚本中使用。支持 Visual Studio 9/10 工程文件。
 
-### CMakeLists.txt 自动推导
+#### CMakeLists.txt 自动推导
 
 - `gencmake` 根据现有文件推导 `CMakeLists.txt` 文件。
 - `CMakeListGenerator` 应用一套文件和目录分析创建出完整的 `CMakeLists.txt` 文件。仅支持 Win32 平台。
 
-## 类似工具
+### 类似工具
 
 - SCons：Eric S. Raymond、Timothee Besset、Zed A. Shaw 等大神力荐的项目架构工具。和 CMake 的最大区别是使用 Python 作为执行脚本
+
+

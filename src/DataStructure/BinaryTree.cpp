@@ -211,6 +211,8 @@ namespace BinaryTree {
 		printf("后序遍历：");
 		post_order(T);
 
+
+
 		getchar();
 		return 0;
 	}
