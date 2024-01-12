@@ -24,7 +24,7 @@ AOP 编程的支持
 
 ### 4、Spring的体系结构
 
-![Spring的体系结构](attachment/spring/20231223010201.png)
+![Spring的体系结构](img/spring/20231223010201.png)
 
 ## Spring_Xml配置
 
@@ -482,7 +482,7 @@ SpringAOP是在运行期，通过动态代理技术生成代理对象实现的�
 
 常用的动态代理技术：JDK代理，cglib代理 （具体理论在后面文章中讨论，本章关注使用）
 
-![动态代理技术](attachment/spring/20231223011613.png)
+![动态代理技术](img/spring/20231223011613.png)
 
 ### 2 AOP的Maven坐标
 
@@ -1481,7 +1481,7 @@ public String index(@RequestParam("name") Integer name){
 
 若传参的形式不同，接口需要设置 HTTP 协议头的 **Content-Type** 的值来接受参数，即，spring 中使用 **@RequestMapping** 的 **consumes** 属性
 
-![spring_restful注解-图1](attachment/spring/20231223013114.png)
+![spring_restful注解-图1](img/spring/20231223013114.png)
 
 
 ```java
@@ -1542,7 +1542,7 @@ public @interface RequestBody {
 **示例1：**
 
 **raw** 的方式
-![spring_restful注解-图2](attachment/spring/20231223013208.png)
+![spring_restful注解-图2](img/spring/20231223013208.png)
 
 ```java
 @RequestMapping(value="/index")
@@ -1992,21 +1992,21 @@ Knife4j的前身是swagger-bootstrap-ui,前身swagger-bootstrap-ui是一个纯sw
 例：127.0.0.1/demo/doc.html
 
 1、接口文档显示
-![接口文档显示](attachment/spring/20231223013509.png)
+![接口文档显示](img/spring/20231223013509.png)
 
 2、接口调试
-![接口调试](attachment/spring/20231223013553.png)
+![接口调试](img/spring/20231223013553.png)
 
 
 3、Swagger Models
 
-![Swagger Models](attachment/spring/20231223013645.png)
+![Swagger Models](img/spring/20231223013645.png)
 
 4、支持导出离线Markdown、Html功能
-![离线Markdown](attachment/spring/20231223013756.png)
+![离线Markdown](img/spring/20231223013756.png)
 
 
-![离线Html](attachment/spring/20231223013839.png)
+![离线Html](img/spring/20231223013839.png)
 
 ### 教程
 1、在maven项目的pom.xml中引入Knife4j的依赖包：

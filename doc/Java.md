@@ -7,7 +7,7 @@
 > 我们想要运行一个已有的Java程序，那么只需安装 JRE 即可。
 > 我们想要开发一个全新的Java程序，那么必须安装 JDK 。  
 >
-![JDK](attachment/java/20231223004114.png)
+![JDK](img/java/20231223004114.png)
 
 ### 内存划分
 
@@ -25,10 +25,10 @@ Java中内存分为5个部分：栈、堆、方法区、本地方法区、寄存
 
 ### Java8前-内存
 
-![Java8前-内存](attachment/java/20231223004651.png)
+![Java8前-内存](img/java/20231223004651.png)
 ### Java8后-内存
 
-![Java8后-内存](attachment/java/20231223004734.png)
+![Java8后-内存](img/java/20231223004734.png)
 
 ## 基础语法
 
@@ -470,7 +470,7 @@ public class ClassName{
 
 - 集合类的体系图
 
-![collection](attachment/java/20231223004303.png)
+![collection](img/java/20231223004303.png)
 #### 2 Collection集合概述和基本使用
 
 - Collection集合概述
@@ -772,7 +772,7 @@ public class ForDemo {
     - 由于是Set集合，所以是不包含重复元素的集合  
     - HashSet存储逻辑：
         
-        ![HashSet存储](attachment/java/20231223004919.png)
+        ![HashSet存储](img/java/20231223004919.png)
   
 - 案例需求
   - 创建一个存储学生对象的集合，存储多个学生对象，使用程序实现在控制台遍历该集合
