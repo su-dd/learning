@@ -10,22 +10,6 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <!-- 侧边栏插件的样式 -->
   <link rel="stylesheet" href="//vox.cab/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
-  <!-- Theme: Simple (latest v0.x.x) -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-defaults.css"> -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css"> -->
-  <!-- Theme: Simple Dark -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"> -->
-
-  <!-- <style>
-    :root {
-      /* Reduce the font size */
-      --base-font-size: 16px;
-      /* Change the theme color hue */
-      --theme-hue: 2000;
-      /* Change the sidebar bullets */
-      --sidebar-nav-link-before-content: '😀';
-    }
-  </style> -->
 </head>
 
 <body>
@@ -46,10 +30,6 @@
       loadSidebar: true,// 加载侧边栏
       subMaxLevel: 6, // 侧边栏标题
       autoHeader: true, // 自动显示标题
-      // themeable: {
-      //   readyTransition: true, // default
-      //   responsiveTables: true  // default
-      // },
       plugins: [
         function (hook, vm) {
           var footer = [
@@ -73,7 +53,6 @@
             var editHtml = '[📝 编辑文档](' + url + ')\n';
             return (
               editHtml + '\n' +
-              '文章的目的是为了梳理知识，分享知识。其中有自己的感悟、也有借鉴，由于部分借鉴已经找不到出处，如果您发现问题或希望添加标注，可以通过issue告知或者自行标记，谢谢！\n\n' +
               content
             );
             // return content;
@@ -105,9 +84,6 @@
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script> -->
-  <!-- docsify-themeable (latest v0.x.x) -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/disqus.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
