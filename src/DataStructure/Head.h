@@ -28,4 +28,8 @@ namespace BinaryTree {
 namespace RedBlackTree {
 	int test();
 };
+
+namespace AVLTree {
+	int test();
+};
 #endif // SQHEAD_H

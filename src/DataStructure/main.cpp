@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
     // LinkList_with_head::test();
     // HashTable::test();
     // BinaryTree::test();
-    RedBlackTree::test();
+    // RedBlackTree::test();
+    AVLTree::test();
     return 0;
 }
