@@ -171,7 +171,6 @@ namespace AVLTree {
 
 		Node* getSmallestTree(Node* p)
 		{
-			if (nullptr == p) return p;
 			if (nullptr == p->leftChild) return p;
 			return getSmallestTree(p->leftChild);
 		}
@@ -186,19 +185,20 @@ namespace AVLTree {
 				p->rightChild = delete_value(p->rightChild, value);
 			else
 			{
-				Node* pSmall = getSmallestTree(p->rightChild);
-				if (nullptr != pSmall)
+
+				if (nullptr == p->rightChild)
 				{
-					p->value = pSmall->value;
-					pSmall->value = value;
-					p->rightChild = delete_value(p->rightChild, value);
-				}
-				else
-				{	// pSmall为空，说明右子树意见没有了
 					Node* tmp = p;
 					p = p->leftChild;
 					delete tmp;
 					return p;
+				}
+				else
+				{
+					Node* pSmall = getSmallestTree(p->rightChild);
+					p->value = pSmall->value;
+					pSmall->value = value;
+					p->rightChild = delete_value(p->rightChild, value);
 				}
 			}
 			p->height = getHeight(p);

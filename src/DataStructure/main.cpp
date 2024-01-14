@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
     // HashTable::test();
     // BinaryTree::test();
     // RedBlackTree::test();
-    AVLTree::test();
+    //AVLTree::test();
+    Prim::test();
     return 0;
 }

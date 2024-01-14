@@ -32,4 +32,8 @@ namespace RedBlackTree {
 namespace AVLTree {
 	int test();
 };
+
+namespace Prim {
+	int test();
+}
 #endif // SQHEAD_H

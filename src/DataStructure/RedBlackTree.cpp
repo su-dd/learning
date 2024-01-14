@@ -169,7 +169,7 @@ namespace RedBlackTree {
 				return;
 			}
 
-			// 链接 parent和child
+			// 连接 parent和child
 			if (d->parent->leftChild == d) {
 				d->parent->leftChild = child;
 			}
