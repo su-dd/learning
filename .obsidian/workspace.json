@@ -70,7 +70,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 275.5
+    "width": 200
   },
   "right": {
     "id": "1db0c3695a508abd",
@@ -159,29 +159,30 @@
   },
   "active": "d9843092ce9db1fd",
   "lastOpenFiles": [
+    "src/DataStructure/enc_temp_folder/f7a67cc4797029661c5c913787af2d/ShortestPath.cpp",
+    "src/DataStructure/enc_temp_folder/f7a67cc4797029661c5c913787af2d",
+    "src/DataStructure/enc_temp_folder",
+    "src/DataStructure/ShortestPath.cpp~RFc8a2f5f.TMP",
+    "src/DataStructure/enc_temp_folder/297a084c34aef35c6ab126bebaf9ab/ShortestPath.cpp",
+    "src/DataStructure/enc_temp_folder/297a084c34aef35c6ab126bebaf9ab",
+    "src/DataStructure/ShortestPath.cpp~RFc8963a3.TMP",
+    "src/DataStructure/ShortestPath.cpp~RFc87ac2f.TMP",
+    "src/DataStructure/enc_temp_folder/69f16874e8cefa1914d0fb19f3358cb2/ShortestPath.cpp",
+    "src/DataStructure/enc_temp_folder/69f16874e8cefa1914d0fb19f3358cb2",
+    "src/DataStructure/ShortestPath.cpp~RFc8757a6.TMP",
+    "doc/img/20240115214844.png",
+    "doc/c++.md",
+    "doc/数据结构.md",
     "doc/img/20240114232808.png",
     "doc/img/20240114232016.png",
-    "src/DataStructure/Floyd.cpp~RF760b873.TMP",
-    "src/DataStructure/Floyd.cpp",
-    "src/DataStructure/Dijkstra.cpp~RF742d554.TMP",
-    "src/DataStructure/out/build/x64-Debug/CMakeCache.txt.tmpc0ea3",
-    "src/DataStructure/out/build/x64-Debug/cmake_install.cmake.tmp86843",
-    "src/DataStructure/out/build/x64-Debug/CMakeFiles/rules.ninja.tmpae065",
-    "src/DataStructure/out/build/x64-Debug/build.ninja.tmp71a35",
-    "src/DataStructure/out/build/x64-Debug/CMakeCache.txt.tmp03085",
-    "src/DataStructure/新建文件",
-    "src/DataStructure/CMakeLists.txt.user.ZHaNuM",
     "doc/img/20240114223311.png",
     "doc/img/20240114192633.png",
     "doc/img/20240114192141.png",
     "doc/img/20240114191454.png",
     "doc/img/20240114185518.png",
     "doc/算法.md",
-    "doc/数据结构.md",
     "doc/img/20240114172612.png",
     "doc/img/20240114161539.png",
-    "doc/img/20240114131217.png",
-    "doc/img/20240113214412.png",
     "README.md",
     "_sidebar.md",
     "docs/dataStruct_algorithm/数据结构.md",
@@ -203,7 +204,6 @@
     "docs/cpp/cpp_advance/C++14.md",
     "docs/README.md",
     "docs/forchild/成语故事/凿壁偷光.md",
-    "docs/forchild/成语故事/亡羊补牢.md",
-    "docs/readbook/掌控谈话/掌控谈话.md"
+    "docs/forchild/成语故事/亡羊补牢.md"
   ]
 }

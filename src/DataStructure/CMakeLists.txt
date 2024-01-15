@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(DataStructure
   "main.cpp"
   "Head.h"
+  "Graph.h"
   "SqStack.cpp"
   "SqList.cpp"
   "LinkList.cpp"
@@ -21,7 +22,8 @@ add_executable(DataStructure
   "RedBlackTree.cpp"
   "AVLTree.cpp"
   "MiniSpanTree.cpp"
-  "Graph.h")
+  "ShortestPath.cpp"
+ "Graph.cpp")
 
 include(GNUInstallDirs)
 install(TARGETS DataStructure

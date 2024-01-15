@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     //BinaryTree::test();
     //RedBlackTree::test();
     //AVLTree::test();
-    MiniSpanTree::test();
+    //MiniSpanTree::test();
+    ShortestPath::test();
     return 0;
 }
