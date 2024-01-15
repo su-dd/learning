@@ -33,7 +33,12 @@ namespace AVLTree {
 	int test();
 };
 
-namespace Prim {
+namespace MiniSpanTree {
 	int test();
 }
+
+namespace ShortestPath {
+	int test();
+}
+
 #endif // SQHEAD_H

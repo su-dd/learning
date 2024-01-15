@@ -20,9 +20,8 @@ add_executable(DataStructure
   "BinaryTree.cpp"
   "RedBlackTree.cpp"
   "AVLTree.cpp"
-  "Prim.cpp"
-  "Dijkstra.cpp"
-)
+  "MiniSpanTree.cpp"
+  "Graph.h")
 
 include(GNUInstallDirs)
 install(TARGETS DataStructure
