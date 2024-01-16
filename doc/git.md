@@ -17,15 +17,11 @@ git config --global user.email 'xxx@xx.com'
 
 自报家门
 
-
-
 #### 检查配置信息
 
 ```sh
 git config --list
 ```
-
-
 
 #### 获取帮助
 
