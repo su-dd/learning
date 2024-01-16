@@ -1,5 +1,5 @@
-﻿#ifndef Sort_Bubble
-#define Sort_Bubble
+﻿#ifndef Sort_Bubble_H
+#define Sort_Bubble_H
 
 /**
 *	冒泡排序算法：
@@ -21,16 +21,40 @@
 #include <vector>
 
 // 模板方法实现冒泡
-//template<typename T>
-void Sort_Bubble(std::vector<int> &array)
+template<typename T>
+void sort_bubble(std::vector<T> &array)
 {
-	array;
-	for (int i = 0; i < 8; i ++)
+	int len = array.size();
+	for (int i = 0; i < len - 1; i ++)
 	{
-
+		for (int j = 0; j < len - 1 - i; j++)
+		{
+			if (array[j] > array[j + 1])
+			{
+				std::swap(array[j], array[j + 1]);
+			}
+		}
 	}
 }
 
+// 模板方法实现冒泡算法调优
+template<typename T>
+void sort_bullbe_tuning(std::vector<T> &array)
+{
+	int orderly = false;	// 标识是否已经有序
+	int len = array.size();
+	for (int i = 0; (i < len - 1) && !orderly; i++)
+	{
+		orderly = true;
+		for (int j = 0; j < len - 1 - i; j++)
+		{
+			if (array[j] > array[j + 1])
+			{
+				orderly = false;
+				std::swap(array[j], array[j + 1]);
+			}
+		}
+	}
+}
 
-
-#endif // Sort_Bubble
+#endif // Sort_Bubble_H

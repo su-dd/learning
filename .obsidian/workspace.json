@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/数据结构.md",
+                "file": "doc/算法.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/数据结构.md",
+                "file": "doc/算法.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/数据结构.md",
+                "file": "doc/算法.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/数据结构.md"
+                "file": "doc/算法.md"
               }
             }
           },
@@ -157,22 +157,23 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "d9843092ce9db1fd",
+  "active": "1bbf8f87ea646c1f",
   "lastOpenFiles": [
-    "src/DataStructure/enc_temp_folder/f7a67cc4797029661c5c913787af2d/ShortestPath.cpp",
-    "src/DataStructure/enc_temp_folder/f7a67cc4797029661c5c913787af2d",
-    "src/DataStructure/enc_temp_folder",
-    "src/DataStructure/ShortestPath.cpp~RFc8a2f5f.TMP",
-    "src/DataStructure/enc_temp_folder/297a084c34aef35c6ab126bebaf9ab/ShortestPath.cpp",
-    "src/DataStructure/enc_temp_folder/297a084c34aef35c6ab126bebaf9ab",
-    "src/DataStructure/ShortestPath.cpp~RFc8963a3.TMP",
-    "src/DataStructure/ShortestPath.cpp~RFc87ac2f.TMP",
-    "src/DataStructure/enc_temp_folder/69f16874e8cefa1914d0fb19f3358cb2/ShortestPath.cpp",
-    "src/DataStructure/enc_temp_folder/69f16874e8cefa1914d0fb19f3358cb2",
-    "src/DataStructure/ShortestPath.cpp~RFc8757a6.TMP",
+    "src/algorithm/sort/Sort_Bubble.h~RF11db5ae8.TMP",
+    "src/algorithm/sort/Sort_Bubble.h~RF11d98df8.TMP",
+    "src/algorithm/enc_temp_folder/f334fdc26b20f9cafbb32715b967437/Sort_Bubble.h",
+    "src/algorithm/enc_temp_folder/f334fdc26b20f9cafbb32715b967437",
+    "src/algorithm/enc_temp_folder",
+    "src/algorithm/sort/Sort_Bubble.h~RF11d7b020.TMP",
+    "src/algorithm/sort/Sort_Bubble.h~RF11d763a5.TMP",
+    "src/algorithm/sort/Sort_Bubble.h~RF11d6e1d3.TMP",
+    "src/algorithm/sort/Sort_Bubble.h~RF11d4bd4d.TMP",
+    "src/algorithm/sort/Sort_Bubble.h~RF11d47e8f.TMP",
+    "doc/数据结构.md",
+    "doc/算法.md",
+    "src/algorithm/sort/Sort_Bubble.h~RF11ce0bdd.TMP",
     "doc/img/20240115214844.png",
     "doc/c++.md",
-    "doc/数据结构.md",
     "doc/img/20240114232808.png",
     "doc/img/20240114232016.png",
     "doc/img/20240114223311.png",
@@ -180,7 +181,6 @@
     "doc/img/20240114192141.png",
     "doc/img/20240114191454.png",
     "doc/img/20240114185518.png",
-    "doc/算法.md",
     "doc/img/20240114172612.png",
     "doc/img/20240114161539.png",
     "README.md",
