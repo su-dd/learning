@@ -45,7 +45,7 @@ void sort_merge_recursive(std::vector<T>& array, std::vector<T>& temp, int start
 	
 	int k = start;
 	while (start1 <= end1 && start2 <= end2)
-		temp[k++] = (array[start1] < array[start2] ? array[start1++] : array[start2++]);
+		temp[k++] = (array[start1] <= array[start2] ? array[start1++] : array[start2++]);
 
 	while (start1 <= end1)
 		temp[k++] = array[start1++];
@@ -90,7 +90,7 @@ void sort_merge_iterate(std::vector<T> &array) {
 
 			int k = low;
 			while (start1 < end1 && start2 < end2)
-				temp[k++] = array[start1] < array[start2] ? array[start1++] : array[start2++];
+				temp[k++] = array[start1] <= array[start2] ? array[start1++] : array[start2++];
 			while (start1 < end1)
 				temp[k++] = array[start1++];
 			while (start2 < end2)

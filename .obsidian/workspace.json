@@ -159,6 +159,11 @@
   },
   "active": "1bbf8f87ea646c1f",
   "lastOpenFiles": [
+    "doc/c++.md",
+    "doc/领域分析.md",
+    "doc/设计模式.md",
+    "doc/数据结构.md",
+    "doc/算法.md",
     "src/algorithm/sort/Sort_Shell.h~RF170b0eff.TMP",
     "src/algorithm/sort/Sort_Shell.h~RF170a4bed.TMP",
     "src/algorithm/sort/Sort_Shell.h~RF170a14ff.TMP",
@@ -169,12 +174,8 @@
     "src/algorithm/sort/Sort_Shell.h~RF16fb6c4f.TMP",
     "src/algorithm/sort/Sort_Shell.h~RF16faa91e.TMP",
     "src/algorithm/sort/Sort_Shell.h~RF16f8f767.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF16ed5ca4.TMP",
     "doc/img/design_pattern/20240117233759.png",
-    "doc/数据结构.md",
-    "doc/算法.md",
     "doc/img/20240115214844.png",
-    "doc/c++.md",
     "doc/img/20240114232808.png",
     "doc/img/20240114232016.png",
     "doc/img/20240114223311.png",
@@ -203,7 +204,6 @@
     "docs/cpp/cpp_topic/C++之RAII.md",
     "docs/cpp/cpp_advance/C++14.md",
     "docs/README.md",
-    "docs/forchild/成语故事/凿壁偷光.md",
-    "docs/forchild/成语故事/亡羊补牢.md"
+    "docs/forchild/成语故事/凿壁偷光.md"
   ]
 }
