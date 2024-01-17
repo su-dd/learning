@@ -27,49 +27,80 @@
 
 #include <vector>
 
-// 递归
+/*****************
+	递归版
+*****************/
 template<typename T>
-void Merge(std::vector<T>& array, int front, int mid, int end) {
-    // preconditions:
-    // array[front...mid] is sorted
-    // array[mid+1 ... end] is sorted
-    // Copy array[front ... mid] to LeftSubArray
-    // Copy array[mid+1 ... end] to RightSubArray
-    std::vector<T> LeftSubArray(array.begin() + front, array.begin() + mid + 1);
-    std::vector<T> RightSubArray(array.begin() + mid + 1, array.begin() + end + 1);
-    int idxLeft = 0, idxRight = 0;
-    LeftSubArray.insert(LeftSubArray.end(), numeric_limits<int>::max());
-    RightSubArray.insert(RightSubArray.end(), numeric_limits<int>::max());
-
-    // Pick min of LeftSubArray[idxLeft] and RightSubArray[idxRight], and put into array[i]
-    for (int i = front; i <= end; i++)
-    {
-        if (LeftSubArray[idxLeft] < RightSubArray[idxRight]) 
-        {
-            array[i] = LeftSubArray[idxLeft];
-            idxLeft++;
-        }
-        else
-        {
-            array[i] = RightSubArray[idxRight];
-            idxRight++;
-        }
-    }
-}
-
-template<typename T>
-void sort_merge_recursion(std::vector<T>& array, int front, int end)
+void sort_merge_recursive(std::vector<T>& array, std::vector<T>& temp, int start, int end)
 {
-    if (front >= end)
-        return;
+	if (start >= end)
+		return;
 
-    int mid = front + (end - front) / 2;
-    sort_merge_recursion(array, front, mid);
-    sort_merge_recursion(array, mid + 1, end);
-    Merge(array, front, mid, end);
+	int len = end - start;
+	int mid = len / 2 + start;
+	int start1 = start, end1 = mid;
+	int start2 = mid + 1, end2 = end;
+	sort_merge_recursive(array, temp, start1, end1);
+	sort_merge_recursive(array, temp, start2, end2);
+	
+	int k = start;
+	while (start1 <= end1 && start2 <= end2)
+		temp[k++] = (array[start1] < array[start2] ? array[start1++] : array[start2++]);
+
+	while (start1 <= end1)
+		temp[k++] = array[start1++];
+		
+	while (start2 <= end2)
+		temp[k++] = array[start2++];
+
+	for (int k = start; k <= end; k++)	// 将排序好的数据，回到array中，以便后续使用
+		array[k] = temp[k];
+}
+
+//整数或浮点数皆可使用,若要使用物件(class)时必须设定"小于"(<)的运算子功能
+template<typename T>
+void sort_merge_recursion(std::vector<T> &array)
+{
+	std::vector<T> temp(array);
+	sort_merge_recursive(array, temp, 0, array.size() - 1);
 }
 
 
 
+/*****************
+	迭代版
+*****************/
+
+//整数或浮点数皆可使用,若要使用物件(class)时必须设定"小于"(<)的运算子功能
+template<typename T>
+void sort_merge_iterate(std::vector<T> &array) {
+	std::vector<T> temp(array);
+	int len = array.size();
+	// seg 为合并的区间大小，从1开始，后面每次乘2
+	for (int seg = 1; seg < len; seg += seg)
+	{
+		for (int start = 0; start < len; start += seg + seg) 
+		{
+			int low = start;
+			int mid = std::min(start + seg, len);
+			int high = std::min(start + seg + seg, len);
+
+			int start1 = low, end1 = mid;
+			int start2 = mid, end2 = high;
+
+			int k = low;
+			while (start1 < end1 && start2 < end2)
+				temp[k++] = array[start1] < array[start2] ? array[start1++] : array[start2++];
+			while (start1 < end1)
+				temp[k++] = array[start1++];
+			while (start2 < end2)
+				temp[k++] = array[start2++];
+
+			// 将排序好的数据，回到array中，以便后续使用
+			for (int k = low; k < high; k++)
+				array[k] = temp[k];
+		}
+	}
+}
 
 #endif // !Sort_Merge_H

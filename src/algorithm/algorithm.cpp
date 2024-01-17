@@ -8,6 +8,7 @@
 #include "sort/Sort_Insert.h"
 #include "sort/Sort_Quick.h"
 #include "sort/Sort_Heap.h"
+#include "sort/Sort_Merge.h"
 
 int main()
 {
@@ -16,12 +17,15 @@ int main()
 	//sort_bullbe_tuning<int>(array);
 	//sort_select<int>(array);
 	//sort_insert<int>(array);
-	//sort_quick_recursive<int>(array, 0, array.size() - 1);
-	sort_heap<int>(array);
+	//sort_quick_recursion<int>(array);
+	//sort_quick_iterate<int>(array);
+	//sort_heap<int>(array);
+	//sort_merge_recursion<int>(array);
+	sort_merge_iterate<int>(array);
 	for (int i = 0; i < array.size(); i++)
 	{
 		std::cout << array[i] << " ";
 	}
-
+	std::cout << std::endl;
 	return 0;
 }
