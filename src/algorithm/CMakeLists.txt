@@ -5,13 +5,15 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("algorithm")
 
-aux_source_directory(./sort, SORT_SRCS)
+aux_source_directory(./sort, sort_srcs)
+aux_source_directory(./sort, search_srcs)
 
 # 将源代码添加到此项目的可执行文件。
 add_executable (
 	algorithm
 	"algorithm.cpp" "algorithm.h" 
-	${SORT_SRCS}
+	${sort_srcs}
+	${search_srcs}
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

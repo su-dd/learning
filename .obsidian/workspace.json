@@ -70,7 +70,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 260.5
   },
   "right": {
     "id": "1db0c3695a508abd",
@@ -159,21 +159,23 @@
   },
   "active": "1bbf8f87ea646c1f",
   "lastOpenFiles": [
+    "src/algorithm/search/InsertionSearch.h~RF1c1ccf5c.TMP",
+    "src/algorithm/search/InsertionSearch.h~RF1c1add8f.TMP",
+    "doc/img/data_structure/20240118232701.png",
+    "src/algorithm/search/FibonacciSearch.h",
+    "src/algorithm/search/SequentialSearch.h",
+    "src/algorithm/search/InsertionSearch.h",
+    "src/algorithm/search/FibonacciSearch.cpp",
+    "src/algorithm/search/BSTSearch.h",
+    "src/algorithm/search/BinarySearch.h",
+    "src/algorithm/search/新建文件",
+    "src/algorithm/out/build/x64-debug/CMakeCache.txt.tmp8c930",
+    "src/algorithm/out/build/x64-debug/cmake_install.cmake.tmpe91f9",
     "doc/c++.md",
     "doc/领域分析.md",
     "doc/设计模式.md",
     "doc/数据结构.md",
     "doc/算法.md",
-    "src/algorithm/sort/Sort_Shell.h~RF170b0eff.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF170a4bed.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF170a14ff.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF1709ccea.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF17089331.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF170706b5.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF1700b045.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF16fb6c4f.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF16faa91e.TMP",
-    "src/algorithm/sort/Sort_Shell.h~RF16f8f767.TMP",
     "doc/img/design_pattern/20240117233759.png",
     "doc/img/20240115214844.png",
     "doc/img/20240114232808.png",
@@ -183,7 +185,6 @@
     "doc/img/20240114192141.png",
     "doc/img/20240114191454.png",
     "doc/img/20240114185518.png",
-    "doc/img/20240114172612.png",
     "README.md",
     "_sidebar.md",
     "docs/dataStruct_algorithm/数据结构.md",
@@ -203,7 +204,6 @@
     "docs/cpp/cpp_topic/C++变量、引用、指针.md",
     "docs/cpp/cpp_topic/C++之RAII.md",
     "docs/cpp/cpp_advance/C++14.md",
-    "docs/README.md",
-    "docs/forchild/成语故事/凿壁偷光.md"
+    "docs/README.md"
   ]
 }
