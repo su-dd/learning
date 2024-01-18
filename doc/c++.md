@@ -2327,42 +2327,64 @@ int main() {
 
 ### 常用c++头文件
 
+[cplusplus.com/reference/](https://cplusplus.com/reference/)
+
+#### 容器
+
 ```cpp
-#include <algorithm>//STL通用算法 
-#include <bitset> //STL位集容器 
-#include <cctype> //字符处理 
-#include <cerrno> //定义错误码 
-#include <clocale> //定义本地化函数 
-#include <cmath> //定义数学函数 
-#include <complex>//复数类 
-#include <cstdio> //定义输入输出函数 
-#include <cstdlib> //定义杂项函数内存分配函数 
-#include <cstring> //字符串处理 
-#include <ctime> //定义关于时间的函数 
-#include <deque> //STL双端队列容器 
-#include <exception> //异常处理类 
-#include <fstream> //文件输入或者输出 
-#include <functional>// STL定义运算函数(代替运算符) 
-#include <limits> //定义各种数据类型最值常量 
+#include <vector>//STL动态数组容器 
 #include <list> //STL线性列表容器 
 #include <map> //STL映射容器 
+#include <set> //STL集合容器 
+#include <queue> //STL队列送容器 
+#include <stack> //STL堆栈容器 
+#include <deque> //STL双端队列容器 
+```
+
+#### 常用算法
+
+```cpp
+#include <algorithm>//STL通用算法 
+```
+
+#### 输入、输出
+
+```cpp
+#include <fstream> //文件输入或者输出 
 #include <iomanip>// 参数化输入输出 
 #include <ios>//基本输入输出支持 
 #include <iosfwd> //输入输出系统使用的前置声明 
 #include <iostream> //数据流输入数据流输出 
 #include <istream> //基本输入流 
 #include <ostream> //基本输出流 
-#include <queue> //STL队列送容器 
-#include <set> //STL集合容器 
 #include <sstream> //基于字符串的流 
-#include <stack> //STL堆栈容器 
-#include <stdexcept> //标准异常类 
 #include <streambuf> //底层输入输出支持 
-#include <string> //字符串类 
-#include <utility> //STL通用模板类 
-#include <vector>//STL动态数组容器 
+```
+
+#### 其他
+
+```cpp
+#include <stdexcept> //标准异常类 
+#include <exception> //异常处理类 
+
+#include <limits> //定义各种数据类型最值常量 
+#include <cmath> //定义数学函数 
+#include <complex>//复数类 
+
+#include <cctype> //字符处理 
+#include <cerrno> //定义错误码 
+#include <clocale> //定义本地化函数 
 #include <cwchar>//宽字符处理及输入或者输出 
 #include <cwctype> //宽字符分类
+#include <cstdio> //定义输入输出函数 
+#include <cstdlib> //定义杂项函数内存分配函数 
+#include <cstring> //字符串处理 
+#include <ctime> //定义关于时间的函数 
+
+#include <functional>// STL定义运算函数(代替运算符) 
+#include <string> //字符串类 
+#include <utility> //STL通用模板类 
+#include <bitset> //STL位集容器 
 
 //C99
 #include <complex.h> //复数处理 
@@ -5701,9 +5723,6 @@ phi
 贴一张cppreference的截图：
 
 图片
-
-## STL
-
 
 
 ## 面试题

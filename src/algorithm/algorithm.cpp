@@ -9,7 +9,8 @@
 #include "sort/Sort_Quick.h"
 #include "sort/Sort_Heap.h"
 #include "sort/Sort_Merge.h"
-
+#include "sort/Sort_Bucket.h"
+#include "sort/Sort_Radix.h"
 int main()
 {
 	std::vector<int> array{1, 2, 5, 3, 9, 7, 4, 8, 6};
@@ -21,11 +22,23 @@ int main()
 	//sort_quick_iterate<int>(array);
 	//sort_heap<int>(array);
 	//sort_merge_recursion<int>(array);
-	sort_merge_iterate<int>(array);
+	//sort_merge_iterate<int>(array);
+	//sort_bucket(array);
 	for (int i = 0; i < array.size(); i++)
 	{
 		std::cout << array[i] << " ";
 	}
+
+	std::cout << std::endl;
+
+	int array2[] = { 7, 0 ,1,2,3,4,5,6};
+	sort_radix(array2, 8);
+
+	for (int i = 0; i < 8; i++)
+	{
+		std::cout << array2[i] << " ";
+	}
+
 	std::cout << std::endl;
 	return 0;
 }
