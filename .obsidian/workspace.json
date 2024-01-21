@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "doc/算法.md",
+                "file": "doc/操作系统.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "doc/算法.md",
+                "file": "doc/操作系统.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "doc/算法.md",
+                "file": "doc/操作系统.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "doc/算法.md"
+                "file": "doc/操作系统.md"
               }
             }
           },
@@ -159,6 +159,9 @@
   },
   "active": "1bbf8f87ea646c1f",
   "lastOpenFiles": [
+    "README.md",
+    "doc/操作系统.md",
+    "doc/算法.md",
     "src/algorithm/search/InsertionSearch.h~RF1c1ccf5c.TMP",
     "src/algorithm/search/InsertionSearch.h~RF1c1add8f.TMP",
     "doc/img/data_structure/20240118232701.png",
@@ -170,12 +173,10 @@
     "src/algorithm/search/BinarySearch.h",
     "src/algorithm/search/新建文件",
     "src/algorithm/out/build/x64-debug/CMakeCache.txt.tmp8c930",
-    "src/algorithm/out/build/x64-debug/cmake_install.cmake.tmpe91f9",
     "doc/c++.md",
     "doc/领域分析.md",
     "doc/设计模式.md",
     "doc/数据结构.md",
-    "doc/算法.md",
     "doc/img/design_pattern/20240117233759.png",
     "doc/img/20240115214844.png",
     "doc/img/20240114232808.png",
@@ -185,7 +186,6 @@
     "doc/img/20240114192141.png",
     "doc/img/20240114191454.png",
     "doc/img/20240114185518.png",
-    "README.md",
     "_sidebar.md",
     "docs/dataStruct_algorithm/数据结构.md",
     "docs/dataStruct_algorithm/算法.md",
