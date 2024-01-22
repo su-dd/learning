@@ -624,3 +624,33 @@ void test()
 }
 ```
 
+
+## C++11 内存模型
+
+在了解具体情况前，需要先了解 CPU的内存屏障；这篇文章比较适合
+[为什么需要内存屏障 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/55767485)
+
+
+#### memory order
+
+C++11 述了 6 种可以应用于原子变量的内存次序:
+
+- momory_order_relaxed,
+- memory_order_consume,
+- memory_order_acquire,
+- memory_order_release,
+- memory_order_acq_rel,
+- memory_order_seq_cst.
+
+虽然共有 6 个选项,但它们表示的是三种内存模型:
+
+- sequential consistent([memory_order_seq_cst](https://www.zhihu.com/search?q=memory_order_seq_cst&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A83422523%7D)),
+- relaxed(memory_order_seq_cst).
+- acquire release(memory_order_consume, memory_order_acquire, memory_order_release, memory_order_acq_rel),
+
+
+
+
+[C++11内存模型完全解读-从硬件层面和内存模型规则层面双重解读_acquire relaxed-CSDN博客](https://blog.csdn.net/weixin_43376501/article/details/108006586)
+
+
