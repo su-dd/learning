@@ -627,30 +627,127 @@ void test()
 
 ## C++11 内存模型
 
-在了解具体情况前，需要先了解 CPU的内存屏障；这篇文章比较适合
+### CPU的内存屏障
+
+在了解具体情况前，需要先了解 CPU的内存屏障；
+
+[MESI协议-缓存一致性协议_meis一致性协中的excludee与chi中的unique-CSDN博客](https://blog.csdn.net/younger_china/article/details/103821657)
+
 [为什么需要内存屏障 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/55767485)
 
+**简单说：**
 
-#### memory order
+内存屏障是 摩尔定律渐渐失效，CPU从单核进入多核时代；人们为了重复发挥多核CPU能力，同时保障正确执行的一个手段。
 
-C++11 述了 6 种可以应用于原子变量的内存次序:
+主要解决CPU指令重排的问题
 
-- momory_order_relaxed,
-- memory_order_consume,
-- memory_order_acquire,
-- memory_order_release,
-- memory_order_acq_rel,
-- memory_order_seq_cst.
+[MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中cache line的四种状态：
 
-虽然共有 6 个选项,但它们表示的是三种内存模型:
+![](img/c++的技巧和感悟/20240123143220.png)
 
-- sequential consistent([memory_order_seq_cst](https://www.zhihu.com/search?q=memory_order_seq_cst&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A83422523%7D)),
-- relaxed(memory_order_seq_cst).
-- acquire release(memory_order_consume, memory_order_acquire, memory_order_release, memory_order_acq_rel),
+[MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中CPU之间的六种消息：
+
+![](img/c++的技巧和感悟/20240123143245.png)
+
+cpu、cache 执行示意图：
+
+![](img/c++的技巧和感悟/20240123142815.png)
+
+- **store buffer：** cache line 修改的缓存，对应CPU的 Writeback
+- **invalidate queue：** cache line 失效的缓存，对应CPU的 Invalidate
+
+为了约束与store buffer和invalidate queue相关的操作，用到了smp_mb()。
+
+也就是说，CPU执行指令中如果遇到了smp_mb()，则需要处理store buffer和invalidate queue。
+
+有些CPU提供了更为细分的内存屏障，包括” read memory barrier”和” write memory barrier”，前者只会处理invalidate queue，而后者只会处理store buffer，其函数可分别记为smp_rmb()和smp_wmb()。显然，只处理其中之一肯定比同时处理二者效率要高，当然，约束就更少，可能的行为也就越多。
+
+### C++11 memory order
+
+memory order 主要是 限制编译器以及CPU对单线程当中的指令执行顺序进行重排的程度（此外还包括对cache的控制方法）。
+
+这种限制，决定了以atomic操作为基准点（边界），对其之前后的内存访问命令，能够在多大的范围内自由重排（或者反过来，需要施加多大的保序限制），也被称为**栅栏**。从而形成了6种模式。它本身与多线程无关，是限制的单一线程当中指令执行顺序。
+
+
+C++11的内存模型共有6种，分四类。其中一致性的减弱会伴随着性能的增强。
+![](img/Pasted%20image%2020240123160842.png)
+
+#### Sequential Consistency
+
+atomic默认的模型是顺序一致性的，这种模型对程序的执行结果有两个要求：
+
+- 每个处理器的执行顺序和代码中的顺序一样。
+- 所有处理器都只能看到一个单一的操作执行顺序。
+
+即单线程中按照代码顺序，多线程之间按照一个全局统一顺序，具体什么顺序按照时间片的分配。
+![](img/Pasted%20image%2020240123161956.png)
+
+
+```cpp
+// 顺序一致
+
+std::atomic<bool> x,y;
+std::atomic<int> z;
+void write_x()
+{
+   x.store(true,std::memory_order_seq_cst);//A
+}
+
+void write_y()
+{
+    y.store(true,std::memory_order_seq_cst);//B
+}
+
+void read_x_then_y()
+{
+    while(!x.load(std::memory_order_seq_cst));//C
+    if(y.load(std::memory_order_seq_cst))//D
+        ++z;
+}
+
+void read_y_then_x()
+{
+    while(!y.load(std::memory_order_seq_cst));//E
+    if(x.load(std::memory_order_seq_cst))  //F
+        ++z;
+}
+
+int main()
+{
+    x=false;
+    y=false;
+    z=0;
+    std::thread a(write_x);
+    std::thread b(write_y);
+    std::thread c(read_x_then_y);
+    std::thread d(read_y_then_x);
+    a.join();
+    b.join();
+    c.join();
+    d.join();
+    assert(z.load()!=0);
+}
+```
+上代码的A、B、C、D、E、F ；6条指令的执行顺序：
+
+
+#### Acquire-Release
 
 
 
+
+#### Release-Consume
+
+
+#### Relaxed
+
+
+
+
+**参考：**
 
 [C++11内存模型完全解读-从硬件层面和内存模型规则层面双重解读_acquire relaxed-CSDN博客](https://blog.csdn.net/weixin_43376501/article/details/108006586)
 
+[C++11新特性内存模型总结详解--一篇秒懂_c++11 内存模型-CSDN博客](https://blog.csdn.net/baochunlei1/article/details/122952057)
 
+[C++11内存模型-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1942213)
