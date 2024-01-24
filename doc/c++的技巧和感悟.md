@@ -627,19 +627,25 @@ void test()
 
 ## C++11 内存模型
 
-### CPU的内存屏障
+### 内存屏障
 
-在了解具体情况前，需要先了解 CPU的内存屏障；
+在了解具体情况前，需要先了解 内存屏障；
 
 [MESI协议-缓存一致性协议_meis一致性协中的excludee与chi中的unique-CSDN博客](https://blog.csdn.net/younger_china/article/details/103821657)
 
 [为什么需要内存屏障 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/55767485)
 
+[C++11中的内存模型上篇 - 内存模型基础 - codedump的网络日志](https://www.codedump.info/post/20191214-cxx11-memory-model-1/#%E6%9D%BE%E5%BC%9B%E5%9E%8B%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Brelaxed-memory-models)
+
 **简单说：**
 
 内存屏障是 摩尔定律渐渐失效，CPU从单核进入多核时代；人们为了重复发挥多核CPU能力，同时保障正确执行的一个手段。
 
-主要解决CPU指令重排的问题
+主要解决CPU指令重排的问题：
+
+CPU指令重排是指多核CPU在执行时，由于同步不够及时，导致的执行顺序不同于代码顺序的情况。
+
+#### MESI协议
 
 [MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中cache line的四种状态：
 
@@ -648,6 +654,8 @@ void test()
 [MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中CPU之间的六种消息：
 
 ![](img/c++的技巧和感悟/20240123143245.png)
+
+#### CPU执行
 
 cpu、cache 执行示意图：
 
@@ -660,9 +668,133 @@ cpu、cache 执行示意图：
 
 也就是说，CPU执行指令中如果遇到了smp_mb()，则需要处理store buffer和invalidate queue。
 
+即在这条指令之前所有的内存操作的结果，都在这个指令之后的内存操作指令被执行之前，写入到内存中。
+
 有些CPU提供了更为细分的内存屏障，包括” read memory barrier”和” write memory barrier”，前者只会处理invalidate queue，而后者只会处理store buffer，其函数可分别记为smp_rmb()和smp_wmb()。显然，只处理其中之一肯定比同时处理二者效率要高，当然，约束就更少，可能的行为也就越多。
 
-### C++11 memory order
+##### Demo1
+```cpp
+int a=0; // 存在CPU0和CPU1中
+int b=0; // 存在CPU0中
+
+// CPU0
+a = 1;// A
+b = 1;//B
+
+// CPU1
+while(b == 0) continue;//C
+assert(a == 1);  //D
+```
+
+运行分析：（这是对所有情况中的一种进行分析）
+1. `CPU0` 执行 `a = 1`， 发现 `a` 在 `cache line` 中，状态为`shared`; 发送 `Invalidate消息`给其他CPU，将 a=1 写入 `store buffer`
+2. `CPU0` 执行 `b = 1`， 发现 `b` 在 `cache line` 中，状态为`exclusive`或`modified`;但`store buffer`有值将 b=1 写入 `store buffer`
+3. `CPU1` 执行while循环，发现 `b` 不在 `cache line` 中， 发送`Read消息`给其他CPU
+4. `CPU1`收到`CPU0`的`Invalidate消息`，将其加人 `invalidate queue`，返回 `Invalidate Acknowledge消息`
+5. `CPU0` 收到 `Invalidate Acknowledge消息`，将 `a` 的`cache line`改为 `exclusive`状态
+6. `CPU0`将`store buffer`的值都写到`cache line`
+7. `CPU0`收到`Read消息`，返回`Read Response消息` ，将b的`cache line` 状态改完`shared`,这里b为1
+8. `CPU1`收到`Read Response消息`，将消息中的`cache line`放入自身的`cache`
+9. `CPU1` 执行while循环，发现 `b=1`，while循环结束
+10. `CPU1` 执行assert，发现a在cache中，且值为0，assert fails
+11. `CPU1` 执行`invalidate queue`，将a的`cache line`移除
+
+我们这里发现，D错误的原因是 `invalidate queue`，没有及时被处理
+
+##### Demo2
+```cpp
+int a=0; // 存在CPU0和CPU1中
+int b=0; // 存在CPU0中
+
+// CPU0
+a = 1;// A
+smp_mb();
+b = 1;//B
+
+// CPU1
+while(b == 0) continue;//C
+assert(a == 1);  //D
+```
+
+运行分析：（这是对所有情况中的一种进行分析）
+1. `CPU0` 执行 `a = 1`， 发现 `a` 在 `cache line` 中，状态为`shared`; 发送 `Invalidate消息`给其他CPU，将 a=1 写入 `store buffer`
+2. `CPU1` 执行while循环，发现 `b` 不在 `cache line` 中， 发送`Read消息`给其他CPU
+3. `CPU1`收到`CPU0`的`Invalidate消息`，将其加人 `invalidate queue`，返回 `Invalidate Acknowledge消息`
+4. `CPU0` 收到 `Invalidate Acknowledge消息`，将 `a` 的`cache line`改为 `exclusive`状态；执行`smp_mb()`,将`store buffer`的值都写到`cache line`
+6.  `CPU0` 执行 `b = 1`， 发现 `b` 在 `cache line` 中，状态为`exclusive`或`modified`;且`store buffer`没有值；因此，直接将 b=1 写入 `cache line`
+7. `CPU0`收到`Read消息`，返回`Read Response消息` ，将b的`cache line` 状态改完`shared`,这里b为1
+8. `CPU1`收到`Read Response消息`，将消息中的`cache line`放入自身的`cache`
+9. `CPU1` 执行while循环，发现 `b=1`，while循环结束
+10. `CPU1` 执行assert，发现a在cache中，且值为0，assert fails
+11. `CPU1` 执行`invalidate queue`，将a的`cache line`移除
+
+我们这里发现，D错误的原因是 `invalidate queue`，没有及时被处理；
+
+当前情况给CPU0 加 内存栅栏无效。
+
+##### Demo3
+```cpp
+int a=0; // 存在CPU0和CPU1中
+int b=0; // 存在CPU0中
+
+// CPU0
+a = 1;// A
+smp_mb();
+b = 1;//B
+
+// CPU1
+while(b == 0) continue;//C
+smp_mb();
+assert(a == 1);  //D
+```
+
+运行分析：（这是对所有情况中的一种进行分析）
+1. `CPU0` 执行 `a = 1`， 发现 `a` 在 `cache line` 中，状态为`shared`; 发送 `Invalidate消息`给其他CPU，将 a=1 写入 `store buffer`
+2. `CPU1` 执行while循环，发现 `b` 不在 `cache line` 中， 发送`Read消息`给其他CPU
+3. `CPU1`收到`CPU0`的`Invalidate消息`，将其加人 `invalidate queue`，返回 `Invalidate Acknowledge消息`
+4. `CPU0` 收到 `Invalidate Acknowledge消息`，将 `a` 的`cache line`改为 `exclusive`状态；执行`smp_mb()`,将`store buffer`的值都写到`cache line`
+6.  `CPU0` 执行 `b = 1`， 发现 `b` 在 `cache line` 中，状态为`exclusive`或`modified`;且`store buffer`没有值；因此，直接将 b=1 写入 `cache line`
+7. `CPU0`收到`Read消息`，返回`Read Response消息` ，将b的`cache line` 状态改完`shared`,这里b为1
+8. `CPU1`收到`Read Response消息`，将消息中的`cache line`放入自身的`cache`
+9. `CPU1` 执行while循环，发现 `b=1`，while循环结束
+10. `CPU1`执行`smp_mb()`，处理`invalidate queue`内的消息；`Invalidate消息`被处理，`a` 移出`cache line`
+11. `CPU1` 执行assert，发现a不在cache中；发送`Read消息`
+12. `CPU0`收到`Read消息`，返回`Read Response消息` ，将a的`cache line` 状态改完`shared`,这里a为1
+13. `CPU1`收到`Read Response消息`，将消息中的`cache line`放入自身的`cache`
+14.  `CPU1`载入a，a为1，assert成功
+
+我们这里发现，D正常；这里我们发现，程序能否正常执行的关键是缓存是否一致是否达成。
+
+我们保证局部的 Sequential Consistency（顺序一致性），即可保证程序正常进行。
+
+#### 源码解析
+
+```cpp
+        #define barrier() __asm__ __volatile__("": : :"memory")
+        #define mb() alternative("lock; addl $0,0(%%esp)", "mfence", X86_FEATURE_XMM2)
+        #define rmb() alternative("lock; addl $0,0(%%esp)", "lfence", X86_FEATURE_XMM2)
+#ifdef CONFIG_SMP
+        #define smp_mb()        mb()
+        #define smp_rmb()        rmb()
+        #define smp_wmb()        wmb()
+        #define smp_read_barrier_depends()        read_barrier_depends()
+        #define set_mb(var, value) do { (void) xchg(&var, value); } while (0)
+#else
+        #define smp_mb()        barrier()
+        #define smp_rmb()        barrier()
+        #define smp_wmb()        barrier()
+        #define smp_read_barrier_depends()        do { } while(0)
+        #define set_mb(var, value) do { var = value; barrier(); } while (0)
+#endif
+```
+
+1. `set_mb()`, `mb()`, `barrier()` 函数追踪到底，就是`__asm__  __volatile__("" ::: "memory")`  而这行代码就是内存屏障
+2. `__asm__`用于指示编译器在此插入汇编语句
+3. `__volatile__`用于告诉编译器，**严禁将此处的汇编语句与其它的语句重组合优化**。即：**原原本本按原来的样子处理这这里的汇编**
+4. memory 强制 gcc 编译器假设 RAM 所有内存单元均被汇编指令修改，这样 cpu 中的 registers 和 cache 中已缓存的内存单元中的数据将作废。cpu 将不得不在需要的时候重新读取内存中的数据。这就阻止了 cpu 又将 registers, cache 中的数据用于去优化指令，而避免去访问内存
+5. `"":::` 表示这是个空指令。barrier() 不用在此插入一条串行化汇编指令
+
+### C++11 Memory Order
 
 memory order 主要是 限制编译器以及CPU对单线程当中的指令执行顺序进行重排的程度（此外还包括对cache的控制方法）。
 
@@ -670,9 +802,29 @@ memory order 主要是 限制编译器以及CPU对单线程当中的指令执行
 
 
 C++11的内存模型共有6种，分四类。其中一致性的减弱会伴随着性能的增强。
-![](img/Pasted%20image%2020240123160842.png)
+![](img/c++的技巧和感悟/20240123160842.png)
+#### 同步
+
+##### 同步点
+对于一个原子类型变量a，如果a在线程1中进行store(写)操作，在线程2中进行load(读)操作，则线程1的store和线程2的load构成原子变量a的一对`同步点`，其中的store操作和load操作就分别是一个`同步点`。
+
+可以看出，`同步点`具有三个条件：
+
+- 必须是一对原子变量操作中的一个，且一个操作是store，另一个操作是load；
+- 这两个操作必须针对同一个原子变量；
+- 这两个操作必须分别在两个线程中。
+
+##### synchronized-with(同步)
+对于一对`同步点`来说，当写操作写入一个值x后，另一个同步点的读操作在某一时刻读到了这个变量的值x，则此时就认为这两个`同步点`之间发生了`同步`关系。
+
+`同步`关系具有两方面含义：
+
+- 针对的是一对同步点之间的一种状态的描述；
+- 只有当读取的值是另一个同步点写入的值的时候，这两个同步点之间才发生`同步`；
 
 #### Sequential Consistency
+
+对应标记为：**memory_order_seq_cst**
 
 atomic默认的模型是顺序一致性的，这种模型对程序的执行结果有两个要求：
 
@@ -680,8 +832,9 @@ atomic默认的模型是顺序一致性的，这种模型对程序的执行结�
 - 所有处理器都只能看到一个单一的操作执行顺序。
 
 即单线程中按照代码顺序，多线程之间按照一个全局统一顺序，具体什么顺序按照时间片的分配。
-![](img/Pasted%20image%2020240123161956.png)
+![](img/c++的技巧和感悟/20240123161956.png)
 
+**Demo：**
 
 ```cpp
 // 顺序一致
@@ -728,21 +881,156 @@ int main()
     assert(z.load()!=0);
 }
 ```
-上代码的A、B、C、D、E、F ；6条指令的执行顺序：
-
+上代码的A、B、C、D、E、F ；6条指令的执行顺序：C一定在D之前，E一定在F之前，所以可以是 ABCDEF，ACBEDF 等
+![](img/c++的技巧和感悟/20240124092643.png)
 
 #### Acquire-Release
 
+原子操作有三类：
 
+- 读：在读取的过程中，读取位置的内容不会发生任何变动。
+- 写：在写入的过程中，其他执行线程不会看到部分写入的结果。
+- 读‐修改‐写：读取内存、修改数值、然后写回内存，整个操作的过程中间不会有其他写入操作插入，其他执行线程不会看到部分写入的结果。
+
+##### memory_order_acquire&memory_order_release
+**memory_order_acquire：获得操作**，在读取某原子对象时，当前线程的任何**后面的读写操作**都不允许重排到这个操作的**前面**去，并且其他线程在对同一个原子对象释放**之前的所有内存写入**都在**当前线程可见**。
+
+**memory_order_release：释放操作**，在写入某原子对象时，当前线程的任何**前面的读写操作**都不允许重排到这个操作的**后面**去，并且当前线程的所有内存**写入**都在对同一个原子对象进行获取的**其他线程可见**。
+
+![](img/c++的技巧和感悟/20240124093018.png)
+**Demo：**
+```cpp
+bool f=false;
+atomic<bool> g=false;
+
+// thread1
+f=true//A
+g.store(true, memory_order_release);//B
+
+// thread2
+while(!g.load(memory_order_ acquire));//C
+assert(f));//D
+```
+
+这里可以发现f是同步点，由于C做了循环，所以执行顺序一定是 ABCD；
+
+这就保障了 D部分的正确执行；即A的操作对D可见
+
+##### memory_order_acq_rel
+
+**memory_order_acq_rel：获得释放操作**，一个**读‐修改‐写操作同时具有获得语义和释放语义**，即它**前后的任何读写操作都不允许重排**，并且其他线程在对同一个原子对象释放之前的所有内存写入都在当前线程可见，当前线程的所有内存写入都在对同一个原子对象进行获取的其他线程可见
+
+![](img/c++的技巧和感悟/20240124112422.png)
+
+**Demo**
+
+```cpp
+bool f=false;
+atomic<bool> g=false;
+bool h=false;
+
+// thread1
+f=true//A
+g.store(true, memory_order_release);//B 
+
+// thread2
+while(!g.load(memory_order_ acquire);//C
+assert(f));//D
+assert(h);//E
+
+//thread3
+h=true;//F
+while(!g.load(memory_order_acq_rel);//G
+assert(f));//H
+```
+
+由前面的知识知道：
+	A一定在B前面，C,一定在D、E前面，F、G、H的顺序一定是 F、G、H
+
+由于C，G为循环，所以，B一定在C前面，B一定在G前面
+
+所以：D、E、H都不会触发
 
 
 #### Release-Consume
 
+Acquire-Release可以保证线程之间的Synchronizes-With（同步）关系，同时也约束了同一个线程中的前后语句执行顺序。
+
+Release-Consume 不会限制线程中其他变量的顺序重排，不会顺带强制其前后其他指令（无依赖关系）的顺序。避免了其他指令强制顺序带来的额外开销
+
+![](img/c++的技巧和感悟/20240124103517.png)
+
+**Demo1**
+```cpp
+bool f=false;
+atomic<bool> g=false;
+
+// thread1
+f=true//A
+g.store(true, memory_order_release);//B
+
+// thread2
+while(!g.load(memory_order_consume);//C
+assert(f));//D
+```
+
+当前代码中，A、B之间无依赖，C、D之间无依赖；所以D可能断言失败
+
+**Demo2**
+```cpp
+bool f=false;
+atomic<bool> g=false;
+
+// thread1
+f=true//A
+g.store(f, memory_order_release);//B   g依赖于f
+
+// thread2
+while(!g.load(memory_order_consume);//C
+assert(f));//D
+```
+
+当前代码中：变量g依赖于f，所以线程1里A在B前面，同时会导致线程2里C在D前面。D的断言就不会触发。
+
+这里存在一个隐藏的关系：C在D前面；这使得代码难以维护，一般不推荐使用。
 
 #### Relaxed
 
+**memory_order_relaxed：** 仅保证load()和store()是原子操作，除此之外，不提供任何跨线程的同步，乱序执行依然有。
 
+即单线程中，除了代码提供的依赖关系外，没有什么关系
 
+![](img/c++的技巧和感悟/20240124103446.png)
+
+**Demo1**
+```cpp
+atomic<bool> f=false;
+atomic<bool> g=false;
+
+// thread1
+f.store(true, memory_order_relaxed);//A
+g.store(true, memory_order_relaxed);//B
+
+// thread2
+while(!g.load(memory_order_relaxed));//C  
+assert(f.load(memory_order_relaxed));//D
+```
+当前，A、B没有依赖关系，C、D没有依赖关系。C由于是循环，可以确定，A、C的关系。D可能断言失败
+
+**Demo2**
+```cpp
+atomic<bool> f=false;
+atomic<bool> g=false;
+
+// thread1
+f.store(true, memory_order_relaxed);//A
+g.store(f, memory_order_relaxed);//B
+
+// thread2
+while(!g.load(memory_order_relaxed));//C  
+assert(f.load(memory_order_relaxed));//D
+```
+当前A、B存在依赖关系，C由于是循环，可以确定，A、C的关系；但线程C、D没有依赖关系。D可能断言失败
 
 **参考：**
 
