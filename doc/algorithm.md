@@ -116,7 +116,7 @@ void sort_select(std::vector<T>& array)
 5. 将新元素插入到该位置后
 6. 重复步骤2~5
 
-![](img/data_structure/插入排序.gif)
+![](img/data_structure/insert.gif)
 
 [插入排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Insert.h)
 
