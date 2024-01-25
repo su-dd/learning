@@ -649,17 +649,17 @@ CPU指令重排是指多核CPU在执行时，由于同步不够及时，导致�
 
 [MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中cache line的四种状态：
 
-![](20240123143220.png)
+![](img/c++skill/20240123143220.png)
 
 [MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中CPU之间的六种消息：
 
-![](20240123143245.png)
+![](img/c++skill/20240123143245.png)
 
 #### CPU执行
 
 cpu、cache 执行示意图：
 
-![](20240123142815.png)
+![](img/c++skill/20240123142815.png)
 
 - **store buffer：** cache line 修改的缓存，对应CPU的 Writeback
 - **invalidate queue：** cache line 失效的缓存，对应CPU的 Invalidate
@@ -802,7 +802,7 @@ memory order 主要是 限制编译器以及CPU对单线程当中的指令执行
 
 
 C++11的内存模型共有6种，分四类。其中一致性的减弱会伴随着性能的增强。
-![](20240123160842.png)
+![](img/c++skill/20240123160842.png)
 #### 同步
 
 ##### 同步点
@@ -832,7 +832,7 @@ atomic默认的模型是顺序一致性的，这种模型对程序的执行结�
 - 所有处理器都只能看到一个单一的操作执行顺序。
 
 即单线程中按照代码顺序，多线程之间按照一个全局统一顺序，具体什么顺序按照时间片的分配。
-![](20240123161956.png)
+![](img/c++skill/20240123161956.png)
 
 **Demo：**
 
@@ -882,7 +882,7 @@ int main()
 }
 ```
 上代码的A、B、C、D、E、F ；6条指令的执行顺序：C一定在D之前，E一定在F之前，所以可以是 ABCDEF，ACBEDF 等
-![](20240124092643.png)
+![](img/c++skill/20240124092643.png)
 
 #### Acquire-Release
 
@@ -897,7 +897,7 @@ int main()
 
 **memory_order_release：释放操作**，在写入某原子对象时，当前线程的任何**前面的读写操作**都不允许重排到这个操作的**后面**去，并且当前线程的所有内存**写入**都在对同一个原子对象进行获取的**其他线程可见**。
 
-![](20240124093018.png)
+![](img/c++skill/20240124093018.png)
 **Demo：**
 ```cpp
 bool f=false;
@@ -920,7 +920,7 @@ assert(f));//D
 
 **memory_order_acq_rel：获得释放操作**，一个**读‐修改‐写操作同时具有获得语义和释放语义**，即它**前后的任何读写操作都不允许重排**，并且其他线程在对同一个原子对象释放之前的所有内存写入都在当前线程可见，当前线程的所有内存写入都在对同一个原子对象进行获取的其他线程可见
 
-![](20240124112422.png)
+![](img/c++skill/20240124112422.png)
 
 **Demo**
 
@@ -958,7 +958,7 @@ Acquire-Release可以保证线程之间的Synchronizes-With（同步）关系，
 
 Release-Consume 不会限制线程中其他变量的顺序重排，不会顺带强制其前后其他指令（无依赖关系）的顺序。避免了其他指令强制顺序带来的额外开销
 
-![](20240124103517.png)
+![](img/c++skill/20240124103517.png)
 
 **Demo1**
 ```cpp
@@ -1000,7 +1000,7 @@ assert(f));//D
 
 即单线程中，除了代码提供的依赖关系外，没有什么关系
 
-![](20240124103446.png)
+![](img/c++skill/20240124103446.png)
 
 **Demo1**
 ```cpp
