@@ -18,18 +18,18 @@
 - [🚀C++](doc/c++.md)
 - [👻Java](doc/java.md)
 
-**技巧与感悟**
+**技巧于感悟**
 - [✂️C++](doc/c++_skill.md)
 
 **基础**
 - [🧱数据结构](doc/data_structure.md)
 - [🤞算法](doc/algorithm.md)
-- 操作系统
-- 计算机网络
-- 数据库
+- [🖥️操作系统](doc/operating_system.md)
+- [🌐计算机网络](doc/network.md)
+- [🧳数据库](doc/database.md)
 
 **设计**
-- [🌐架构设计](doc/design_architect.md)
+- [🦑架构设计](doc/design_architect.md)
 - [🤖设计模式](doc/design_pattern.md)
 
 **框架**
@@ -37,7 +37,7 @@
 
 **工具**
 - [👽cmake](doc/cmake.md)
-- [💌Git](doc/git.md)
+- [🎪Git](doc/git.md)
 - [👝nvm](doc/nvm.md)
 
 **沟通**
