@@ -117,3 +117,7 @@ CMakeLists.txt.user*
 
 #obsidian
 /.obsidian
+
+#clion
+src/*/.idea/
+src/*/cmake-build-debug/
