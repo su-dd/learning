@@ -1039,3 +1039,13 @@ assert(f.load(memory_order_relaxed));//D
 [C++11新特性内存模型总结详解--一篇秒懂_c++11 内存模型-CSDN博客](https://blog.csdn.net/baochunlei1/article/details/122952057)
 
 [C++11内存模型-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1942213)
+
+
+## D指针，Q指针
+
+
+
+
+## 变长参数
+
+
