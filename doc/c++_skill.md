@@ -647,6 +647,10 @@ CPU指令重排是指多核CPU在执行时，由于同步不够及时，导致�
 
 #### MESI协议
 
+cahce line 示意：
+
+![](img/c_skill/20240201173609.png)
+
 [MESI Protocol](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/MESI_protocol)中cache line的四种状态：
 
 ![](img/c_skill/20240123143220.png)
@@ -794,7 +798,7 @@ assert(a == 1);  //D
 4. memory 强制 gcc 编译器假设 RAM 所有内存单元均被汇编指令修改，这样 cpu 中的 registers 和 cache 中已缓存的内存单元中的数据将作废。cpu 将不得不在需要的时候重新读取内存中的数据。这就阻止了 cpu 又将 registers, cache 中的数据用于去优化指令，而避免去访问内存
 5. `"":::` 表示这是个空指令。barrier() 不用在此插入一条串行化汇编指令
 
-### C++11 Memory Order
+### C++11  Memory Order
 
 memory order 主要是 限制编译器以及CPU对单线程当中的指令执行顺序进行重排的程度（此外还包括对cache的控制方法）。
 
