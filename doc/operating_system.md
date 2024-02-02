@@ -284,6 +284,48 @@ Intel基于冯洛伊曼体系，做了更为详细的分类：
 
 
 
+### 内存占用
+
+先了解内存的结构**32位的内存结构**：
+![](img/operating_system/20240202102437.png)
+32位机器 的内存空间为4个G（2的32次方），1个G的内核空间后，3个G的进程空间，
+
+主线程栈默认大小为 8M，无最大值限制
+
+可以通过：**ulimit -s** 调整
+
+除此之外还有getrlimit/setrlimit两个函数：
+
+```cpp
+int getrlimit(int resource, struct rlimit *rlim);
+
+int setrlimit(int resource, const struct rlimit *rlim);
+```
+
+**多线程的情况：**
+
+![](img/operating_system/20240202105942.png)
+
+线程主要是每个分配一个线程栈：一个栈 默认大小为2M，也是最大值
+
+可以通过：**ulimit -s** 调整
+
+除此之外还有getrlimit/setrlimit两个函数：
+
+```cpp
+int getrlimit(int resource, struct rlimit *rlim);
+
+int setrlimit(int resource, const struct rlimit *rlim);
+```
+
+**协程的情况：**
+
+有栈协程是一个用户态的线程，用户可以**在堆上模拟出协程的栈空间**，当需要进行协程上下文切换的时候，主线程只需要交换栈空间和恢复协程的一些相关的寄存器的状态就可以实现一个用户态的线程上下文切换，没有了从用户态转换到内核态的切换成本，协程的执行也就更加高效。
+
+
+
+
+
 ### 同步&通信
 
 #### 进程之间的通信方式以及优缺点
