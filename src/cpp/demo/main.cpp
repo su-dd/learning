@@ -1,50 +1,47 @@
-// #include <QCoreApplication>
-
-// int main(int argc, char *argv[])
-// {
-//     QCoreApplication a(argc, argv);
-
-//     return a.exec();
-// }
 #include <functional>
 #include <iostream>
 #include <memory>
 
-void f(int n1, int n2, int n3, const int& n4, int n5) {
+void f(int n1, int n2, int n3, const int &n4, int n5)
+{
     std::cout << n1 << ' ' << n2 << ' ' << n3 << ' ' << n4 << ' ' << n5 << std::endl;
 }
 
 int g(int n1) { return n1; }
 
-struct Foo {
+struct Foo
+{
     void print_sum(int n1, int n2) { std::cout << n1 + n2 << std::endl; }
     int data = 10;
 };
 
-int main() {
-    using namespace std::placeholders;  // Õë¶Ô _1, _2, _3...
+int main()
+{
+    using namespace std::placeholders; // é’ˆå¯¹ _1, _2, _3...
 
-    // ÑÝÊ¾²ÎÊýÖØÅÅÐòºÍ°´ÒýÓÃ´«µÝ
+    // æ¼”ç¤ºå‚æ•°é‡æŽ’åºå’ŒæŒ‰å¼•ç”¨ä¼ é€’
     int n = 7;
-    // £¨ _1 Óë _2 À´×Ô std::placeholders £¬²¢±íÊ¾½«À´»á´«µÝ¸ø f1 µÄ²ÎÊý£©
+    // ï¼ˆ _1 ä¸Ž _2 æ¥è‡ª std::placeholders ï¼Œå¹¶è¡¨ç¤ºå°†æ¥ä¼šä¼ é€’ç»™ f1 çš„å‚æ•°ï¼‰
     auto f1 = std::bind(f, _2, 42, _1, std::cref(n), n);
     n = 10;
-    f1(1, 2, 1001);  // 1 Îª _1 Ëù°ó¶¨£¬ 2 Îª _2 Ëù°ó¶¨£¬²»Ê¹ÓÃ 1001
-        // ½øÐÐµ½ f(2, 42, 1, n, 7) µÄµ÷ÓÃ
+    f1(1, 2, 1001); // 1 ä¸º _1 æ‰€ç»‘å®šï¼Œ 2 ä¸º _2 æ‰€ç»‘å®šï¼Œä¸ä½¿ç”¨ 1001
+                    // è¿›è¡Œåˆ° f(2, 42, 1, n, 7) çš„è°ƒç”¨
 
-    // Ç¶Ì× bind ×Ó±í´ïÊ½¹²ÏíÕ¼Î»·û
+    // åµŒå¥— bind å­è¡¨è¾¾å¼å…±äº«å ä½ç¬¦
     auto f2 = std::bind(f, _3, std::bind(g, _3), _3, 4, 5);
-    f2(10, 11, 12);  // ½øÐÐµ½ f(12, g(12), 12, 4, 5); µÄµ÷ÓÃ
+    f2(10, 11, 12); // è¿›è¡Œåˆ° f(12, g(12), 12, 4, 5); çš„è°ƒç”¨
 
-    // °ó¶¨Ö¸Ïò³ÉÔ±º¯ÊýÖ¸Õë
+    // ç»‘å®šæŒ‡å‘æˆå‘˜å‡½æ•°æŒ‡é’ˆ
     Foo foo;
     auto f3 = std::bind(&Foo::print_sum, &foo, 95, _1);
     f3(5);
 
-    // °ó¶¨Ö¸ÏòÊý¾Ý³ÉÔ±Ö¸Õë
+    // ç»‘å®šæŒ‡å‘æ•°æ®æˆå‘˜æŒ‡é’ˆ
     auto f4 = std::bind(&Foo::data, _1);
     std::cout << f4(foo) << std::endl;
 
-    // ÖÇÄÜÖ¸ÕëÒàÄÜÓÃÓÚµ÷ÓÃ±»ÒýÓÃ¶ÔÏóµÄ³ÉÔ±
+    // æ™ºèƒ½æŒ‡é’ˆäº¦èƒ½ç”¨äºŽè°ƒç”¨è¢«å¼•ç”¨å¯¹è±¡çš„æˆå‘˜
     std::cout << f4(std::make_shared<Foo>(foo)) << std::endl;
+    system("pause");
+    return 0;
 }

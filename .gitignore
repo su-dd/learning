@@ -121,3 +121,12 @@ CMakeLists.txt.user*
 #clion
 src/*/.idea/
 src/*/cmake-build-debug/
+
+#vs code
+.vscode/
+
+#cmake
+cmake-build-debug/
+
+#build
+build/
