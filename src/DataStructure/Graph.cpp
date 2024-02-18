@@ -1,6 +1,6 @@
 #include "Graph.h"
 
-EdgesGraph MatrixGraph2EdgesGraph(MatrixGraph& MGraph)
+EdgesGraph MatrixGraph2EdgesGraph(MatrixGraph &MGraph)
 {
     EdgesGraph EGraph;
     EGraph.vexnum = MGraph.vexnum;
@@ -15,13 +15,13 @@ EdgesGraph MatrixGraph2EdgesGraph(MatrixGraph& MGraph)
         {
             if (MGraph.arc[i][j] != INF)
             {
-                EGraph.edges[k++] = EdgesGraph::Edge{ i, j, MGraph.arc[i][j] };
+                EGraph.edges[k++] = EdgesGraph::Edge{i, j, MGraph.arc[i][j]};
             }
         }
     }
     EGraph.edgenum = k;
 
-    // Í¨¹ıÑ¡ÔñÅÅĞòÀ´ÊµÏÖ ÏÈĞ¡£¬ºó´óµÄÅÅĞò
+    // é€šè¿‡é€‰æ‹©æ’åºæ¥å®ç° å…ˆå°ï¼Œåå¤§çš„æ’åº
     for (int i = 0; i < EGraph.edgenum; i++)
     {
         int min = i;
@@ -35,7 +35,7 @@ EdgesGraph MatrixGraph2EdgesGraph(MatrixGraph& MGraph)
 
         if (i != min)
         {
-            std::swap(EGraph.edges[min], EGraph.edges[i]); // swapÍ¨¹ımoveÀ´ÊµÏÖ£¬Ğ§ÂÊ¸ü¸ß
+            std::swap(EGraph.edges[min], EGraph.edges[i]); // swapé€šè¿‡moveæ¥å®ç°ï¼Œæ•ˆç‡æ›´é«˜
         }
     }
 

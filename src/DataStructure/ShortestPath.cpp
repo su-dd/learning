@@ -1,20 +1,22 @@
-﻿#include "Head.h"
+#include "Head.h"
 #include "Graph.h"
 #include <iostream>
 #include <string>
 
-namespace ShortestPath {
+namespace ShortestPath
+{
 
-    struct Path {
-        std::string path = "V0";   // 路径
-        int distance;       // 距离起点的距离
-        bool visit = false; // 是否已经被访问
+    struct Path
+    {
+        std::string path = "V0"; // 路径
+        int distance;            // 距离起点的距离
+        bool visit = false;      // 是否已经被访问
     };
 
     struct FloydPath
     {
-        int D[9][9] = { 0 };
-        int P[9][9] = { 0 };
+        int D[9][9] = {0};
+        int P[9][9] = {0};
     };
 
     /* 最短路径：迪杰斯特拉( Dijkstra )算法（单源最短路径）*/
@@ -28,7 +30,6 @@ namespace ShortestPath {
             node[i].path = "V0->V" + std::to_string(i);
         }
         node[0].visit = true;
-
 
         int num = 1;
         do
@@ -77,16 +78,16 @@ namespace ShortestPath {
             for (int w = 0; w < G.vexnum; w++)
             {
                 path.D[v][w] = G.arc[v][w];
-                path.P[v][w] = w;   // 设置为w，代步的事
+                path.P[v][w] = w; // 设置为w，代步的事
             }
         }
 
         // 3重循环核心算法
-        for (int k = 0; k < G.vexnum; k++)//k为中间点 
+        for (int k = 0; k < G.vexnum; k++) // k为中间点
         {
-            for (int v = 0; v < G.vexnum; v++) //v为起点
+            for (int v = 0; v < G.vexnum; v++) // v为起点
             {
-                for (int w = 0; w < G.vexnum; w++) //w为终点
+                for (int w = 0; w < G.vexnum; w++) // w为终点
                 {
                     if (path.D[v][w] > path.D[v][k] + path.D[k][w])
                     {
@@ -99,7 +100,7 @@ namespace ShortestPath {
     }
 
     /* 通过 弗洛伊德( Floyd )算法的结果，输出 节点间 的路径和 权重*/
-    void print_Floyd(MatrixGraph& G, FloydPath& path, int begin, int end)
+    void print_Floyd(MatrixGraph &G, FloydPath &path, int begin, int end)
     {
         std::string str = G.vertex[begin];
         int k = begin;
@@ -116,19 +117,19 @@ namespace ShortestPath {
     {
         MatrixGraph G;
         G.vexnum = 9;
-        VertexType vertex[9] = { "V0", "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8" };
-        EdgeType arc[9][9] = 
-        {
-                {  0,  10, INF, INF, INF,  11, INF, INF, INF},
-                { 10,   0,  18, INF, INF, INF,  16, INF,  12},
-                {INF,  18,   0,  22, INF, INF, INF, INF,   8},
-                {INF, INF,  22,   0,  20, INF, INF,  16,  21},
-                {INF, INF, INF,  20,   0,  26, INF,   7, INF},
-                { 11, INF, INF, INF,  26,   0,  17, INF, INF},
-                {INF,  16, INF, INF, INF,  17,   0,  19, INF},
-                {INF, INF, INF,  16,   7, INF,  19,   0, INF},
-                {INF,  12,   8,  21, INF, INF, INF, INF,   0},
-        };
+        VertexType vertex[9] = {"V0", "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"};
+        EdgeType arc[9][9] =
+            {
+                {0, 10, INF, INF, INF, 11, INF, INF, INF},
+                {10, 0, 18, INF, INF, INF, 16, INF, 12},
+                {INF, 18, 0, 22, INF, INF, INF, INF, 8},
+                {INF, INF, 22, 0, 20, INF, INF, 16, 21},
+                {INF, INF, INF, 20, 0, 26, INF, 7, INF},
+                {11, INF, INF, INF, 26, 0, 17, INF, INF},
+                {INF, 16, INF, INF, INF, 17, 0, 19, INF},
+                {INF, INF, INF, 16, 7, INF, 19, 0, INF},
+                {INF, 12, 8, 21, INF, INF, INF, INF, 0},
+            };
 
         for (int i = 0; i < G.vexnum; i++)
         {
@@ -152,7 +153,6 @@ namespace ShortestPath {
         ShortestPath_Dijkstra(G);
         std::cout << std::endl;
 
-
         std::cout << "最短路径算法：弗洛伊德( Floyd )" << std::endl;
         FloydPath path;
         ShortestPath_Floyd(G, path);
@@ -162,4 +162,3 @@ namespace ShortestPath {
         return 0;
     }
 }
-

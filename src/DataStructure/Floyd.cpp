@@ -1,59 +1,74 @@
-void Floyd(MatGraph MG) {
-	int i, j, k;
-	int A[MAXV][MAXV];
-	int path[MAXV][MAXV];
-	for (i = 0; i < MG.n; i++) {
-		for (j = 0; j < MG.n; j++) {
-			A[i][j] = MG.adjMat[i][j];
-			if (i != j && MG.adjMat[i][j] < INF) {
-				path[i][j] = i;							//¶¥µã i µ½¶¥µã j ÓĞ±ßÊ±
-			}
-			else {
-				path[i][j] = -1;						//¶¥µã i µ½¶¥µã j ÎŞ±ßÊ±
-			}
-		}
-	}
-	for (k = 0; k < MG.n; k++) {						//Ò»´Î¿¼²ìËùÓĞ¶¥µã
-		for (i = 0; i < MG.n; i++) {
-			for (j = 0; j < MG.n; j++) {
-				if (A[i][j] > A[i][k] + A[k][j]) {
-					A[i][j] = A[i][k] + A[k][j];		//ĞŞ¸Ä×î¶ÌÂ·¾¶³¤¶È
-					path[i][j] = path[k][j];			//ĞŞ¸Ä×î¶ÌÂ·¾¶
-				}
-			}
-		}
-	}
-	displayPath(MG, A, path);							//Êä³ö×î¶ÌÂ·¾¶
+#include <stdio.h>
+
+void Floyd(MatGraph MG)
+{
+    int i, j, k;
+    int A[MAXV][MAXV];
+    int path[MAXV][MAXV];
+    for (i = 0; i < MG.n; i++)
+    {
+        for (j = 0; j < MG.n; j++)
+        {
+            A[i][j] = MG.adjMat[i][j];
+            if (i != j && MG.adjMat[i][j] < INF)
+            {
+                path[i][j] = i; // é¡¶ç‚¹ i åˆ°é¡¶ç‚¹ j æœ‰è¾¹æ—¶
+            }
+            else
+            {
+                path[i][j] = -1; // é¡¶ç‚¹ i åˆ°é¡¶ç‚¹ j æ— è¾¹æ—¶
+            }
+        }
+    }
+    for (k = 0; k < MG.n; k++)
+    { // ä¸€æ¬¡è€ƒå¯Ÿæ‰€æœ‰é¡¶ç‚¹
+        for (i = 0; i < MG.n; i++)
+        {
+            for (j = 0; j < MG.n; j++)
+            {
+                if (A[i][j] > A[i][k] + A[k][j])
+                {
+                    A[i][j] = A[i][k] + A[k][j]; // ä¿®æ”¹æœ€çŸ­è·¯å¾„é•¿åº¦
+                    path[i][j] = path[k][j];     // ä¿®æ”¹æœ€çŸ­è·¯å¾„
+                }
+            }
+        }
+    }
+    displayPath(MG, A, path); // è¾“å‡ºæœ€çŸ­è·¯å¾„
 }
 
-
-
-void displayPath(MatGraph MG, int A[MAXV][MAXV], int path[MAXV][MAXV]) {
-	int i, j, k;
-	int s;
-	int aPath[MAXV];										//´æ·ÅÒ»Ìõ×î¶ÌÂ·¾¶£¨ÄæÏò£©
-	int d;													//¶¥µã¸öÊı
-	for (i = 0; i < MG.n; i++) {
-		for (j = 0; j < MG.n; j++) {
-			if (A[i][j] != INF && i != j) {					//Èô¶¥µã i ºÍ ¶¥µã j Ö®¼ä´æÔÚÂ·¾¶
-				printf("´Ó %d µ½ %d µÄÂ·¾¶Îª£º", i, j);
-				k = path[i][j];
-				d = 0;
-				aPath[d] = j;								//Â·¾¶ÉÏÌí¼ÓÖÕµã
-				while (k != -1 && k != i) {					//Â·¾¢ÉÏÌí¼ÓÖĞ¼äµã
-					d++;
-					aPath[d] = k;
-					k = path[i][k];
-				}
-				d++;
-				aPath[d] = i;								//Â·¾¶ÉÏÌí¼ÓÆğµã
-				printf("%d", aPath[d]);						//Êä³öÆğµã
-				for (s = d - 1; s >= 0; s--) {				//Êä³öÂ·¾¶ÉÏÆäËû¶¥µã
-					printf("->%d", aPath[s]);
-				}
-				printf("\t\t");
-				printf("Â·¾¶³¤¶ÈÎª£º%d\n", A[i][j]);
-			}
-		}
-	}
+void displayPath(MatGraph MG, int A[MAXV][MAXV], int path[MAXV][MAXV])
+{
+    int i, j, k;
+    int s;
+    int aPath[MAXV]; // å­˜æ”¾ä¸€æ¡æœ€çŸ­è·¯å¾„ï¼ˆé€†å‘ï¼‰
+    int d;           // é¡¶ç‚¹ä¸ªæ•°
+    for (i = 0; i < MG.n; i++)
+    {
+        for (j = 0; j < MG.n; j++)
+        {
+            if (A[i][j] != INF && i != j)
+            { // è‹¥é¡¶ç‚¹ i å’Œ é¡¶ç‚¹ j ä¹‹é—´å­˜åœ¨è·¯å¾„
+                printf("ä» %d åˆ° %d çš„è·¯å¾„ä¸ºï¼š", i, j);
+                k = path[i][j];
+                d = 0;
+                aPath[d] = j; // è·¯å¾„ä¸Šæ·»åŠ ç»ˆç‚¹
+                while (k != -1 && k != i)
+                { // è·¯åŠ²ä¸Šæ·»åŠ ä¸­é—´ç‚¹
+                    d++;
+                    aPath[d] = k;
+                    k = path[i][k];
+                }
+                d++;
+                aPath[d] = i;           // è·¯å¾„ä¸Šæ·»åŠ èµ·ç‚¹
+                printf("%d", aPath[d]); // è¾“å‡ºèµ·ç‚¹
+                for (s = d - 1; s >= 0; s--)
+                { // è¾“å‡ºè·¯å¾„ä¸Šå…¶ä»–é¡¶ç‚¹
+                    printf("->%d", aPath[s]);
+                }
+                printf("\t\t");
+                printf("è·¯å¾„é•¿åº¦ä¸ºï¼š%d\n", A[i][j]);
+            }
+        }
+    }
 }
