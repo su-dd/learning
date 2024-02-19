@@ -11,7 +11,9 @@ namespace AVLTree
             int height; // 当前的高度
             Node *leftChild, *rightChild, *parent;
         };
+        Node *root;
 
+    private:
         // 创建一个节点
         Node *createNode(Node *x, int value)
         {
@@ -252,9 +254,6 @@ namespace AVLTree
                 root = delete_value(root, value);
             }
         }
-
-    private:
-        Node *root;
     };
 
     int test()
@@ -297,9 +296,6 @@ namespace AVLTree
         // 顺序打印AVL树
         std::cout << "删除元素 2 后的AVL树：" << std::endl;
         tree.middle_order();
-
-        // 析构
-        tree.~bst();
 
         getchar();
         return 0;

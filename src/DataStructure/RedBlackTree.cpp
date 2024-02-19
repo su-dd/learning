@@ -464,9 +464,6 @@ namespace RedBlackTree
         cout << "删除元素 2 后的红黑树：" << endl;
         tree.inorder();
 
-        // 析构
-        tree.~bst();
-
         getchar();
         return 0;
     }
