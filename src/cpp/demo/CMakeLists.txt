@@ -10,7 +10,7 @@ add_executable(
   main.cpp
 )
 
-include(GNUInstallDirs)
+# include(GNUInstallDirs)
 install(TARGETS demo
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
