@@ -29,14 +29,14 @@ namespace SqStack
     } SqSrack;
 
     // 初始化顺序栈
-    Status InitStack_Sq(SqSrack &S, int size, int inc)
+    Status InitStack_Sq(SqSrack &S, int size, int increment)
     {
         S.elem = (ElemType *)malloc(size * sizeof(ElemType));
         if (nullptr == S.elem)
             return OVERFLOW;
         S.top = 0;
         S.size = size;
-        S.increment = inc;
+        S.increment = increment;
         return OK;
     }
 
