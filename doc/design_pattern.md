@@ -2031,6 +2031,9 @@ https://github.com/su-dd/learning/tree/main/src/design_pattern/Iterator
 **类图**
 
 ![备忘录模式](img/design_pattern/15Memento.drawio.svg)
+Originator（原发器）：，可以生成自身状态的快照， 也可以在需要时通过快照恢复自身状态
+Memento（备忘录）： 原发器状态快照的值对象 （value object）。 通常做法是将备忘录设为不可变的， 并通过构造函数一次性传递数据。
+Caretaker（负责人）： 仅知道 “何时” 和 “为何” 捕捉原发器的状态， 以及何时恢复状态。
 
 ### 实现代码
 
@@ -2133,11 +2136,23 @@ private:
 
 通过原型模式的自copy，我们不会丢失任何数据；并可以将 备忘录中 的**备忘录使用者**和**备忘录**统一。
 
+**当不希望Caretaker和备忘录直接交换时：**
 
+![](img/design_pattern/15Memento2.png)
+
+
+
+**当希望存在多个原发器时：**
+
+![](img/design_pattern/15Memento3.png)
+
+这时Caretaker不能维护Originator和Memento的关系，不能继续持有Originator；restore功能和Originator对象持有被放到 Memento中，完成了依赖倒置
 
 ### 代码路径
 
 https://github.com/su-dd/learning/tree/main/src/design_pattern/Memento
+
+
 
 ## 命令模式
 

@@ -6,13 +6,14 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	IceFactoryOriginator oIceFactoryOriginator;
-	IceCream* pIceCream = nullptr;
+	IceCream *pIceCream = nullptr;
 	CareTaker oCareTaker;
 
-	// 添加备忘录
+	cout << "*********添加备忘录*********" << endl;
+	// 添加备忘录1
 	oIceFactoryOriginator.setDryFruit(string("冻草莓"));
 	oIceFactoryOriginator.setFlavour(string("草莓"));
 	pIceCream = oIceFactoryOriginator.createCream();
@@ -20,6 +21,7 @@ int main(int argc, char* argv[])
 	oCareTaker.add(oIceFactoryOriginator.createMemento());
 	delete pIceCream;
 
+	// 添加备忘录2
 	oIceFactoryOriginator.setDryFruit(string("榛子"));
 	oIceFactoryOriginator.setFlavour(string("香草"));
 	pIceCream = oIceFactoryOriginator.createCream();
@@ -30,15 +32,15 @@ int main(int argc, char* argv[])
 	// 使用备忘录
 	cout << "*********使用备忘录*********" << endl;
 
-	oIceFactoryOriginator.restoreMemento(oCareTaker.get(0));
+	oIceFactoryOriginator.restoreMemento(oCareTaker.pop());
 	pIceCream = oIceFactoryOriginator.createCream();
 	pIceCream->taste();
 	delete pIceCream;
 
-	oIceFactoryOriginator.restoreMemento(oCareTaker.get(1));
+	oIceFactoryOriginator.restoreMemento(oCareTaker.pop());
 	pIceCream = oIceFactoryOriginator.createCream();
 	pIceCream->taste();
 	delete pIceCream;
-	
+
 	return 0;
 }

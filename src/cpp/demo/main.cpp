@@ -42,6 +42,6 @@ int main()
 
     // 智能指针亦能用于调用被引用对象的成员
     std::cout << f4(std::make_shared<Foo>(foo)) << std::endl;
-    system("pause");
+    getchar(); // 等待用户输入
     return 0;
 }
