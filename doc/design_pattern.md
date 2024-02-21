@@ -2140,8 +2140,6 @@ private:
 
 ![](img/design_pattern/15Memento2.png)
 
-
-
 **当希望存在多个原发器时：**
 
 ![](img/design_pattern/15Memento3.png)
