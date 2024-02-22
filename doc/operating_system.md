@@ -438,6 +438,14 @@ int setrlimit(int resource, const struct rlimit *rlim);
 **银行家算法：** 系统资源就相当于银行的钱。  银行在放贷的过程中，他会考虑你这个钱是否可以收回。如果预估这个钱是无法回收的，则不会通过这笔贷款。
 
 
+### 调度
+
+| 分类 | 场景 | 调度方案 |
+| ---- | ---- | ---- |
+| 批处理(Batch) | 商业领域 | 先来先服务(first-come,first-serverd) <br/><br>最短作业优先(Shortest Job First)<br/><br>最短剩余时间优先(Shortest Remaining Time Next)<br/> |
+| 交互式(Interactive) | 交互式用户环境 | 轮询算法(round-robin)<br/><br>优先级调度(priority scheduling)<br/><br>多级反馈队列  |
+| 实时(Real time) |  | 硬实时(hard real time)<br/><br>软实时(soft real time) |
+
 ##  内存管理&虚拟内存
 
 
