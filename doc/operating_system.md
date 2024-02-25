@@ -448,7 +448,16 @@ int setrlimit(int resource, const struct rlimit *rlim);
 
 ##  内存管理&虚拟内存
 
+### 物理内存的两种管理
 
+- `位图(bitmap)`
+- `空闲列表(free lists)`
+
+![](img/operating_system/20240224201532.png)
+
+### Swap和虚拟内存
+
+![](img/operating_system/20240225193601.png)
 
 ## I/O管理&文件系统
 
