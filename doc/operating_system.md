@@ -446,7 +446,7 @@ int setrlimit(int resource, const struct rlimit *rlim);
 | 交互式(Interactive) | 交互式用户环境 | 轮询算法(round-robin)<br/><br>优先级调度(priority scheduling)<br/><br>多级反馈队列  |
 | 实时(Real time) |  | 硬实时(hard real time)<br/><br>软实时(soft real time) |
 
-##  内存管理&虚拟内存
+## 内存管理&虚拟内存
 
 ### 物理内存管理的两种方式
 
@@ -704,11 +704,10 @@ FIFO 算法可能会把经常使用的页面置换出去，为了避免这一问
 
 对于第二种情况，所有的页面都在工作集中，否则将至少执行了一个写操作。由于缺乏额外的信息，一个简单的方法就是随便置换一个干净的页面来使用，扫描中需要记录干净页面的位置。如果不存在干净页面，就选定当前页面并把它协会磁盘。
 
-## 文件系统&I/O管理
+## 文件系统
 
 - Windows：FCB 表 + FAT + 位图
 - Unix：inode + 混合索引 + 成组链接
-
 
 
 **参考：**
