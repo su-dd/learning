@@ -67,21 +67,44 @@
 - IGMP（Internet Group Management Protocol，网际组管理协议）
 
 ### IP 网际协议
+
 IP 地址分类：
 - `IP 地址 ::= {<网络号>,<主机号>}`
 
-|IP 地址类别|网络号|网络范围|主机号|IP 地址范围|
-|---|---|---|---|---|
-|A 类|8bit，第一位固定为 0|0 —— 127|24bit|1.0.0.0 —— 127.255.255.255|
-|B 类|16bit，前两位固定为 10|128.0 —— 191.255|16bit|128.0.0.0 —— 191.255.255.255|
-|C 类|24bit，前三位固定为 110|192.0.0 —— 223.255.255|8bit|192.0.0.0 —— 223.255.255.255|
-|D 类|前四位固定为 1110，后面为多播地址||||
-|E 类|前五位固定为 11110，后面保留为今后所用|||
+| IP 地址类别 | 网络号 | 网络范围 | 主机号 | IP 地址范围 |
+| ---- | ---- | ---- | ---- | ---- |
+| A 类 | 8bit，第一位固定为 0 | 0 —— 127 | 24bit | 1.0.0.0 —— 127.255.255.255 |
+| B 类 | 16bit，前两位固定为 10 | 128.0 —— 191.255 | 16bit | 128.0.0.0 —— 191.255.255.255 |
+| C 类 | 24bit，前三位固定为 110 | 192.0.0 —— 223.255.255 | 8bit | 192.0.0.0 —— 223.255.255.255 |
+| D 类 | 前四位固定为 1110，后面为多播地址 |  |  |  |
+| E 类 | 前五位固定为 11110，后面保留为今后所用 |  |  |  |
+
+IP地址3种主要类型里，各保留了3个区域作为私有区域，其地址范围如下:
+- A类:10.0.0.0～10.255.255.255
+- B类:172.16.0.0～173.31.255.255
+- C类:192.168.0.0～192.168.255.255
 
 IP 数据报格式：
 
 ![](img/network/20240201164958.png)
+#### 特殊IP
 
+##### 0.0.0.0
+
+本机地址，`0.0.0.0`是不能被`ping`通的，
+
+##### 255.255.255.255
+
+
+##### 127.0.0.1
+
+##### localhost
+
+
+
+
+**全零(“0.0.0.0”)地址对应于当前主机。全“1”的IP地址(“255.255.255.255”)是当前子网的广播地址。
+**
 
 ### ICMP 网际控制报文协议
 
@@ -441,12 +464,11 @@ socket起源于Unix，而Unix/Linux基本哲学之一就是 **“一切皆文件
 | ---- | ---- |
 | 分配Socket | int socket(int domain, int type, int protocol); |
 | 关闭socket | int close(int fd); |
-| 给 Socket 指定本地地址 | int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen); |
+| 给 Socket 指定本地地址 | int bind(int sockfd, const struct sockaddr \*addr, socklen_t addrlen); |
 | 准备接受连接请求 | int listen(int sockfd, int backlog);<br> |
-| 接受指定 Socket 的连接请求 | int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen); |
-| 建立连接 | int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen); |
+| 接受指定 Socket 的连接请求 | int accept(int sockfd, struct sockaddr \*addr, socklen_t \*addrlen); |
+| 建立连接 | int connect(int sockfd, const struct sockaddr \*addr, socklen_t addrlen); |
 | recvmsg()/sendmsg()函数是最通用的I/O函数，实际上可以把上面的其它函数都替换成这两个函数 | read()/write()<br>recv()/send()<br>readv()/writev()<br>recvmsg()/sendmsg()<br>recvfrom()/sendto() |
-|  |  |
 
 ### socket
 
@@ -599,7 +621,6 @@ int listen(int s,int backlog);
 
  s           ：Socket 描述符
  backlog：连接请求暂存队列长度
-
 
 ### non_blocking
 
