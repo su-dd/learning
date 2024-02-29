@@ -356,9 +356,483 @@ HTTP（HyperText Transfer Protocol，超文本传输协议）是一种用于分�
     - 503 Service Unavailable: 由于超载或系统维护，服务器暂时的无法处理客户端的请求。延时的长度可包含在服务器的 Retry-After 头信息中
     - 504 Gateway Timeout: 充当网关或代理的服务器，未及时从远端服务器获取请求
 
+## 主机字节序
+
+### 主机字节序（CPU 字节序）
+
+#### 概念
+
+主机字节序又叫 CPU 字节序，其不是由操作系统决定的，而是由 CPU 指令集架构决定的。主机字节序分为两种：
+
+- 大端字节序（Big Endian）：高序字节存储在低位地址，低序字节存储在高位地址
+- 小端字节序（Little Endian）：高序字节存储在高位地址，低序字节存储在低位地址
+
+#### 存储方式
+
+32 位整数 0x12345678 是从起始位置为 0x00 的地址开始存放，则：
+
+![](img/network/20240229103244.png)
+
+大端小端图片
+
+![](img/network/20240229103300.png)
+
+#### 判断大端小端
+
+判断大端小端
+
+可以这样判断自己 CPU 字节序是大端还是小端：
+
+```text
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 0x12345678;
+
+    if (*((char*)&i) == 0x12)
+        cout << "大端" << endl;
+    else    
+        cout << "小端" << endl;
+
+    return 0;
+}
+```
+
+#### 各架构处理器的字节序
+
+- x86（Intel、AMD）、MOS Technology 6502、Z80、VAX、PDP-11 等处理器为小端序；
+- Motorola 6800、Motorola 68000、PowerPC 970、System/370、SPARC（除 V9 外）等处理器为大端序；
+- ARM（默认小端序）、PowerPC（除 PowerPC 970 外）、DEC Alpha、SPARC V9、MIPS、PA-RISC 及 IA64 的字节序是可配置的。
+
+### 网络字节序
+
+网络字节顺序是 TCP/IP 中规定好的一种数据表示格式，它与具体的 CPU 类型、操作系统等无关，从而可以保证数据在不同主机之间传输时能够被正确解释。
+
+网络字节顺序采用：大端（Big Endian）排列方式。
 
 ## Socket编程
 
+### 网络中进程之间如何通信
+
+本地的进程间通信（IPC）有很多种方式，但可以总结为下面4类：
+
+- 消息传递（管道、FIFO、消息队列）
+- 同步（互斥量、条件变量、读写锁、文件和写记录锁、信号量）
+- 共享内存（匿名的和具名的）
+- 远程过程调用（Solaris门和Sun RPC）
+
+但这些都不是本文的主题！我们要讨论的是网络中进程之间如何通信？首要解决的问题是如何唯一标识一个进程，否则通信无从谈起！在本地可以通过进程PID来唯一标识一个进程，但是在网络中这是行不通的。其实TCP/IP协议族已经帮我们解决了这个问题，网络层的“**ip地址**”可以唯一标识网络中的主机，而传输层的“**协议+端口**”可以唯一标识主机中的应用程序（进程）。这样利用**三元组（ip地址，协议，端口）** 就可以标识网络的进程了，网络中的进程通信就可以利用这个标志与其它进程进行交互。
+
+使用TCP/IP协议的应用程序通常采用应用编程接口：UNIX  BSD的套接字（socket）和UNIX System V的TLI（已经被淘汰），来实现网络进程之间的通信。就目前而言，几乎所有的应用程序都是采用socket，而现在又是网络时代，网络中进程通信是无处不在，这就是我为什么说“一切皆socket”。
+
+### 什么是Socket
+
+socket是在应用层和传输层之间的一个抽象层，它把TCP/IP层复杂的操作抽象为几个简单的接口供应用层调用已实现进程在网络中通信。
+
+![](img/network/20240229145316.png)
+
+socket起源于Unix，而Unix/Linux基本哲学之一就是 **“一切皆文件”** ，都可以用“**打开open** –> **读写write/read** –> **关闭close**”模式来操作。我的理解就是Socket就是该模式的一个实现，socket即是一种特殊的文件，一些socket函数就是对其进行的操作（读/写IO、打开、关闭）
+
+### Socket函数罗列
+
+| 作用 | 声明 |
+| ---- | ---- |
+| 分配Socket | int socket(int domain, int type, int protocol); |
+| 关闭socket | int close(int fd); |
+| 给 Socket 指定本地地址 | int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen); |
+| 准备接受连接请求 | int listen(int sockfd, int backlog);<br> |
+| 接受指定 Socket 的连接请求 | int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen); |
+| 建立连接 | int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen); |
+| recvmsg()/sendmsg()函数是最通用的I/O函数，实际上可以把上面的其它函数都替换成这两个函数 | read()/write()<br>recv()/send()<br>readv()/writev()<br>recvmsg()/sendmsg()<br>recvfrom()/sendto() |
+|  |  |
+
+### socket
+
+分配Socket
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+int socket(int domain, int type, int protocol);
+```
+
+socket0函数分配一个 Socket 句柄，用于指定特定网络下、使用特定的协议和数据传送方式进行通信。Socket 接口是不仅仅局限于 TCP/IP 的，但是由于 TCPIP 的广泛使用，它们几乎被完全等同起来了。
+
+Socket 句柄分配以后，如果要开始 TCP 通信，还需要建立连接。根据需要，可以主动地建立连接(通过 connect0) 和被动地等待对方建立连接 (通过 listen())，在连接建立后才能使用读写操作通过网络连接进行数据交换。
+
+#### 返回值
+
+正常执行时，返回 Socket 描述符:否则，返回-1，错误状态在全局变量 errno 中。
+
+#### 参数说明
+
+**domain**选择通信中使用的协议族，也就是网络的类型 :
+
+- AF_UNIX  (UNIX 内部协议)
+- AF_INET  (ARPA Internet 协议，也就是 TCP/IP 协议族，亦即我们实验中所使用的)
+- AF_ISO    (ISO 协议)
+- AF_NS     (Xerox Network Systems 协议)
+- AF_IMPLINK    (IMP "host at IMp" link layer)
+
+**type**指定数据传送的方式：
+
+- SOCK_STREAM: 保证顺序的、可靠传送的双向字节数据流，最为常用，也是 TCP 连接所使用的方式
+- SOCK_DGRAM: 无连接的、不保证可靠的、固定长度(通常很小) 的消息传送
+- SOCK_SEQPACKET: 顺序的、可靠的双向固定长度的数据包传送，只用于 AF NS 类型的网络中
+- SOCK_RAW:原始的数据传送,适用于系统内部专用的网终协议和接口,和SOCK RDM样，只能由超级用户使用
+- SOCK_RDM: 可靠的数据报传送，未实现
+
+**protocol** 指定通信中使用的协议：
+在给定 Socket 的协议族和传送类型之后,一般情况下所使用的协议也就固定下来，如下表所示，此时 protocol 参数可使用缺省值’0’；但如果还有多个协议供选择，则必须使用 protocol 参数来标识。
+
+| 协议族 (仅考虑 IP协议) | 传送类型 | protocol 参数常量<br>(/usr/include/linux/in.h ) | 协议类型 |
+| ---- | ---- | ---- | ---- |
+| AF INET | SOCK_STREAM<br>SOCK_DGRAM<br>SOCK_RAW<br>SOCK_RAW | IPPROTO_TCP<br>IPPROTO_UDP<br>IPPROTO_ICMP<br>IPRROTO_RAW | TCP<br>UDP<br>ICMP<br>(raw) |
+
+### close
+
+关闭 Socket
+
+```cpp
+#include <unistd.h>
+int close(int fd);
+```
+
+Socket 和文件描述符的关闭操作都是使用这个函数。
+
+#### 返回值
+
+正常时返回 0，-1 表示出错
+
+#### 参数说明
+
+fd ：Socket 描述符。
+
+### bind
+
+给 Socket 指定本地地址
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+int bind(int sockfd, struct sockaddr *my_addr, int addrlen);
+```
+
+bind 函数给已经打开的 Socket 指定本地地址。这个函数的使用有以下两种情况:
+
+一、如果此 Socket 是面向连接的，而且此 Socket 在连接建立过程中处于被动的地位，即，己
+方程序使用 listen 函数等待对方建立连接，对方用 connect 函数来向此 Socket 建立连接，这
+种情况下，必须用 bind 给此 Socket 设定本地地址。在已方使用 listen 函数时，除指定 Socket
+描述符之外，该 Socket 必须已经用 bind 函数设定好了本地地址(包括 IP 地址和端口号)，
+这样,系统在收到建立连接的网络请求时,才能根据请求的目的地址,识别是通向哪个 Socket
+的连接，从而己方才能用此 Socket 接收到发给此 Socket 地址的数据包。不指定 Socket 的本
+地地址，就无法将此 Socket 用于连接建立和数据接收。
+
+二、如果此 Socket 用于无连接的情形，同样也要求给该 Socket 设定本地地址，这样，以后
+系统从网络中接收到数据后，才知道该送给哪个 Socket 及其相对应的进程。
+
+#### 返回值
+
+正常时返回 0，否则返回:1，同时 errno 是系统错误码
+
+#### 参数说明
+
+**sockfd** ：Socket 描述符。
+**addrlen** ：my_addr 结构的长度
+**my_addr** ：用于侦听连接请求的本地地址
+
+**struct sockaddr** 是一个通用型的结构，不仅包含TCP/IP 协议的情况，同时也是为了适合于其它网络，如 AF NS。
+
+由于它的这种通用性，它只是定义了一个一般意义上的存储空间，/usr/include/linux/socket.h 中所示:
+```cpp
+struct sockaddr
+{
+   unsigned short sa_family;/* address family, AF xxx */
+   char           sa_data[14]; /* 14 bytes of protocol address */
+};
+```
+
+当使用 TCP/IP 协议(即: Intermet 协议) 时，可用如下的 struct 等价地代替 struct sockaddr
+(/usr/include/linux/in.h ):
+
+```cpp
+struct sockaddr_in
+{
+    unsigned short int sin_family; /* Address family.  */
+    in_port_t sin_port;     /* Port number.  */
+    struct in_addr sin_addr;    /* Internet address.  */
+    /* Pad to size of `struct sockaddr'.  */
+    unsigned char sin_zero[sizeof (struct sockaddr)
+            - sizeof (unsigned short int)
+            - sizeof (in_port_t)
+            - sizeof (struct in_addr)];
+};
+```
+
+在 Socket 程序中，等待建立连接一方的准备过程请参见编程实例，以及 listen0、accept0的
+说明。
+
+### listen
+
+准备接受连接请求
+
+```cpp
+#include <sys/socket.h>
+int listen(int s,int backlog);
+```
+
+在用 bind()给一个 socket 设定本地地址之后，就可以将这个 socket 用于接受连接请求，即 listen()。调用 listen()之后，系统将给此 socket 配备一个连接请求的队列，暂存系统接收到的、申请向此 Socket 建立连接的请求，等待用户程序用 accept()正式接受该请求。队列长度，就由 backlog 参数指定。如下面的简图所示:
+
+![](img/network/17091945731419.png)
+
+如果短时间内向己方建立连接的请求过多，已方来不及处理，那么排在 backlog 之后的请求将被系统拒绝。因此，backlog 参数实际上规定了已方程序能够容许的连接建立处理速度。
+
+至于己方程序使用此 Socket(及其指定的本地地址) 实际建立连接的个数，由己方程序调用accept()的次数来决定，参见 accept()的说明。
+
+#### 返回值
+
+正常时返回 0: 否则返回-1，同时 errno 是系统错误码
+
+#### 参数说明
+
+ s           ：Socket 描述符
+ backlog：连接请求暂存队列长度
+
+
+### non_blocking
+
+非阻塞，windows和linux创建Socket时，默认都是阻塞的（bloking）
+
+可以通过 Unix 文件操作函数来设置的
+
+```cpp
+#include <unistd.h>
+#include <fcntl.h>
+fcntl(socket， F_SETFL， O_NONBLOCK):
+```
+
+### accept
+
+接受指定 Socket 的连接请求
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+int accept(int s, struct sockaddr *addr, int *addrlen);
+```
+
+在调用 listen()之后，系统就在 Socket 的连接请求暂存队列里存放每一个向该 Socket(及其本地地址) 建立的连接请求。
+
+accept()函数的作用就是，从该暂存队列中取出一个连接请求，用该 Socket的数据，创建一个新的 Socket: Socket_New，并为它分配一个文件描述符。
+
+Socket_New 即标识了此次建立的连接，可被已方用来向连接的另一方发送和接收数据(write/read，send/recv)。同时，原 Socket 仍然保持打开状态不变，继续用于等待网络连接请求。
+
+如果该 Socket 的暂存队列中没有待处理的连接请求，根据 Socket 的特征选项(是否non_blocking),
+
+accept()函数将选择两种方式: 
+
+- 如果该 Socket 不是 non_blocking 型的，accept()将一直等待，直到收到一个连接请求后才返回:
+- 如果该 Socket 是 non_blocking 型的，那么accept()将立即返回，但如果没有连接请求，只返回错误信息，不创建新的 Socket New。
+accept()返回后，如果创建了新的 Socket_New 来标识新建立的连接，那么参数 addr 指定的结构里面将会有对方的地址信息，addrlen 是地址信息的长度。
+
+关于 accept()的进一步信息，如: 如何检测某 Socket 有无待处理的连接请求、如何在使用 accept()接受连接请求之前先获取连接对方的地址、如何根据获取的对方地址信息拒绝该连接请求等，请参阅 Linux manual，此处不再累述。
+
+#### 返回值
+
+如果正常创建了一个新的连接，那么返回非负的整数: 即新连接的 Socket 描述符
+
+> 注意，用于等待连接请求的原 Socket 保持打开状态不变，可用于接收新的连接请求
+
+否则，返回-1，errno 是系统错误码
+#### 参数说明
+
+s：      Socket 描述符。
+addr：accept()接受连接后，在 addr 指向的结构中存放对方的地址信息。如果是 AF_INET Socket,
+该地址信息就是对方的 IP地址和端口号。
+
+addrlen：在调用 accept()之前，\*addrlen 必须被设置为 addr 数据结构的合法长度。在 accept()返回之后，\*addrlen 中是对方地址信息的长度。
+
+### connect
+
+建立连接
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+int connect(int sockfd, struct sockaddr *serv addr, int addrlen );
+```
+
+前面提到的函数，如 bind、listen、connect 等，都是用于被动地等待对方建立连接时需要使用的，而 connect()函数，则是主动地向对方建立连接时使用的。connect0使用一个事先打开的 Socket，和目的方(即通信对方，或称服务器一方) 地址信息，向对方发出连接建立请求。一个完整的 Socket 通信发起过程可简单地图示为:
+
+![](img/network/17091956805846.png)
+如果是 SOCK_STREAM 型的 Socket，通常只用 connect()建立一个正常的连接。但如果是SOCK_DGRAM 型的 Socket，connect)函数并不象上图中那样向目的方发出连接建立请求而只是简单地用给出的地址设置该 Socket 的目的地址，以后该 Socket 的无连接数据报就发往该目的地址。因此，对于 SOCK DGRAM 型的 Socket，可以多次调用 connect()来改变该Socket 的目的地址。
+
+#### 返回值
+
+连接正常建立时返回 0；否则，返回-1，系统错误码在 errno 中
+
+#### 参数说明
+
+sockfd      ：Socket 描述符。
+serv_addr ：通信目的方的地址。其格式参见 bind()的说明。
+addrlen    ：目的地址长度。
+
+
+### send/recv
+
+用 Socket 发送和接收数据
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+int send(int s,const void *msg, int len,unsigned int flags);
+int sendto(int s, const void *msg, int len,unsigned int flags, const struct sockaddr *to, int tolen);
+
+int recv(int s,void *buf, int len, unsigned int flags);
+int recvfrom(int s, void *buf, int len, unsigned int flags, struct sockaddr *from, int
+*fromlen);
+```
+
+在连接建立完成后，通信双方就可以使用以上这些函数来进行数据的发送和接收操作。
+
+其中: 
+- send 和 recv 用于连接建立以后的发送和接收: 
+- sendto 和 recvfrom 用于非连接的协议
+
+对于非 non_blocking 型的 Socket，send 将等待数据发送完后才返回;
+对于 non_blocking 型的 Socket，send 将立即返回，用户程序需要用 select()函数决定网络发送是否结束
+
+类似地对于非 non_blocking 型的 Socket，若系统没有收到任何数据，recv 将等待接收数据到达后才返回；
+对于 non_blocking 型的 Socket，recv 将立即返回，并返回错误信息或者接收到的数据字节数
+
+sendto 和 recvfrom 因为是非连接型的发送和接收，必须在参数中给出目的地址或者存放源地址的空间
+
+#### 返回值
+
+send/sendto 返回实际发送的数据字节数，或者-1，表示出错
+
+recv/recvfrom 返回实际接收到的数据字节数，或者-1，表示出错
+
+#### 参数说明
+
+s                      ： Socket 描述符
+msg,buf           ：存放接收或者发送数据的存储空间;
+len                   ：接收或者发送数据的字节数:
+flags                 ： 通常设为 0，详细说明请参见 Linux Manual
+to,from            ：sendto 和 recvfrom 所使用的，目的方地址和存放源地址的空间:
+tolen,fromlen  ：目的地址和源地址空间大小。
+
+### read/write
+
+用系统文件操作进行 Socket 通信
+
+```cpp
+#include <unistd.h>
+ssize_t read(int fd, void *buf, size_t count),
+ssize_t write(int fd, const void *buf, size_t count):
+```
+
+在连接建立完成后，对于连接建立过程中被动的一方，在accept()正常返回后，它返回个新的Socket，并且为该 Socket 分配了一个文件描述符；对于连接请求发起方，connect()正常返回后，相应的 Socket 中也包含有已分配的文件描述符。
+
+因此，可以使用标准的 Unix文件读写函数 read()/write()来进行 Socket 通信。要注意的是，由于网络数据和磁盘文件不一样，不是已经准备好的
+
+因此，每次读写操作不一定能传送完指定长度的数据，需要由程序反复进行剩余部分的传送。
+
+另外，文件描述符是较底层的文件操作参数，不同于 C 语言中常用的 FILE\*。FILE\*是使用 fread/fwrite 函数来进行读写操作的。
+
+#### 返回值
+
+正常时，返回所读写的字节数(注意，可能小于 count 参数指定的数目)；
+ 
+否则，返回-1，errno 是系统错误码。
+
+#### 参数说明
+
+fd         ：文件或者 Socket 描述符
+buf       ：数据缓冲区
+count   ：数据字节数
+
+### 数据格式转换
+
+```cpp
+#include <netinet/in.h>
+unsigned long int htonl(unsigned long int hostlong);
+unsigned short int htons(unsigned short int hostshort);
+unsigned long int ntohl(unsigned long int netlong);
+unsigned short int ntohs(unsigned short int netshort);
+```
+
+- htons--"Host to Network Short"
+- htonl--"Host to Network Long"
+- ntohs--"Network to Host Short"
+- ntohl--"Network to Host Long"
+
+> h表示"host" ，n表示"network"，s 表示"short"，l表示 "long"
+
+数据格式转换函数提供和硬件平台无关的、主机数据字节顺序和网络字节顺序之间的转换。由于各种平台 CPU 结构的不同，在不同的硬件平台下，主机的字节顺序有两种情况:
+
+- Intel80x86 和 SUN Sparc CPU 的低位在前格式 (小端)
+- Motorola CPU (68000、PowerPC) 等的高位在前格式（大端）
+
+网络数据交换要求网络中所有的 int 型数据都有统一的字节顺序:高位在前格式，因此在 Socket 函数库中提供了以上统一的字节顺序转换函数。
+
+在 Socket 程序中使用的地址数据，如端口号等，都必须遵循这样统一的字节顺序。
+
+因此，在 bind函数、connect0函数等涉及 struct sockaddr in 地址数据的场合，都需要以上转换函数，以加强源程序的可移植性。
+
+
+### 主机名字/地址数据查询
+
+为配合 DNS 的使用，尽量方便 Intermet 主机名字的记忆，避免使用烦琐的数字式IP 地
+址，Socket 函数库提供了方便的主机名字查询函数。
+
+#### struct hostent
+
+struct hostent 是一个关于主机地址信息的数据结构，其中包含从 DNS 服务器得到的比较全面的主机信息。
+
+gethostbyname()和 gethostbyaddr())都返回这样的数据结构。
+
+实际使用时,可用此结构中的地址信息来设置 bind()和 connect()函数参数中的 struct sockaddr_in 中的地址，以支持 DNS 名字的使用
+
+```cpp
+#include <netdb.h>
+struct hostent {
+    char *h_name;       /* official name of host */
+    char **h_aliases;   /* alias list */
+    int h_addrtype;     /* host address type */
+    int h_length;       /* length ofaddress */
+    char **h_addr_list; /* list ofaddresses from name server */
+};
+
+#define h_addr h_addr_list[(0)]  /* address, for backward compatibility */
+```
+这其中最常用的是 h_addr，即主机的缺省地址(因为该主机名字可能对应多个地址)。
+
+#### gethostbyname
+
+```cpp
+#include <netdb.h>
+struct hostent *gethostbyname(char *name):
+```
+
+根据 DNS 名字，查找主机地址信息。name 可以是 DNS 名字，如wwwustc.edu.cn”，也可以是 IP 地址串:”202.38.64.2”
+
+#### gethostbyaddr
+
+```cpp
+#include <netdb.h>
+struct hostent *gethostbyaddr(char *addr; int len, int type);
+```
+
+根据IP地址查找主机地址信息。addr 是整数格式的IP地址指针，
+
+如：unsigned char addr\[4\]= {202，38，64，2}
+
+在 Internet 协议中，len 必须为 4，type 必须为 AF_INET。
+
+要注意的是:如果只知道主机的 IP 地址，而且 DNS 服务器中没有登记该主机，用gethostbyname 总能得到适当的主机地址信息，它只需要简单地将 ASCⅡ形式的 地址转换为二进制格式。但如果使用 gethostbyaddr，却得不到所需要的地址信息，因为此函数完全依靠 DNS 服务器进行 IP 到DNS 名字的转换，不作其它的处理。
 
 
 **参考：**
@@ -366,3 +840,5 @@ HTTP（HyperText Transfer Protocol，超文本传输协议）是一种用于分�
 [GitHub - huihut/interview.](https://github.com/huihut/interview?tab=readme-ov-file#computer-network)
 
 [Linux Socket编程（不限Linux） - 吴秦 - 博客园 (cnblogs.com)](https://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html)
+
+[网络编程socket基本API详解 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/362983198)
