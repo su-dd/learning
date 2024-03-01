@@ -570,7 +570,7 @@ Socket 句柄分配以后，如果要开始 TCP 通信，还需要建立连接�
 
 #### 参数说明
 
-**domain**选择通信中使用的协议族，也就是网络的类型 :
+**domain** 选择通信中使用的协议族，也就是网络的类型 :
 
 - AF_UNIX    (UNIX 内部协议)
 - AF_INET    (ARPA Internet 协议，也就是 TCP/IP 协议族)
@@ -578,7 +578,7 @@ Socket 句柄分配以后，如果要开始 TCP 通信，还需要建立连接�
 - AF_NS      (Xerox Network Systems 协议)
 - AF_IMPLINK (IMP "host at IMp" link layer)
 
-**type**指定数据传送的方式：
+**type** 指定数据传送的方式：
 
 - SOCK_STREAM: 保证顺序的、可靠传送的双向字节数据流，最为常用，也是 TCP 连接所使用的方式
 - SOCK_DGRAM: 无连接的、不保证可靠的、固定长度(通常很小) 的消息传送
@@ -613,7 +613,7 @@ Socket 和文件描述符的关闭操作都是使用这个函数。
 
 #### 参数说明
 
-fd ：Socket 描述符。
+- fd ：Socket 描述符。
 
 ### bind
 
@@ -638,9 +638,9 @@ bind 函数给已经打开的 Socket 指定本地地址。这个函数的使用�
 
 #### 参数说明
 
-**sockfd** ：Socket 描述符。
-**addrlen** ：my_addr 结构的长度
-**my_addr** ：用于侦听连接请求的本地地址
+- **sockfd**  ：Socket 描述符
+- **addrlen** ：my_addr 结构的长度
+- **my_addr** ：用于侦听连接请求的本地地址
 
 **struct sockaddr** 是一个通用型的结构，不仅包含TCP/IP 协议的情况，同时也是为了适合于其它网络，如 AF NS。
 
@@ -696,8 +696,8 @@ int listen(int s,int backlog);
 
 #### 参数说明
 
- s           ：Socket 描述符
- backlog：连接请求暂存队列长度
+ - s       ：Socket 描述符
+ - backlog ：连接请求暂存队列长度
 
 ### non_blocking
 
@@ -746,11 +746,9 @@ accept()返回后，如果创建了新的 Socket_New 来标识新建立的连接
 否则，返回-1，errno 是系统错误码
 #### 参数说明
 
-s：      Socket 描述符。
-addr：accept()接受连接后，在 addr 指向的结构中存放对方的地址信息。如果是 AF_INET Socket,
-该地址信息就是对方的 IP地址和端口号。
-
-addrlen：在调用 accept()之前，\*addrlen 必须被设置为 addr 数据结构的合法长度。在 accept()返回之后，\*addrlen 中是对方地址信息的长度。
+- s      ：Socket 描述符
+- addr   ：accept()接受连接后，在 addr 指向的结构中存放对方的地址信息。如果是 AF_INET Socket,该地址信息就是对方的 IP地址和端口号
+- addrlen：在调用 accept()之前，\*addrlen 必须被设置为 addr 数据结构的合法长度。在 accept()返回之后，\*addrlen 中是对方地址信息的长度
 
 ### connect
 
@@ -773,9 +771,9 @@ int connect(int sockfd, struct sockaddr *serv addr, int addrlen );
 
 #### 参数说明
 
-sockfd      ：Socket 描述符。
-serv_addr ：通信目的方的地址。其格式参见 bind()的说明。
-addrlen    ：目的地址长度。
+- sockfd      ：Socket 描述符
+- serv_addr   ：通信目的方的地址
+- addrlen     ：目的地址长度
 
 
 ### send/recv
@@ -815,12 +813,12 @@ recv/recvfrom 返回实际接收到的数据字节数，或者-1，表示出错
 
 #### 参数说明
 
-s                      ： Socket 描述符
-msg,buf           ：存放接收或者发送数据的存储空间;
-len                   ：接收或者发送数据的字节数:
-flags                 ： 通常设为 0，详细说明请参见 Linux Manual
-to,from            ：sendto 和 recvfrom 所使用的，目的方地址和存放源地址的空间:
-tolen,fromlen  ：目的地址和源地址空间大小。
+- s             ： Socket 描述符
+- msg,buf       ：存放接收或者发送数据的存储空间;
+- len           ：接收或者发送数据的字节数:
+- flags         ： 通常设为 0，详细说明请参见 Linux Manual
+- to,from       ：sendto 和 recvfrom 所使用的，目的方地址和存放源地址的空间:
+- tolen,fromlen ：目的地址和源地址空间大小。
 
 ### read/write
 
@@ -843,14 +841,14 @@ ssize_t write(int fd, const void *buf, size_t count):
 #### 返回值
 
 正常时，返回所读写的字节数(注意，可能小于 count 参数指定的数目)；
- 
+
 否则，返回-1，errno 是系统错误码。
 
 #### 参数说明
 
-fd         ：文件或者 Socket 描述符
-buf       ：数据缓冲区
-count   ：数据字节数
+- fd      ：文件或者 Socket 描述符
+- buf     ：数据缓冲区
+- count   ：数据字节数
 
 ### 数据格式转换
 
