@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 #define MAXLINE 4096
 
@@ -16,10 +17,17 @@ int main(int argc, char **argv)
     char recvline[4096], sendline[4096];
     struct sockaddr_in servaddr;
 
-    if (argc != 2)
+    // if (argc != 2)
+    // {
+    //     printf("usage: ./client <ip address>\n");
+    //     exit(0);
+    // }
+
+    char *host = "127.0.0.1";
+
+    if (argc == 2)
     {
-        printf("usage: ./client <ipaddress>\n");
-        exit(0);
+        host = argv[1];
     }
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -28,12 +36,12 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-    memset(&servaddr, 0, sizeof(servaddr));
+    memset(&servaddr, 0, sizeof(servaddr)); // clear servaddr structure
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(6666);
-    if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0)
+    if (inet_pton(AF_INET, host, &servaddr.sin_addr) <= 0)
     {
-        printf("inet_pton error for %s\n", argv[1]);
+        printf("inet_pton error for %s\n", host);
         exit(0);
     }
 

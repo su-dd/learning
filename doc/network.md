@@ -733,6 +733,7 @@ accept()函数将选择两种方式:
 
 - 如果该 Socket 不是 non_blocking 型的，accept()将一直等待，直到收到一个连接请求后才返回:
 - 如果该 Socket 是 non_blocking 型的，那么accept()将立即返回，但如果没有连接请求，只返回错误信息，不创建新的 Socket New。
+
 accept()返回后，如果创建了新的 Socket_New 来标识新建立的连接，那么参数 addr 指定的结构里面将会有对方的地址信息，addrlen 是地址信息的长度。
 
 关于 accept()的进一步信息，如: 如何检测某 Socket 有无待处理的连接请求、如何在使用 accept()接受连接请求之前先获取连接对方的地址、如何根据获取的对方地址信息拒绝该连接请求等，请参阅 Linux manual，此处不再累述。
@@ -930,6 +931,10 @@ struct hostent *gethostbyaddr(char *addr; int len, int type);
 
 要注意的是:如果只知道主机的 IP 地址，而且 DNS 服务器中没有登记该主机，用gethostbyname 总能得到适当的主机地址信息，它只需要简单地将 ASCⅡ形式的 地址转换为二进制格式。但如果使用 gethostbyaddr，却得不到所需要的地址信息，因为此函数完全依靠 DNS 服务器进行 IP 到DNS 名字的转换，不作其它的处理。
 
+
+### Demo代码
+
+[learning/src/network/socket at main · su-dd/learning (github.com)](https://github.com/su-dd/learning/tree/main/src/network/socket)
 
 **参考：**
 
