@@ -101,7 +101,7 @@ IP 数据报格式：
 
 **默认子网掩码：**
 
-![](img/network/20240301110608.png)
+![](img/20240301110608.png)
 
 
 #### 常见IP相关计算
@@ -140,7 +140,7 @@ ip:        10101100.00011111.10000000.11111111
 
 ```txt
 ip:            10101100.00011111.10000000.11111111  
-子网掩码取反:　 00000000.00000000.00111111.11111111
+子网掩码取反:   00000000.00000000.00111111.11111111
 ----------------------------------------------------
 主机号:        00000000.00000000.00000000.11111111   &　
 主机号点分法表示: 0.0.0.255 
@@ -572,22 +572,25 @@ Socket 句柄分配以后，如果要开始 TCP 通信，还需要建立连接�
 
 **domain**选择通信中使用的协议族，也就是网络的类型 :
 
-- AF_UNIX  (UNIX 内部协议)
-- AF_INET  (ARPA Internet 协议，也就是 TCP/IP 协议族，亦即我们实验中所使用的)
-- AF_ISO    (ISO 协议)
-- AF_NS     (Xerox Network Systems 协议)
-- AF_IMPLINK    (IMP "host at IMp" link layer)
+- AF_UNIX    (UNIX 内部协议)
+- AF_INET    (ARPA Internet 协议，也就是 TCP/IP 协议族)
+- AF_ISO     (ISO 协议)
+- AF_NS      (Xerox Network Systems 协议)
+- AF_IMPLINK (IMP "host at IMp" link layer)
 
 **type**指定数据传送的方式：
 
 - SOCK_STREAM: 保证顺序的、可靠传送的双向字节数据流，最为常用，也是 TCP 连接所使用的方式
 - SOCK_DGRAM: 无连接的、不保证可靠的、固定长度(通常很小) 的消息传送
 - SOCK_SEQPACKET: 顺序的、可靠的双向固定长度的数据包传送，只用于 AF NS 类型的网络中
-- SOCK_RAW:原始的数据传送,适用于系统内部专用的网终协议和接口,和SOCK RDM样，只能由超级用户使用
+- SOCK_RAW:原始的数据传送,适用于系统内部专用的网终协议和接口,和SOCK_RDM样，只能由超级用户使用
 - SOCK_RDM: 可靠的数据报传送，未实现
 
 **protocol** 指定通信中使用的协议：
-在给定 Socket 的协议族和传送类型之后,一般情况下所使用的协议也就固定下来，如下表所示，此时 protocol 参数可使用缺省值’0’；但如果还有多个协议供选择，则必须使用 protocol 参数来标识。
+
+在给定 Socket 的协议族和传送类型之后,一般情况下所使用的协议也就固定下来，如下表所示，此时 protocol 参数可使用缺省值’0’；
+
+但如果还有多个协议供选择，则必须使用 protocol 参数来标识。
 
 | 协议族 (仅考虑 IP协议) | 传送类型 | protocol 参数常量<br>(/usr/include/linux/in.h ) | 协议类型 |
 | ---- | ---- | ---- | ---- |
@@ -624,13 +627,7 @@ int bind(int sockfd, struct sockaddr *my_addr, int addrlen);
 
 bind 函数给已经打开的 Socket 指定本地地址。这个函数的使用有以下两种情况:
 
-一、如果此 Socket 是面向连接的，而且此 Socket 在连接建立过程中处于被动的地位，即，己
-方程序使用 listen 函数等待对方建立连接，对方用 connect 函数来向此 Socket 建立连接，这
-种情况下，必须用 bind 给此 Socket 设定本地地址。在已方使用 listen 函数时，除指定 Socket
-描述符之外，该 Socket 必须已经用 bind 函数设定好了本地地址(包括 IP 地址和端口号)，
-这样,系统在收到建立连接的网络请求时,才能根据请求的目的地址,识别是通向哪个 Socket
-的连接，从而己方才能用此 Socket 接收到发给此 Socket 地址的数据包。不指定 Socket 的本
-地地址，就无法将此 Socket 用于连接建立和数据接收。
+一、如果此 Socket 是面向连接的，而且此 Socket 在连接建立过程中处于被动的地位，即，己方程序使用 listen 函数等待对方建立连接，对方用 connect 函数来向此 Socket 建立连接，这种情况下，必须用 bind 给此 Socket 设定本地地址。在已方使用 listen 函数时，除指定 Socket描述符之外，该 Socket 必须已经用 bind 函数设定好了本地地址(包括 IP 地址和端口号)，这样,系统在收到建立连接的网络请求时,才能根据请求的目的地址,识别是通向哪个 Socket 的连接，从而己方才能用此 Socket 接收到发给此 Socket 地址的数据包。不指定 Socket 的本地地址，就无法将此 Socket 用于连接建立和数据接收。
 
 二、如果此 Socket 用于无连接的情形，同样也要求给该 Socket 设定本地地址，这样，以后
 系统从网络中接收到数据后，才知道该送给哪个 Socket 及其相对应的进程。
@@ -881,7 +878,7 @@ unsigned short int ntohs(unsigned short int netshort);
 
 在 Socket 程序中使用的地址数据，如端口号等，都必须遵循这样统一的字节顺序。
 
-因此，在 bind函数、connect0函数等涉及 struct sockaddr in 地址数据的场合，都需要以上转换函数，以加强源程序的可移植性。
+因此，在 bind()函数、connect()函数等涉及 struct sockaddr_in 地址数据的场合，都需要以上转换函数，以加强源程序的可移植性。
 
 
 ### 主机名字/地址数据查询
@@ -895,7 +892,7 @@ struct hostent 是一个关于主机地址信息的数据结构，其中包含�
 
 gethostbyname()和 gethostbyaddr())都返回这样的数据结构。
 
-实际使用时,可用此结构中的地址信息来设置 bind()和 connect()函数参数中的 struct sockaddr_in 中的地址，以支持 DNS 名字的使用
+实际使用时,可用此结构中的地址信息来设置 bind() 和 connect() 函数参数中的 struct sockaddr_in 中的地址，以支持 DNS 名字的使用
 
 ```cpp
 #include <netdb.h>
