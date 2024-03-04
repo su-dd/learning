@@ -23,12 +23,7 @@ int main(int argc, char **argv)
     //     exit(0);
     // }
 
-    char *host = "127.0.0.1";
-
-    if (argc == 2)
-    {
-        host = argv[1];
-    }
+    char *host = (char *)(argc == 2 ? argv[1] : "127.0.0.1");
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
