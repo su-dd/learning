@@ -1051,7 +1051,13 @@ assert(f.load(memory_order_relaxed));//D
 [C++11内存模型-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1942213)
 
 
-## D指针，Q指针
+## C++二进制兼容的解决办法
+
+### 什么是二进制兼容
+
+
+
+### 
 
 
 
