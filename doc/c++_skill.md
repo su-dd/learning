@@ -1093,3 +1093,9 @@ assert(f.load(memory_order_relaxed));//D
 ## 变长参数
 
 
+
+**参考：**
+
+[C++/C++11中变长参数的使用_c++ variadicmultiply-CSDN博客](https://blog.csdn.net/fengbingchun/article/details/78483471)
+
+[C++中的变长参数 - 穆游 - 博客园 (cnblogs.com)](https://www.cnblogs.com/kevonyang/p/5932059.html)
