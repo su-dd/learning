@@ -931,7 +931,6 @@ struct hostent *gethostbyaddr(char *addr; int len, int type);
 
 要注意的是:如果只知道主机的 IP 地址，而且 DNS 服务器中没有登记该主机，用gethostbyname 总能得到适当的主机地址信息，它只需要简单地将 ASCⅡ形式的 地址转换为二进制格式。但如果使用 gethostbyaddr，却得不到所需要的地址信息，因为此函数完全依靠 DNS 服务器进行 IP 到DNS 名字的转换，不作其它的处理。
 
-
 ### Demo代码
 
 [learning/src/network/socket at main · su-dd/learning (github.com)](https://github.com/su-dd/learning/tree/main/src/network/socket)

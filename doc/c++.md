@@ -3404,8 +3404,6 @@ public:
 
 在上述代码中，const方法中不允许对常规成员进行变动，但mutable成员不受此限制。对Driver类来说，其固有属性（姓名、年龄、真实手机号等）未发生改变，符合const修饰。mutable让一些随时可变的展示属性能发生改变，达到了灵活编程的目的。
 
-
-
 #### volatile
 
 volatile用于修饰成员或变量，指示其修饰对象可能随时变化，编译器不要对所修饰变量进行优化（缓存），每次取值应该直接读取内存。由于volatile的变化来自运行期，其可以与const一起使用。两者一起使用可能让人费解，如果考虑场景就容易许多：CPU和GPU通过映射公用内存中的同一块，GPU可能随时往共享内存中写数据。对CPU上的程序来说，const修饰变量一直是右值，所以编译通过。但其变量内存中的值在运行期间可能随时在改变，volatile修饰是正确做法。
@@ -3446,13 +3444,11 @@ double square(volatile double a, volatile double b) {
 ```
 
 
-
 #### 总结
 
 mutable只能用与类变量，不能与const同时使用；在const修饰的方法中，mutable变量数值可以发生改变；
 
 volatile只是运行期变量的值随时可能改变，这种改变即可能来自其他线程，也可能来自外部系统
-
 
 
 #### 参照资料
@@ -4018,7 +4014,7 @@ int main() {
 }
 ```
 
-volatile相关
+#### volatile相关
 
 貌似把volatile放在并发里介绍不太合适，但是貌似很多人都会把volatile和多线程联系在一起，那就一起介绍下吧。
 
@@ -5337,6 +5333,7 @@ modules使用方式和include差不多，但modules使用比include头文件速�
 图片
 
 using 可以引用enum
+
 ```cpp
 enum class Animal {
   kCat,
@@ -5405,7 +5402,7 @@ std::string message = std::format("The answer is {}.", 42);
 
 增加了std::atomic：让智能指针线程安全
 
-source_location：可作为__LINE__ 、__func__这些宏的替代：
+source_location：可作为\_\_LINE\_\_ 、\_\_func\_\_这些宏的替代：
 
 ```cpp
 ## include <iostream>
@@ -5488,6 +5485,7 @@ int main()
         && !contains(std::span{a,8}, std::span{a,9}));
 }
 ```
+
 endian：可获取当前平台是大端序还是小端序
 
 ```cpp
@@ -5508,6 +5506,7 @@ int main() {
 
 }
 ```
+
 make_shared 支持构造数组
 
 std::remove_cvref看名字就知道，去除CV，去除引用
@@ -5528,7 +5527,9 @@ int main()
               << std::is_same_v<std::remove_cvref_t<int(int)>, int(int)> << '\n';
 }
 ```
+
 结果全是true
+
 std::to_address：获得由p表示的地址，而不形成对p所指向的对象的引用。
 
 线程同步：
@@ -5560,7 +5561,8 @@ basic_osyncstream：它是对std::basic_syncbuf的再包装，直接使用std::c
     synced_out << "and more!\n";
 } // characters are transferred and std::cout is flushed
 ```
-string的系列操作
+
+### string的系列操作
 
 string::starts_with
 
@@ -5610,6 +5612,7 @@ void f(int*p) {
    // regardless of whether p1 is used.
 }
 ```
+
 bind_front：和使用std::bind绑定第一个参数效果相同
 
 std::ssize：signed size
@@ -5635,6 +5638,7 @@ int main()
     std::cout << "\n" "i = " << i << '\n';
 }
 ```
+
 midpoint 函数计算中位数
 
 lerp函数计算线性差值：
@@ -5644,6 +5648,7 @@ constexpr double lerp( double a, double b, double t) noexcept {
     return a + t * (b - a);
 }
 ```
+
 Ranges库：ranges库提供了用于处理元素范围的组件，包括各种视图适配器。表示连续元素或者连续元素的片段。
 
 ```cpp
@@ -5672,7 +5677,8 @@ int main()
 输出：
 0 4 16
 0 4 16
-std::is_bounded_array：检查数组是不是有界
+
+### std::is_bounded_array：检查数组是不是有界
 
 std::is_unbounded_array
 

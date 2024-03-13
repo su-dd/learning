@@ -1073,20 +1073,21 @@ assert(f.load(memory_order_relaxed));//D
 - 在实际生产环境里边,如果并发量不大且不允许脏读，可以使用悲观锁解决并发问题。
 - 如果系统的并发非常大的话,悲观锁定会带来非常大的性能问题,所以我们就要选择乐观锁定的方法。
 
+### CAS
 
+**ABA问题**
+
+**false sharing**
 
 **参考：**
+
 [锁机制及CAS实现原理(C++) - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/400817892)
+
 [CPU缓存一致性：从理论到实战 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/641558949)
 
 ## C++ 二进制兼容及解决办法
 
 ### 什么会二进制不兼容
-
-
-
-### 
-
 
 
 
@@ -1188,7 +1189,6 @@ int main()
 ```text
 my name is John, age is 25 
 ```
-
 
 ### 模板变长参数
 
