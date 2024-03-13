@@ -1092,6 +1092,107 @@ assert(f.load(memory_order_relaxed));//D
 
 ## 变长参数
 
+### 函数变长参数
+
+函数支持变参数，以便在简化调用的同时，支持复杂业务；常见的如`printf`函数
+
+```cpp
+__fortify_function int
+printf (const char *__restrict __fmt, ...)
+{
+  return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt, __va_arg_pack ());
+}
+
+// 使用
+printf("my name is %s, age is %d \n", "John", 25);
+```
+
+通常，使用`stdarg.h`提供的宏 `va_list`, `va_start`, `va_arg`, `va_end` 让函数支持变长函数，变长参数函数通用形式如下：
+
+```cpp
+#include <stdarg.h> // for va_list, va_start, va_arg, va_end
+void my_variadic_func(int argc, ...) {
+  va_list args;  // 初始化变长参数
+  va_start(args, argc); // 指定变参数从`argc`的下一个参数开始
+  /* deal with variadic arguments */
+  // va_arg(args, int)
+  // va_arg(args, char *)
+  // 等等
+  va_end(args);
+}
+```
+
+**各宏作用：**
+
+| 宏 | 作用 |
+| ---- | ---- |
+| va_arg | 访问下一个可变参数函数参数（函数宏） |
+| va_copy（C99） | 制作可变参数函数参数（函数宏）的副本 |
+| va_end | 结束可变参数函数参数的遍历（函数宏） |
+| va_list的 | 保存va_start，va_arg，va_end和va_copy（typedef）所需的信息 |
+| va_start | 允许访问可变参数函数参数（函数宏） |
+[C - 变量函数 | Variadic functions ](https://cloud.tencent.com/developer/section/1009758)
+
+自己实现一个简易的 printf 函数：
+
+```cpp
+#include <iostream>
+#include <stdarg.h> // for va_list, va_start, va_arg, va_end
+
+int myprintf(const char *format, ...)
+{
+    int len = 0;
+    va_list args;            // initialize the argument list
+    va_start(args, format);  // set the first argument after format
+
+    while (*format != '\0')
+    {
+        if (*format == '%')
+        {
+            switch (*++format)
+            {
+            case 'd':
+                std::cout << va_arg(args, int);
+                len += 1;
+                break;
+            case 's':
+                std::cout << va_arg(args, char *);
+                len += 1;
+                break;
+            default:
+                std::cout << *format;
+                len += 1;
+                break;
+            }
+        }
+        else
+        {
+            std::cout << *format;
+            len += 1;
+        }
+        format++;
+    }
+    va_end(args); // clean up the argument list
+    return len;
+}
+
+int main()
+{
+    myprintf("my name is %s, age is %d \n", "John", 25);
+    return 0;
+}
+```
+
+输出：
+
+```text
+my name is John, age is 25 
+```
+
+
+### 模板变长参数
+
+
 
 
 **参考：**
