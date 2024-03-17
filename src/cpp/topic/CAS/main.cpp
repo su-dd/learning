@@ -1,21 +1,21 @@
 #include <iostream>
-#include <stdarg.h> // for va_list, va_start, va_arg, va_end
+#include <atomic>
 
-int testparams(int count, ...)
-{
-    va_list args;
-    va_start(args, count); // initialize the argument list
-    for (int i = 0; i < count; ++i)
-    {
-        int arg = va_arg(args, int); // get the next argument
-        printf("arg %d = %d \n", i, arg);
-    }
-    va_end(args); // clean up the argument list
-    return 0;
-}
+using atomicInt = std::atomic<int>;
 
 int main()
 {
-    testparams(3, 1, 2, 3);
+    atomicInt x(0);
+    x.store(10);
+    std::cout << x.load() << std::endl; // prints 10
+
+    int oldVal, newVal = 0;
+    do
+    {
+        oldVal = x.load();
+        newVal = oldVal + 1;
+    } while (!x.compare_exchange_strong(oldVal, newVal));
+
+    std::cout << x.load() << std::endl; // prints 20
     return 0;
 }
