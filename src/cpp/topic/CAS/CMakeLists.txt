@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
-project(CAS)
+project(cas)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(cas main.cpp)
+aux_source_directory(. SRC_LIST) # get all source files
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}) # include current directory
+add_executable(cas ${SRC_LIST}) # create executable

@@ -1181,6 +1181,7 @@ CAS 操作基于 CPU 提供的原子操作指令实现，及通过一条处理�
 **注意：**
 
 有如下两种情况处理器不会使用缓存锁定：
+
 1. 当操作的数据跨多个缓存行，或没被缓存在处理器内部，则处理器会使用总线锁定。
 2. 有些处理器不支持缓存锁定，比如：Intel x86 和 Pentium 处理器也会调用总线锁定。
 
@@ -1200,19 +1201,78 @@ C++：线程1，读取指针A指向地址a；线程2，对指针A操作后，依
 
 通常ABA问题是通过版本号version来解决，每次操作版本号加1，**及在compare阶段不仅要比较期望值A和地址V中的实际值，还要比较变量的版本号Version是否一致。**
 
+### 锁的底层支持
+
+
+
 ### 各种类型同步策略
 
 #### 原子操作
 
-原子操作就是由CPU底层提供的CAS；由CPU提供的
+原子操作就是由CPU底层提供的CAS机制实现的。各个编译器根据这个特点实现了各自的原子操作函数。
+
+- C语言，C11的头文件<stdatomic.h>。由GNU提供了对应的__sync系列函数完成原子操作。
+- C++11，STL 提供了atomic 系列函数。
+
+```cpp
+#include <atomic>
+using atomic_Int = std::atomic<int>;
+void test_atomicInt_add(atomic_Int &x)
+{
+	x.fetch_add(1);
+
+	// 下面是用CAS实现的等价操作
+    int oldValue, newValue = 0;
+    do
+    {
+	    oldValue = x.load();
+        newValue = oldValue + 1;
+    } while (!x.compare_exchange_strong(oldValue, newValue));
+}
+
+```
+
+#### 乐观锁
+
+乐观锁不是真实意义上的锁，是业务实现了CAS算法。完成同步操作，一般使用Version解决ABA问题
+
+```cpp
+class OptimisticLock
+{
+public:
+    OptimisticLock(std::string new_data) : data(new_data), version(0) {}
+    bool update(std::string new_data, int expected_version);
+    std::string get_data() const { return data; }
+    int get_version() const { return version.load(); }
+
+private:
+    std::string data;
+    atomic_Int version;
+};
+
+// 通过CAS算法，更新数据
+bool OptimisticLock::update(std::string new_data, int expected_version)
+{
+    if (version.compare_exchange_strong(expected_version, expected_version + 1))
+    {
+        data = new_data;
+        return true;
+    }
+    return false;
+}
+```
+
+#### 自旋锁
+
+一种使用
+
+#### 互斥锁
 
 
 
-自旋锁： 一种使用
+#### 读写锁
 
-互斥锁
 
-读写锁
 
 ### 公平锁和非公平锁
 
@@ -1271,7 +1331,7 @@ void my_variadic_func(int argc, ...) {
 | va_arg | 访问下一个可变参数函数参数（函数宏） |
 | va_copy（C99） | 制作可变参数函数参数（函数宏）的副本 |
 | va_end | 结束可变参数函数参数的遍历（函数宏） |
-| va_list的 | 保存va_start，va_arg，va_end和va_copy（typedef）所需的信息 |
+| va_list | 保存va_start，va_arg，va_end和va_copy（typedef）所需的信息 |
 | va_start | 允许访问可变参数函数参数（函数宏） |
 [C - 变量函数 | Variadic functions ](https://cloud.tencent.com/developer/section/1009758)
 
