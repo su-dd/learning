@@ -494,7 +494,7 @@ int main()
 ```
 
 
-## RALL
+## RAII
 
 **RAII**，全称为 Resource Acquisition Is Initialization，直译为**资源获取即初始化**。
 
@@ -1169,12 +1169,10 @@ C++：线程1，读取指针A指向地址a；线程2，对指针A操作后，依
 ### 锁的底层支持
 
 各种锁作用的位置是不同的，可以归纳分别作用于： 临界区、CPU、内存、cache
+
 ![](img/c_skill/20240318231222.png)
-**临界区锁的本质：** **在计算机里本质上就是一块内存空间。** 当这个空间被赋值为1的时候表示加锁了，被赋值为0的时候表示解锁了，仅此而已。多个线程抢一个锁，就是抢着要把这块内存赋值为1。在一个多核环境里，内存空间是共享的。每个核上各跑一个线程，那如何保证一次只有一个线程成功抢到锁呢？
 
-**通过CPU一条原子操作，及通过一条处理器指令保证了原子性操作**
-
-上面的CAS 操作，也是如此。
+首先CPU提供一系列的原语指令，CAS为其中之一
 
 > 这些指令如下所示：
 > （1）测试并设置（Tetst-and-Set）
@@ -1183,15 +1181,20 @@ C++：线程1，读取指针A指向地址a；线程2，对指针A操作后，依
 > （4）比较并交换（Compare-and-Swap）
 > （5）加载链接/条件存储（Load-Linked/Store-Conditional）
 
-如果是原子操作，这就结束了；
+各编译器，对这些原语做上自己的封装，就有了**原子操作 atomic** 。
 
-如果是自旋锁，还需要加循化
+**乐观锁:** CAS算法，或者原子操作应用到业务代码中；再加上Version版本号控制，解决ABA问题；就是一个标准的乐观锁
 
-如果是互斥锁，还有线程调度
 
-等等如此
+**临界区锁的本质：**  **在计算机里本质上就是一块内存空间。** 当这个空间被赋值为1的时候表示加锁了，被赋值为0的时候表示解锁了，仅此而已。多个线程抢一个锁，就是抢着要把这块内存赋值为1。在一个多核环境里，内存空间是共享的。每个核上各跑一个线程，那如何保证一次只有一个线程成功抢到锁呢？
 
-#### 关于锁定
+**通过CPU一条原子操作，及通过一条处理器指令保证了原子性操作**
+
+**自旋锁：** 如此通过一条原子操作，控制临界区的方式，就是自旋锁
+
+**互斥锁：** 需要再此基础上，加线程调度
+
+#### 关于多核读写的锁定
 
 现在都是多核 CPU 处理器，每个 CPU 处理器内维护了一块字节的内存，每个内核内部维护着一块字节的缓存，当多线程并发读写时，就会出现缓存数据不一致的情况。
 
@@ -1277,16 +1280,179 @@ bool OptimisticLock::update(std::string new_data, int expected_version)
 > 
 > CAS的使用，在写入频繁的情况下，可以会导致CPU繁忙
 
-
 #### 自旋锁
 
-一种使用
+使用CAS算法，加上循环做的锁；会一直占用在CPU上，线程处于用户态，不会进入内核态，减少了用户态和内核态切换的成本；同时如果长时间获得不了资源会导致CPU忙等。
+
+```cpp
+#include <atomic>
+
+class SpinLock
+{
+public:
+    SpinLock() : m_flag(false) {}
+    void lock();
+    bool try_lock();
+    void unlock();
+
+private:
+    std::atomic_bool m_flag;
+};
+
+void SpinLock::lock()
+{
+    bool expected = false;
+    // 这里一直循环到m_flag为false，才会成功设置m_flag为true
+    // 一直循环就是锁住了，直到解锁
+    while (!m_flag.compare_exchange_weak(expected, true, std::memory_order_acquire))
+    {
+        expected = false;
+    }
+}
+
+bool SpinLock::try_lock()
+{
+    bool expected = false;
+    return m_flag.compare_exchange_strong(expected, true, std::memory_order_acquire);
+}
+
+void SpinLock::unlock()
+{
+    m_flag.store(false, std::memory_order_release);
+}
+```
 
 #### 互斥锁
 
+互斥锁（Mutex）是一种常见的线程同步机制，以下罗列了8中使用方式
 
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <unistd.h>
+
+// 常见使用方式
+void thread_func1(int id, std::mutex &mtx)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        mtx.lock();
+        std::cout << "thread_func1 " << id << " acquired lock and prints " << i << std::endl;
+        mtx.unlock();
+    }
+}
+
+// 可以通过try_lock作为自旋锁使用
+void thread_func2(int id, std::mutex &mtx)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        while (!mtx.try_lock())
+        {
+            // 这里可以自旋等待，直到获得锁
+            std::cout << "thread_func2 " << id << " is waiting for lock..." << std::endl;
+            sleep(1); // 自旋时也可以使用 sleep() 函数，usleep() 函数 做睡眠
+        }
+        std::cout << "thread_func2 " << id << " acquired lock and prints " << i << std::endl;
+        mtx.unlock();
+    }
+}
+
+// std::lock_guard 通过RAII（Resource Acquisition Is Initialization）的方式使用
+void thread_func3(int id, std::mutex &mtx)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        std::cout << "thread_func3 " << id << " acquired lock and prints " << i << std::endl;
+    }
+}
+
+//  std::unique_lock也是RAII，但可以做一些 延迟加锁，提前释放，等灵活使用方式；但比较重
+void thread_func4(int id, std::mutex &mtx)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        std::unique_lock<std::mutex> lock(mtx);
+        std::cout << "thread_func4 " << id << " acquired lock and prints " << i << std::endl;
+    }
+}
+
+void thread_func5(int id, std::mutex &mtx1, std::mutex &mtx2)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        std::lock(mtx1, mtx2);
+        // std::adopt_lock作用是声明互斥量已在本线程锁定，std::lock_guard只是保证互斥量在作用域结束时被释放
+        std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
+        std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
+        std::cout << "thread_func5 " << id << " acquired locks and prints " << i << std::endl;
+    }
+}
+
+void thread_func6(int id, std::mutex &mtx1, std::mutex &mtx2)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        // std::defer_lock 用于延迟锁定，直到调用lock()函数时才真正锁定互斥量
+        std::unique_lock<std::mutex> lock1(mtx1, std::defer_lock);
+        std::unique_lock<std::mutex> lock2(mtx2, std::defer_lock);
+        std::lock(lock1, lock2);
+        std::cout << "thread_func6 " << id << " acquired locks and prints " << i << std::endl;
+    }
+}
+
+void thread_func7(int id, std::mutex &mtx1, std::mutex &mtx2)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        if (-1 == std::try_lock(mtx1, mtx2))
+        {
+            std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
+            std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
+            std::cout << "thread_func6 " << id << " acquired locks and prints " << i << std::endl;
+        }
+    }
+}
+```
 
 #### 读写锁
+
+读写锁又叫共享独占锁，**当读写锁以读模式锁住时，它是以共享模式锁住的；当它以写模式锁住时，它是以独占模式锁住的**
+
+1. 当读写锁处于**写加锁**状态时，在其解锁之前，**所有尝试对其加锁的线程都会被阻塞；**  
+2. 当读写锁处于**读加锁**状态时，所有**试图以读模式对其加锁的线程都可以得到访问权**，但是如果**想以写模式对其加锁，线程将阻塞**。
+
+C++17，会直接提供 `shared_mutex`可以直接使用
+
+```cpp
+#include <shared_mutex> // C++17 for shared_lock and shared_mutex
+
+void read_operation(std::shared_mutex &mtx)
+{
+    std::shared_lock<std::shared_mutex> lock(mtx);
+    // read operation
+    std::cout << "thread " << std::this_thread::get_id() << "Reading data..." << std::endl;
+}
+
+void write_operation(std::shared_mutex &mtx)
+{
+    std::unique_lock<std::shared_mutex> lock(mtx);
+    // write operation
+    std::cout << "thread " << std::this_thread::get_id() << "Writing data..." << std::endl;
+}
+```
+
+如果使用的是C++11，可以选择自己封装一个
+```cpp
+
+```
+
+
+#### 条件变量
+
+
 
 
 

@@ -432,7 +432,7 @@ SELECT count(DISTINCT(concat(first_name, last_name)))/count(*) AS Selectivity FR
 
 > InnoDB的情况下：
 > 
-> B+Tree的索引也不建议太长，因为B+Tree的树节点有大小限制，一般为分页面的大小（通常为16KB）；
+> B+Tree的索引也不建议太长，因为B+Tree的树节点有大小限制，一般为**分页**面的大小（通常为**16KB**）；
 > 
 > 如果索引值过长，会一个页导致键值较少；从而导致B+Tree的高度增加，效率下降
 > 
