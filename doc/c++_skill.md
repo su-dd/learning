@@ -1468,6 +1468,8 @@ void write_operation(std::shared_mutex &mtx)
 
 [CPU缓存一致性：从理论到实战 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/641558949)
 
+[C++11 实现读写锁 read_write_mutex_c++11 读写锁-CSDN博客](https://blog.csdn.net/wilson1068/article/details/100766622)
+
 ## C++ 二进制兼容及解决办法
 
 ### 什么会二进制不兼容
