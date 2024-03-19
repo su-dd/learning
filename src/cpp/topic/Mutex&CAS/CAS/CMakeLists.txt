@@ -6,3 +6,4 @@ set(CMAKE_CXX_STANDARD 11)
 aux_source_directory(. SRC_LIST) # get all source files
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}) # include current directory
 add_executable(CAS ${SRC_LIST}) # create executable
+target_link_libraries(CAS pthread) # link pthread library

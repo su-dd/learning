@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.10)
-project(Mutex)
+cmake_minimun_required(VERSION 3.10)
+project(Condition_Variable)
+set(CMAKE_CXX_STANDARD 11)
 aux_source_directory(. SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME} pthread)

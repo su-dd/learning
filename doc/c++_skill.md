@@ -1417,6 +1417,9 @@ void thread_func7(int id, std::mutex &mtx1, std::mutex &mtx2)
 }
 ```
 
+#### 条件变量
+
+
 #### 读写锁
 
 读写锁又叫共享独占锁，**当读写锁以读模式锁住时，它是以共享模式锁住的；当它以写模式锁住时，它是以独占模式锁住的**
@@ -1469,6 +1472,8 @@ void write_operation(std::shared_mutex &mtx)
 [CPU缓存一致性：从理论到实战 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/641558949)
 
 [C++11 实现读写锁 read_write_mutex_c++11 读写锁-CSDN博客](https://blog.csdn.net/wilson1068/article/details/100766622)
+
+[C++11条件变量condition_variable详解 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/599172163)
 
 ## C++ 二进制兼容及解决办法
 
