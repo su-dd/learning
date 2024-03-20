@@ -1,25 +1,33 @@
 #include <iostream>
 #include <thread>
-// #include <shared_mutex> // C++17 for shared_lock and shared_mutex
+#include "Shared_Lock.h"
 #include <mutex>
 
-// void read_operation(std::shared_mutex &mtx)
-// {
-//     std::shared_lock<std::shared_mutex> lock(mtx);
-//     // read operation
-//     std::cout << "thread " << std::this_thread::get_id() << "Reading data..." << std::endl;
-// }
+void read_operation(SharedLock &mtx)
+{
+    SharedLockGuard lock(mtx);
+    // read operation
+    std::cout << "thread " << std::this_thread::get_id() << " Reading data..." << std::endl;
+}
 
-// void write_operation(std::shared_mutex &mtx)
-// {
-//     std::unique_lock<std::shared_mutex> lock(mtx);
-//     // write operation
-//     std::cout << "thread " << std::this_thread::get_id() << "Writing data..." << std::endl;
-// }
+void write_operation(SharedLock &mtx)
+{
+    ExclusiveLockGuard lock(mtx);
+    // write operation
+    std::cout << "thread " << std::this_thread::get_id() << " Writing data..." << std::endl;
+}
 
 int main()
 {
-    // std::shared_mutex mtx;
+    SharedLock mtx;
+
+    std::thread t1(read_operation, std::ref(mtx));
+    // std::thread t2(read_operation, std::ref(mtx));
+    std::thread t3(write_operation, std::ref(mtx));
+
+    t1.join();
+    // t2.join();
+    t3.join();
 
     return 0;
 }

@@ -1,3 +1,30 @@
+## 编译过程
+
+一个程序从.c文本文件成为一个可执行文件需要进行四个过程。
+
+**一：预编译过程 --> 做语法上的校验，文件补充等**
+.c文件经过预编译成为.i文件。预编译过程主要处理源代码文件中那些以“#”开头的预编译指令，如#include,#define等。
+linux环境下的指令为:gcc -E main.c -o main.i 。
+主要处理规则为：
+1.展开所有的宏定义；
+2.处理#if,#endif等预编译指令；
+3.将#include\<\>包含的文件插入到相应位置；
+4.删除所有的注释；
+5.添加行号和文件名标识；
+6.保留所有的\#pragma编译器指令。
+
+**二：编译过程 --> 生成汇编**
+.i文件经过编译成为.s文件。编译过程形成的是汇编文件。
+linux环境下的指令为:gcc -S main.i -o main.s 。
+
+**三：汇编过程 --> 二进制文件**
+.i文件经过该过程成为.o目标文件，目标文件里都是机器可以理解的二进制代码。
+linux环境下的指令为：gcc -c main.s -o main.o 。
+
+**四：链接过程 --> 生成可执行文件**
+.o文件经过链接才能形成最终的可执行文件。
+linux环境下的指令为：gcc -o main main.o 。
+
 ## 深入理解：C++内存分配
 
 程序一般都是在内存中跑的，这章主要讲c++程序运行时的内存分配问题。
@@ -1003,7 +1030,7 @@ f=true//A
 g.store(true, memory_order_release);//B 
 
 // thread2
-while(!g.load(memory_order_ acquire);//C
+while(!g.load(memory_order_acquire);//C
 assert(f));//D
 assert(h);//E
 
@@ -1278,7 +1305,7 @@ bool OptimisticLock::update(std::string new_data, int expected_version)
 
 > 乐观锁适用于写少读多的场景
 > 
-> CAS的使用，在写入频繁的情况下，可以会导致CPU繁忙
+> CAS的使用，在写入频繁的情况下，可能会导致CPU繁忙
 
 #### 自旋锁
 
@@ -1419,6 +1446,59 @@ void thread_func7(int id, std::mutex &mtx1, std::mutex &mtx2)
 
 #### 条件变量
 
+条件变量（condition variable）用于 **实现多个线程之间同步操作**；当条件不满足时，相关线程一直被阻塞，直到某种条件出现，这些线程才会被唤醒
+
+条件变量是利用线程间共享的全局变量进行同步的一种机制，主要包括两个动作：
+
+- 一个线程因等待"条件变量的条件成立"而挂起；
+- 另外一个线程使"条件成立"，给出信号，从而唤醒被等待的线程。
+
+![](img/c_skill/20240320172358.png)
+
+wait函数必选使用 std::unique_lock
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
+void thread_func1(std::condition_variable &cv, std::mutex &mtx, bool &ready)
+{
+    std::unique_lock<std::mutex> lck(mtx);
+    std::cout << "thread_func1: waiting ..." << std::endl;
+    cv.wait(lck, [&]()
+            { return ready; });
+    std::cout << "thread_func1: waiting done." << std::endl;
+}
+
+void thread_func2(std::condition_variable &cv, std::mutex &mtx, bool &ready)
+{
+    // Wait for 1 second before notifying the condition variable
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    std::unique_lock<std::mutex> lck(mtx);
+    ready = true;
+
+    std::cout << "thread_func2: notifying ..." << std::endl;
+    cv.notify_one();
+    std::cout << "thread_func2: notified." << std::endl;
+}
+
+void thread_func3(std::condition_variable &cv, std::mutex &mtx, bool &ready)
+{
+    // Wait for 1 second before notifying the condition variable
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    {
+        std::lock_guard<std::mutex> lck(mtx);
+        ready = true;
+    }
+    std::cout << "thread_func3: notifying ..." << std::endl;
+    cv.notify_one();
+    std::cout << "thread_func3: notified." << std::endl;
+}
+
+```
 
 #### 读写锁
 
@@ -1448,21 +1528,130 @@ void write_operation(std::shared_mutex &mtx)
 ```
 
 如果使用的是C++11，可以选择自己封装一个
+
 ```cpp
+#include <atomic>
+#include <mutex>
+#include <condition_variable> //用于条件变量
+class SharedLock
+{
+public:
+    SharedLock() : m_shared_count(0), m_exclusive_count(0), m_in_exclusive(false) {}
+
+    void lock();
+    void unlock();
+
+    void shared_lock();
+    void shared_unlock();
+
+private:
+    std::atomic_int m_shared_count;
+    std::atomic_int m_exclusive_count;
+    std::atomic_bool m_in_exclusive;
+    std::condition_variable m_cv_shared;
+    std::condition_variable m_cv_exclusive;
+    std::mutex m_mutex;
+};
+
+void SharedLock::lock()
+{
+    std::unique_lock<std::mutex> lock(m_mutex);
+    m_cv_exclusive.wait(
+        lock, [this]() -> bool
+        { return (m_shared_count.load(std::memory_order_acquire) == 0) && !m_in_exclusive.load(std::memory_order_acquire); });
+    m_in_exclusive.store(true, std::memory_order_relaxed);
+    m_exclusive_count.fetch_add(1, std::memory_order_relaxed);
+}
+
+void SharedLock::unlock()
+{
+    std::unique_lock<std::mutex> lock(m_mutex);
+    if (m_exclusive_count.load(std::memory_order_acquire) > 0)
+    {
+        m_exclusive_count.fetch_sub(1, std::memory_order_relaxed);
+    }
+
+    if (m_exclusive_count.load(std::memory_order_acquire) == 0)
+    {
+        m_in_exclusive.store(false, std::memory_order_relaxed);
+        m_cv_shared.notify_all();
+    }
+    else
+    {
+        m_cv_exclusive.notify_one();
+    }
+}
+
+void SharedLock::shared_lock()
+{
+    std::unique_lock<std::mutex> lock(m_mutex);
+    m_cv_shared.wait(lock, [this]() -> bool
+                     { return !m_in_exclusive.load(std::memory_order_acquire); });
+    m_shared_count.fetch_add(1, std::memory_order_relaxed);
+}
+
+void SharedLock::shared_unlock()
+{
+    std::unique_lock<std::mutex> lock(m_mutex);
+    if (m_shared_count.load(std::memory_order_acquire) > 0)
+    {
+        m_shared_count.fetch_sub(1, std::memory_order_relaxed);
+    }
+
+    if (m_shared_count.load(std::memory_order_acquire) == 0)
+    {
+        m_cv_exclusive.notify_one();
+    }
+}
+
+
+class SharedLockGuard
+{
+public:
+    SharedLockGuard(SharedLock &lock) : m_lock(lock)
+    {
+        m_lock.shared_lock();
+    }
+
+    ~SharedLockGuard()
+    {
+        m_lock.shared_unlock();
+    }
+
+private:
+    SharedLock &m_lock;
+};
+
+class ExclusiveLockGuard
+{
+public:
+    ExclusiveLockGuard(SharedLock &lock) : m_lock(lock)
+    {
+        m_lock.lock();
+    }
+
+    ~ExclusiveLockGuard()
+    {
+        m_lock.unlock();
+    }
+
+private:
+    SharedLock &m_lock;
+};
 
 ```
 
-
-#### 条件变量
-
-
-
-
-
 ### 公平锁和非公平锁
 
+公平锁：多个线程按照申请锁的顺序去获得锁，线程会直接进入队列去排队，永远都是队列的第一位才能得到锁。
 
+- 优点：所有的线程都能得到资源，不会饿死在队列中。
+- 缺点：吞吐量会下降很多，队列里面除了第一个线程，其他的线程都会阻塞，cpu唤醒阻塞线程的开销会很大。
 
+非公平锁：多个线程去获取锁的时候，会直接去尝试获取，获取不到，再去进入等待队列，如果能获取到，就直接获取到锁。
+
+- 优点：可以减少CPU唤醒线程的开销，整体的吞吐效率会高点，CPU也不必取唤醒所有线程，会减少唤起线程的数量。
+- 缺点：你们可能也发现了，这样可能导致队列中间的线程一直获取不到锁或者长时间获取不到锁，导致饿死。
 
 
 **参考：**
