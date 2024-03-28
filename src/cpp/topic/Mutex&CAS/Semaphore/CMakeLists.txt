@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(Semaphore)
+set(CMAKE_CXX_STANDARD 11)
+aux_source_directory(. SRC_LIST)
+add_executable(Semaphore ${SRC_LIST})
+target_link_libraries(Semaphore pthread)

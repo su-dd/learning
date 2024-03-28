@@ -15,9 +15,6 @@
 ![](img/design_architect/architect-detail2.png)
 
 
-
-
-
 ## 领域分析
 
 ### 初识DDD

@@ -1246,7 +1246,6 @@ C++：线程1，读取指针A指向地址a；线程2，对指针A操作后，依
 1. 当操作的数据跨多个缓存行，或没被缓存在处理器内部，则处理器会使用总线锁定。
 2. 有些处理器不支持缓存锁定，比如：Intel x86 和 Pentium 处理器也会调用总线锁定。
 
-
 ### 各种类型同步策略
 
 #### 原子操作
@@ -1497,7 +1496,6 @@ void thread_func3(std::condition_variable &cv, std::mutex &mtx, bool &ready)
     cv.notify_one();
     std::cout << "thread_func3: notified." << std::endl;
 }
-
 ```
 
 #### 读写锁
@@ -1638,7 +1636,63 @@ public:
 private:
     SharedLock &m_lock;
 };
+```
 
+#### 信号量
+
+信号量的更好的翻译是 **信号计数量** ，是一种 **首先是一个变量，其次是计数器。**
+
+它是多线程环境下使用的一种设施，信号量在创建时需要设置一个初始值，表示同时可以有几个任务（线程）可以访问某一块共享资源。
+
+C++到C++20才有自己的信号量封装，一般都是用C语言的
+
+**有名信号量：** 
+1. sem_open
+2. sem_close
+3. sem_unlink
+
+**无名信号量：** 
+1. sem_init
+2. sem_destroy
+
+[linux IPC-信号量_sem_open-CSDN博客](https://blog.csdn.net/qq_37932504/article/details/119941111)
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include "semaphore.h"
+
+void worker1(sem_t *semaphore)
+{
+    sem_wait(semaphore);
+    std::cout << "worker1 " << std::this_thread::get_id() << " acquired semaphore" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
+void worker2(sem_t *semaphore)
+{
+    std::cout << "worker2 " << std::this_thread::get_id() << " acquired semaphore" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    sem_post(semaphore);
+}
+
+int main()
+{
+    sem_t semaphore;
+    sem_init(&semaphore, 0, 1); // initialize semaphore with value 1
+    sem_wait(&semaphore);       // acquire the semaphore
+
+    // create two threads and pass the semaphore as argument
+    std::thread t1(worker1, &semaphore);
+    std::thread t2(worker2, &semaphore);
+
+    t1.join();
+    t2.join();
+    sem_destroy(&semaphore);
+    return 0;
+}
 ```
 
 ### 公平锁和非公平锁
