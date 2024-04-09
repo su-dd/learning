@@ -17,6 +17,7 @@
 **语言**
 - [🚀C++](doc/c++.md)
 - [👻Java](doc/java.md)
+- [Rust by Example](doc/readbook/Rust_By_Example.md)
 
 **技巧于感悟**
 - [✂️C++](doc/c++_skill.md)
@@ -40,6 +41,6 @@
 - [🎪Git](doc/git.md)
 - [👝nvm](doc/nvm.md)
 
-**沟通**
+**ReadBook**
 - [📖我不是教你诈](doc/readbook/我不是教你诈.md)
 - [📔掌控谈话](doc/readbook/掌控谈话.md)

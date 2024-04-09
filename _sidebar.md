@@ -4,6 +4,7 @@
 **语言**
 - [🚀C++](doc/c++.md)
 - [👻Java](doc/java.md)
+- [Rust by Example](doc/readbook/Rust_By_Example.md)
 
 **技巧于感悟**
 - [✂️C++](doc/c++_skill.md)
