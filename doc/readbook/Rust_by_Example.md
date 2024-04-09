@@ -1,10 +1,12 @@
+翻译自：[Introduction - Rust By Example (rust-lang.org)](https://doc.rust-lang.org/rust-by-example/index.html)
+
 [Rust](https://www.rust-lang.org/) is a modern systems programming language focusing on safety, speed, and concurrency. It accomplishes these goals by being memory safe without using garbage collection.
 
 Rust 是 一个专注于安全、速度、并发的现代编程语言。它是通过不依赖垃圾回收的内存安全完成了这些目标。
 
 Rust by Example (RBE) is a collection of runnable examples that illustrate various Rust concepts and standard libraries. To get even more out of these examples, don't forget to [install Rust locally](https://www.rust-lang.org/tools/install) and check out the [official docs](https://doc.rust-lang.org/std/). Additionally for the curious, you can also [check out the source code for this site](https://github.com/rust-lang/rust-by-example).
 
-Rust by Example 是一组用于阐明各种Rust概念和标准库的可运行实例。如果希望获得更多的知识，不要忘记本地安装Rust 并且 阅读官网文件。另外还行知道更多，可以现在本站的源代码。
+Rust by Example 是一组用于阐明各种Rust概念和标准库的可运行实例。如果希望获得更多的知识，不要忘记本地安装Rust 并且 阅读官网文件。另外还想知道更多，可以下载本站的源代码。
 
 Now let's begin!
 
