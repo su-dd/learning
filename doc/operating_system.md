@@ -761,6 +761,12 @@ Set Index = (addr >> 6) % M;
 - Windows：FCB 表 + FAT + 位图
 - Unix：inode + 混合索引 + 成组链接
 
+## Windows句柄
+
+
+
+
+
 
 **参考：**
 

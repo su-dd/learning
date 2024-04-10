@@ -7,7 +7,6 @@
 
 MQ是Message Queue的缩写，字面意思：一个FIFO里存放着Message
 
-
 ### Kafka
 
 
