@@ -1,31 +1,5 @@
-## 编译过程
 
-一个程序从.c文本文件成为一个可执行文件需要进行四个过程。
-
-**一：预编译过程 --> 做语法上的校验，文件补充等**
-.c文件经过预编译成为.i文件。预编译过程主要处理源代码文件中那些以“#”开头的预编译指令，如#include,#define等。
-linux环境下的指令为:gcc -E main.c -o main.i 。
-主要处理规则为：
-1.展开所有的宏定义；
-2.处理#if,#endif等预编译指令；
-3.将#include\<\>包含的文件插入到相应位置；
-4.删除所有的注释；
-5.添加行号和文件名标识；
-6.保留所有的\#pragma编译器指令。
-
-**二：编译过程 --> 生成汇编**
-.i文件经过编译成为.s文件。编译过程形成的是汇编文件。
-linux环境下的指令为:gcc -S main.i -o main.s 。
-
-**三：汇编过程 --> 二进制文件**
-.i文件经过该过程成为.o目标文件，目标文件里都是机器可以理解的二进制代码。
-linux环境下的指令为：gcc -c main.s -o main.o 。
-
-**四：链接过程 --> 生成可执行文件**
-.o文件经过链接才能形成最终的可执行文件。
-linux环境下的指令为：gcc -o main main.o 。
-
-## 深入理解：C++内存分配
+## C++内存分配
 
 程序一般都是在内存中跑的，这章主要讲c++程序运行时的内存分配问题。
 
@@ -1725,28 +1699,175 @@ int main()
 
 一个良好的线程池具有以下特点：
 1. 使用者只关心任务的创建，不用关心任务的执行
-2. 线程本身的执行业务无光
-
+2. 线程本身的执行业务无关
 
 那对线程池进行设计：
 
 ![](img/c_skill/threadpool.drawio.png)
 
 
-### Task实现
+```cpp
+#ifndef THREAD_POOL_H
+#define THREAD_POOL_H
+#include <vector>
+#include <thread>
+#include <condition_variable>
+#include <queue>
+#include <mutex>
+#include <future>
+#include <functional>
+#include <iostream>
 
+template <typename T>
+class SafeQueue
+{
+public:
+	bool empty()
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		return m_oQueue.empty();
+	}
 
+	int size()
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		std::cout << "Queue size is : " << m_oQueue.size() << std::endl;
+		return m_oQueue.size();
+	}
 
-## Thread实现
+	void add(T &task)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		m_oQueue.emplace(task);
+	}
 
+	bool take(T &t)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		if (m_oQueue.empty())
+		{
+			return false;
+		}
+		t = m_oQueue.front(); // 移动元素到t中
+		m_oQueue.pop();
+		return true;
+	}
 
-## ThreadPool实现
+private:
+	std::queue<T> m_oQueue;
+	std::mutex m_mutex;
+};
 
+using Task = std::function<void()>;
+class ThreadPool
+{
+	// 线程工作者
+	class ThreadWorker
+	{
+	public:
+		ThreadWorker(ThreadPool *threadPool) : m_pThreadPool(threadPool) {}
+		~ThreadWorker() { m_pThreadPool = nullptr; }
 
+		void operator()()
+		{
+			Task task;				// 定义任务函数
+			bool isGetTask = false; // 定义是否获取任务的标志
 
+			while (true)
+			{
+				if (m_pThreadPool->m_done && m_pThreadPool->m_tasks.empty()) // 线程池完成
+				{
+					break;
+				}
 
+				{
+					std::unique_lock<std::mutex> lock(m_pThreadPool->m_mutex);
+					if (m_pThreadPool->m_tasks.empty()) // 任务队列为空
+					{
+						m_pThreadPool->m_cv.wait(lock); // 等待条件变量通知
+					}
+					isGetTask = m_pThreadPool->m_tasks.take(task);
+				}
 
+				if (isGetTask)
+				{
+					isGetTask = false; // 重置获取任务标志
+					task();			   // 执行任务
+				}
+			}
+		}
+	private:
+		ThreadPool *m_pThreadPool;
+	};
 
+public:
+	ThreadPool(int threadSize = 0) : m_ThreadSize(threadSize), m_done(false)
+	{
+		if (m_ThreadSize <= 0)
+		{
+			setDefaultThreadSize();
+		}
+		for (int i = 0; i < m_ThreadSize; i++)
+		{
+			m_threads.emplace_back(std::thread(ThreadWorker(this))); // 创建线程
+		}
+	};
+	~ThreadPool(){};
+
+	template <typename F, typename... Args>
+	auto addTask(F &&f, Args &&...args) -> std::shared_future<decltype(f(args...))> // 添加任务
+	{
+		// 创建任务包裹
+		std::function<decltype(f(args...))()> func = std::bind(std::forward<F>(f), std::forward<Args>(args)...);
+		auto task_ptr = std::make_shared<std::packaged_task<decltype(f(args...))()>>(func);
+
+		// 包裹任务
+		Task task = [task_ptr]()
+		{
+			(*task_ptr)();
+		};
+		m_tasks.add(task);
+		m_cv.notify_one();			   // 通知线程池有任务
+		return task_ptr->get_future(); // 返回future
+	}
+
+	void wait()
+	{
+		m_done = true;
+		m_cv.notify_all(); // 通知，唤醒所有工作线程
+		for (int i = 0; i < m_ThreadSize; i++)
+		{
+			if (m_threads.at(i).joinable()) // 判断线程是否在等待状态
+			{
+				m_threads.at(i).join(); // 将线程加入等待队列
+			}
+		}
+	}
+
+private:
+	// 设置默认最大线程数
+	void setDefaultThreadSize()
+	{
+		// 获取硬件线程数
+		m_ThreadSize = std::thread::hardware_concurrency();
+		// 若获取失败，则设置为1
+		if (m_ThreadSize <= 0)
+		{
+			m_ThreadSize = 1;
+		}
+	}
+
+private:
+	std::vector<std::thread> m_threads; // 线程池
+	SafeQueue<Task> m_tasks;			// 任务队列
+	std::mutex m_mutex;
+	std::condition_variable m_cv;
+	bool m_done;
+	int m_ThreadSize; // 最大线程数
+};
+
+#endif // THREAD_POOL_H
+```
 
 ## C++ 二进制兼容及解决办法
 
