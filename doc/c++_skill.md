@@ -1705,6 +1705,7 @@ int main()
 
 ![](img/c_skill/threadpool.drawio.png)
 
+代码位置：https://github.com/su-dd/learning/tree/main/src/cpp/topic/ThreadPool
 
 ```cpp
 #ifndef THREAD_POOL_H
@@ -1869,10 +1870,25 @@ private:
 #endif // THREAD_POOL_H
 ```
 
-## C++ 二进制兼容及解决办法
+## C++兼容：ABI和API
 
-### 什么会二进制不兼容
+### API和ABI定义
 
+- API（Application Programming Interface）是应用程序编程接口，是一些预先定义的函数，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无需了解源码和内部实现细节。
+
+- ABI（application binary interface）应用二进制接口，是描述应用程序（或者其他类型）和操作系统之间或其他应用程序的低级接口。`ABI`涵盖了各种细节，如：数据类型的大小、布局和对齐；调用约定等。
+
+### API兼容和ABI兼容定义
+
+- API兼容，源码兼容：在升级库文件的时候，不必**修改**使用此库的可执行文件或其他库文件的**源代码**，只需重新编译应用程序，即可使程序的功能不被破坏。
+
+- ABI兼容，二进制兼容：在升级库文件的时候，不必**重新编译**使用此库的可执行文件或其他库文件，并且程序的功能不被破坏。
+
+### API兼容
+
+ 
+
+### ABI兼容
 
 
 ## 变长参数
