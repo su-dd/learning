@@ -48,8 +48,6 @@
 3. 针对所有的元素重复以上的步骤，除了最后一个。
 4. 持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。
 
-[Sort_Bubble](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Bubble.h)
-
 ```cpp
 // 模板方法实现冒泡
 template<typename T>
@@ -118,26 +116,22 @@ void sort_select(std::vector<T>& array)
 
 ![](img/data_structure/insert.gif)
 
-[插入排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Insert.h)
 
 ```cpp
-template<typename T>
-void sort_insert(std::vector<T>& array)
+template <typename T>
+void sort_insert(std::vector<T> &array)
 {
-	for (int i = 1; i < array.size(); i++)
-	{
-		T temp = array[i];
-		for (int k = i - 1; k >= 0; k--)
-		{
-			if (temp < array[k])
-			{
-				array[k + 1] = array[k];
-				array[k] = temp;
-			}
-			else
-				break;
-		}
-	}
+    for (int i = 1; i < array.size(); i++)
+    {
+        T temp = array[i];
+        int j = i - 1;
+        while (j >= 0 && array[j] > temp)
+        {
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = temp;
+    }
 }
 ```
 
@@ -153,8 +147,6 @@ void sort_insert(std::vector<T>& array)
 1. 选取第一个数为基准
 2. 将比基准小的数交换到前面，比基准大的数交换到后面
 3. 对左右区间重复第二步，直到各区间只有一个数
-
-[快速排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Quick.h)
 
 ```cpp
 // 快速排序（递归）
