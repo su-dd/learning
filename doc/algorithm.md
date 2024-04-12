@@ -50,20 +50,20 @@
 
 ```cpp
 // 模板方法实现冒泡
-template<typename T>
+template <typename T>
 void sort_bubble(std::vector<T> &array)
 {
-	int len = array.size();
-	for (int i = 0; i < len - 1; i ++)
-	{
-		for (int j = 0; j < len - 1 - i; j++)
-		{
-			if (array[j] > array[j + 1])
-			{
-				std::swap(array[j], array[j + 1]);
-			}
-		}
-	}
+    int len = array.size();
+    for (int i = 0; i < len - 1; i++) // i 的区间是 [0, len-1)
+    {
+        for (int j = 0; j < len - 1 - i; j++) // j 的区间是 [0, len-1-i)
+        {
+            if (array[j] > array[j + 1]) // 将大的元素交换到后面
+            {
+                std::swap(array[j], array[j + 1]);
+            }
+        }
+    }
 }
 ```
 
@@ -79,23 +79,23 @@ void sort_bubble(std::vector<T> &array)
 2. 从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾
 3. 以此类推，直到所有元素均排序完毕
 
-[选择排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Selection.h)
 ```cpp
 // 升序的选择排序
-template<typename T>
-void sort_select(std::vector<T>& array)
+template <typename T>
+void sort_select(std::vector<T> &array)
 {
-	int len = array.size();
-	for (int i = 0; i < len - 1; i++) {
-		int min = i;
-		for (int j = i + 1; j < len; j++)
-		{
-			if (array[j] < array[min])
-				min = j;
-		}
-		if (i != min)
-			std::swap(array[i], array[min]);
-	}
+    int len = array.size();
+    for (int i = 0; i < len - 1; i++) // i 的区间是 [0, len-1)
+    {
+        int minIndex = i;
+        for (int j = i + 1; j < len; j++) // j 的区间是 [i+1, len)
+        {
+            if (array[j] < array[minIndex]) // 寻找最小值
+                minIndex = j;
+        }
+        if (i != minIndex) // 如果最小值不是当前位置，则交换
+            std::swap(array[i], array[minIndex]);
+    }
 }
 ```
 
@@ -124,13 +124,13 @@ void sort_insert(std::vector<T> &array)
     for (int i = 1; i < array.size(); i++)
     {
         T temp = array[i];
-        int j = i - 1;
-        while (j >= 0 && array[j] > temp)
+        int j = i - 1;                    // j 的区间是 [0, i-1]
+        while (j >= 0 && array[j] > temp) // 从后往前扫描
         {
-            array[j + 1] = array[j];
+            array[j + 1] = array[j]; // 元素后移
             j--;
         }
-        array[j + 1] = temp;
+        array[j + 1] = temp; // 这时j+1的值是插入位置，将temp插入
     }
 }
 ```
@@ -149,80 +149,30 @@ void sort_insert(std::vector<T> &array)
 3. 对左右区间重复第二步，直到各区间只有一个数
 
 ```cpp
-// 快速排序（递归）
-template<typename T>
-void sort_quick_recursive(std::vector<T>& array, int start, int end)
+template <typename T>
+void sort_quick_recursion(std::vector<T> &array, int start, int end)
 {
-    if (start >= end) return;
-    T mid = array[end]; // 标志数据
-    int left = start, right = end - 1;
-    while (left < right)
+    auto partition = [](std::vector<T> &array, const int start, const int end) -> int
     {
-        while (array[left] < mid && left < right)
-            left++;
-        while (array[right] >= mid && left < right)
-            right--;
-        std::swap(array[left], array[right]);
-    }
-
-    // 这时 left和right的值相同，判断当前值和mid（标志数据）的大小；做交换，保障顺序
-    if (array[left] > mid)       
-        std::swap(array[left], array[end]);
-
-    sort_quick_recursive(array, start, left - 1);
-    sort_quick_recursive(array, left + 1, end);
-}
-
-template<typename T>
-void sort_quick_recursion(std::vector<T>& array)
-{
-    sort_quick_recursive<int>(array, 0, array.size() - 1);
-}
-
-// 快速排序（迭代）
-struct Range {
-    int start, end;
-    Range(int s = 0, int e = 0) {
-        start = s, end = e;
-    }
-};
-
-// 整数或浮点数皆可使用,若要使用物件(class)时必须设定"小于"(<)、"大于"(>)、"不小于"(>=)的运算子功能
-template <typename T> 
-void sort_quick_iterate(std::vector<T> &array) {
-    int len = array.size();
-    std::stack<Range> rangeStack;
-    rangeStack.emplace(0, len - 1);
-
-    while (!rangeStack.empty()) {
-        Range curRange = rangeStack.top();
-        rangeStack.pop();
-
-        if (curRange.start >= curRange.end)
-            continue;
-
-        T mid = array[curRange.end];   // 标志数据
-
-        int left = curRange.start, right = curRange.end - 1;
-
-        while (left < right) 
+        T pivot = array[end];             // 选取基准
+        int i = start - 1;                // i 指向小于基准的元素的位置
+        for (int j = start; j < end; j++) // j 指向待比较的元素
         {
-            while (array[left] < mid && left < right) 
-                left++;
-            while (array[right] >= mid && left < right)
-                right--;
-
-            if (left < right)
-                std::swap(array[left], array[right]);
+            if (array[j] < pivot) // 小于基准的元素
+            {
+                i++;
+                std::swap(array[i], array[j]);
+            }
         }
+        std::swap(array[i + 1], array[end]); // 基准元素归位
+        return i + 1;
+    };
 
-        // 这时 left和right的值相同，判断当前值和mid（标志数据）的大小；做交换，保障顺序
-        if (array[left] > mid)
-            std::swap(array[left], array[curRange.end]);
-
-        // 模拟递归
-        rangeStack.emplace(curRange.start, left - 1);
-        rangeStack.emplace(left + 1, curRange.end);
+    if (start < end)
+    {
+        int pivotIndex = partition(array, start, end);      // 分区，返回基准索引
+        sort_quick_recursion(array, start, pivotIndex - 1); // 左区间
+        sort_quick_recursion(array, pivotIndex + 1, end);   // 右区间
     }
 }
 ```
@@ -245,51 +195,45 @@ void sort_quick_iterate(std::vector<T> &array) {
 3. 将剩下的堆回复到堆的结构
 4. 重复2~3步骤
 
-[堆排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Heap.h)
-
 ```cpp
-
-template<typename T>
-void max_heapify(std::vector<T> &array, int parentIndex)    // 大顶堆调整
+template <typename T>
+void sort_heap(std::vector<T> &array)
 {
-    // 建立 父节点指针位置 和 子节点指针位置
-    int dadIndex = parentIndex;
-    int sonIndex = dadIndex * 2 + 1;
-    int maxIndex = array.size() - 1;
-    while (sonIndex <= maxIndex)
-    { // 若 子节点指针位置 在范围內才做比较
-        if (sonIndex + 1 <= maxIndex && array[sonIndex] > array[sonIndex + 1]) // 先比较两个子节点大小，选择小的
-            sonIndex++;
-        if (array[dadIndex] < array[sonIndex]) // 如果 父节点 < 子节点 代表调整完成，直接跳出函数
-            return;
-        else 
-        {   // 否则较换父子內容再继续子节点和孙节点比较
-            std::swap(array[dadIndex], array[sonIndex]);
-            // 因为这里的循环是从树的叶子节点开始的，但当处理dadIndex时，他下面已经是堆了，所以只需要对dadIndex的值进行处理
-            dadIndex = sonIndex;                
-            sonIndex = dadIndex * 2 + 1;
-        }
-    }
-}
-
-template<typename T>
-void sort_heap(std::vector<T>& array)
-{   
-    // 建立堆结构
-    // 初始化，i从最后一个父节点开始调整
-    int maxIndex = array.size() - 1;
-    for (int i = (maxIndex - 1) / 2; i >= 0; i--)
-        max_heapify(array, i);
-
-    // 先将第一个元素和已经排好的元素前一位做较换，再从新调整(刚调整的元素之前的元素)，直到排序完成
-    for (int i = maxIndex; i > 0; i--)
+    // 调整堆 i为父节点索引，size为堆大小
+    std::function<void(std::vector<T> &, int, int)> heapify;
+    heapify = [&heapify](std::vector<T> &array, int i, int size)
     {
-        std::swap(array[0], array[i]);  // 取堆定数据交换到有序区
-        max_heapify(array, 0);
+        int left = 2 * i + 1;  // 左子节点索引
+        int right = 2 * i + 2; // 右子节点索引
+        int largest = i;       // 最大值索引，默认为父节点
+
+        // 找出最大值
+        if (left < size && array[left] > array[largest]) // 左子节点大于最大值
+            largest = left;
+        if (right < size && array[right] > array[largest]) // 右子节点大于最大值
+            largest = right;
+        if (largest != i) // 最大值不是父节点
+        {
+            std::swap(array[i], array[largest]); // 交换父节点与最大值
+            heapify(array, largest, size);       // 递归调整刚被改变的子树
+        }
+    };
+
+    // 建堆 目的：将数组转换为堆 时间复杂度：O(N)
+    // 从最后一个非叶子节点开始, 依次向上调整, 逐渐建立堆，直到根节点
+    for (int i = ((int)array.size() - 1) / 2; i >= 0; i--)
+        heapify(array, i, int(array.size()));
+
+    // 堆排序 目的：将数组排序 时间复杂度：O(NlogN)
+    // 每次将最大的元素放到数组末尾，然后调整堆，使其成为最大堆
+    for (int i = int(array.size()) - 1; i >= 1; i--)
+    {
+        std::swap(array[0], array[i]);
+        // 调整堆, 这里成功的关键：swap后，除了index为0的元素，其他元素都还在堆中，所以不需要再次调整
+        heapify(array, 0, i);
     }
 }
 ```
-
 
 ### 归并排序
 
@@ -304,42 +248,48 @@ void sort_heap(std::vector<T>& array)
 4. 重复步骤3直到某一指针到达序列尾
 5. 将另一序列剩下的所有元素直接复制到合并序列尾
 
-[归并排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Merge.h)
-
 ```cpp
-template<typename T>
-void sort_merge_recursive(std::vector<T>& array, std::vector<T>& temp, int start, int end)
+
+// 递归法
+template <typename T>
+void sort_merge_recursion(std::vector<T> &array, std::vector<T> &temp, int startIndex, int endIndex) // 递归法
 {
-	if (start >= end)
-		return;
+    if (startIndex < endIndex)
+    {
+        int midIndex = (startIndex + endIndex) / 2;                // 取中间位置
+        sort_merge_recursion(array, temp, startIndex, midIndex);   // 左半部分递归排序
+        sort_merge_recursion(array, temp, midIndex + 1, endIndex); // 右半部分递归排序
+        int left = startIndex, right = midIndex + 1;               // 左右指针
 
-	int len = end - start;
-	int mid = len / 2 + start;
-	int start1 = start, end1 = mid;
-	int start2 = mid + 1, end2 = end;
-	sort_merge_recursive(array, temp, start1, end1);
-	sort_merge_recursive(array, temp, start2, end2);
-	
-	int k = start;
-	while (start1 <= end1 && start2 <= end2)
-		temp[k++] = (array[start1] <= array[start2] ? array[start1++] : array[start2++]);
+        for (int k = startIndex; k <= endIndex; k++) // 合并两个有序数组
+        {
+            if (left > midIndex) // 左半部分无剩余元素
+            {
+                temp[k] = array[right];
+                right++;
+            }
+            else if (right > endIndex) // 右半部分无剩余元素
+            {
+                temp[k] = array[left];
+                left++;
+            }
+            else if (array[left] <= array[right]) // 左半部分最小元素
+            {
+                temp[k] = array[left];
+                left++;
+            }
+            else // 右半部分最小元素
+            {
+                temp[k] = array[right];
+                right++;
+            }
+        }
 
-	while (start1 <= end1)
-		temp[k++] = array[start1++];
-		
-	while (start2 <= end2)
-		temp[k++] = array[start2++];
-
-	for (int k = start; k <= end; k++)	// 将排序好的数据，回到array中，以便后续使用
-		array[k] = temp[k];
-}
-
-//整数或浮点数皆可使用,若要使用物件(class)时必须设定"小于"(<)的运算子功能
-template<typename T>
-void sort_merge_recursion(std::vector<T> &array)
-{
-	std::vector<T> temp(array);
-	sort_merge_recursive(array, temp, 0, array.size() - 1);
+        for (int i = startIndex; i <= endIndex; i++)
+        {
+            array[i] = temp[i];
+        }
+    }
 }
 ```
 
@@ -352,36 +302,54 @@ void sort_merge_recursion(std::vector<T> &array)
 3. 重复步骤2，直到所有元素排序完毕，即序列数为1
 
 ```cpp
-//整数或浮点数皆可使用,若要使用物件(class)时必须设定"小于"(<)的运算子功能
-template<typename T>
-void sort_merge_iterate(std::vector<T> &array) {
-	std::vector<T> temp(array);
-	int len = array.size();
-	// seg 为合并的区间大小，从1开始，后面每次乘2
-	for (int seg = 1; seg < len; seg += seg)
-	{
-		for (int start = 0; start < len; start += seg + seg) 
-		{
-			int low = start;
-			int mid = std::min(start + seg, len);
-			int high = std::min(start + seg + seg, len);
+// 迭代法
+template <typename T>
+void sort_merge_iterate(std::vector<T> &array)
+{
+    int size = (int)array.size();
+    std::vector<T> temp(size); // 临时数组
 
-			int start1 = low, end1 = mid;
-			int start2 = mid, end2 = high;
+    // 迭代法
+    for (int seg = 1; seg < size; seg *= 2) // 子数组大小
+    {
+        for (int start = 0; start < size - seg; start += 2 * seg) // 子数组起始位置
+        {
+            int mid = start + seg - 1;                         // 子数组中间位置
+            int end = std::min(start + 2 * seg - 1, size - 1); // 子数组结束位置
 
-			int k = low;
-			while (start1 < end1 && start2 < end2)
-				temp[k++] = array[start1] <= array[start2] ? array[start1++] : array[start2++];
-			while (start1 < end1)
-				temp[k++] = array[start1++];
-			while (start2 < end2)
-				temp[k++] = array[start2++];
+            // 合并两个子数组
+            int left = start, right = mid + 1;
 
-			// 将排序好的数据，回到array中，以便后续使用
-			for (int k = low; k < high; k++)
-				array[k] = temp[k];
-		}
-	}
+            for (int index = start; index <= end; index++) // 合并两个子数组
+            {
+                if (left > mid) // 左半部分无剩余元素
+                {
+                    temp[index] = array[right];
+                    right++;
+                }
+                else if (right > end) // 右半部分无剩余元素
+                {
+                    temp[index] = array[left];
+                    left++;
+                }
+                else if (array[left] <= array[right]) // 左半部分最小元素
+                {
+                    temp[index] = array[left];
+                    left++;
+                }
+                else // 右半部分最小元素
+                {
+                    temp[index] = array[right];
+                    right++;
+                }
+            }
+            // 复制合并结果
+            for (int i = start; i <= end; i++)
+            {
+                array[i] = temp[i];
+            }
+        }
+    }
 }
 ```
 
@@ -493,87 +461,44 @@ void sort_count(std::vector<int>& vecRaw, std::vector<int>& vecObj)
 3. 对每个不是空的桶子进行排序。
 4. 从不是空的桶子里把项目再放回原来的序列中。
 
-[桶排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Bucket.h)
-
 ```cpp
-// 假设数据分布在[0，100)之间，每个桶内部用链表表示，在数据入桶的同时插入排序。然后把各个桶中的数据合并。
-
-const int BUCKET_NUM = 10;
-
-struct ListNode 
+template <typename T>
+void sort_bucket(std::vector<T> &array, int bucketSize) // 桶排序
 {
-	explicit ListNode(int i = 0) :mData(i), mNext(NULL) {}
-	ListNode* mNext;
-	int mData;
-};
+    std::vector<std::vector<T>> buckets(bucketSize);
 
-ListNode* insertBucket(ListNode* head, int val)
-{
-	ListNode dummyNode;		// 引入空Node ，是为了解决val插在最前面的情况
-	ListNode* newNode = new ListNode(val);
-	ListNode* pre, * curr;
-	dummyNode.mNext = head;
-	pre = &dummyNode;
-	curr = head;
-	while (NULL != curr && curr->mData <= val)	// 这里等号需要存在，否则就不稳定了
-	{
-		pre = curr;
-		curr = curr->mNext;
-	}
-	newNode->mNext = curr;
-	pre->mNext = newNode;
-	return dummyNode.mNext;
-}
+    int size = (int)array.size();
+    // 寻访序列，并且把项目一个一个放到对应的桶子去
+    for (int i = 0; i < size; i++)
+    {
+        int index = (int)(array[i] / bucketSize); // 计算索引, 取倍数可以保障桶数据分级：个十百千万 。。。
+        if (index >= bucketSize)                  // 防止溢出
+            index = bucketSize - 1;
+        buckets[index].push_back(array[i]); // 放入桶子
+    }
 
+    // 对每个不是空的桶子进行排序
+    for (int i = 0; i < bucketSize; i++)
+    {
+        if (!buckets[i].empty())
+        {
+            std::sort(buckets[i].begin(), buckets[i].end()); // 排序
+        }
+    }
 
-ListNode* mergeBucket(ListNode* head1, ListNode* head2) 
-{
-	ListNode dummyNode;
-	ListNode* dummy = &dummyNode;
-	while (NULL != head1 && NULL != head2)
-	{
-		// 相同是 数值 ，只能在同一个桶里； 所以这里的判断是否带等会，不重要
-		if (head1->mData < head2->mData)
-		{
-			dummy->mNext = head1;
-			head1 = head1->mNext;
-		}
-		else
-		{
-			dummy->mNext = head2;
-			head2 = head2->mNext;
-		}
-		dummy = dummy->mNext;
-	}
-	if (NULL != head1) dummy->mNext = head1;
-	if (NULL != head2) dummy->mNext = head2;
-
-	return dummyNode.mNext;
-}
-
-void sort_bucket(std::vector<int> &array)
-{
-	int len = array.size();
-
-	std::vector<ListNode*> buckets(BUCKET_NUM, (ListNode*)(0));
-
-	for (int i = 0; i < len; ++i)
-	{
-		int index = array[i] / BUCKET_NUM;
-		ListNode* head = buckets.at(index);
-		buckets.at(index) = insertBucket(head, array[i]);
-	}
-
-	ListNode* head = buckets.at(0);
-	for (int i = 1; i < BUCKET_NUM; ++i)
-	{
-		head = mergeBucket(head, buckets.at(i));
-	}
-
-	for (int i = 0; i < len; ++i) {
-		array[i] = head->mData;
-		head = head->mNext;
-	}
+    // 从不是空的桶子里把项目再放回原来的序列中
+    int index = 0;
+    for (int i = 0; i < bucketSize; i++)
+    {
+        if (!buckets[i].empty())
+        {
+            for (int j = 0; j < (int)buckets[i].size(); j++)
+            {
+                array[index] = buckets[i][j];
+                index++;
+            }
+        }
+    }
 }
 ```
 

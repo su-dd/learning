@@ -5,15 +5,18 @@
 int main()
 {
     std::vector<int> array{2, 5, 3, 9, 7, 4, 8, 6, 1};
+    // std::vector<int> temp(array.begin() + 0, array.begin() + 9);
+    // std::vector<int> temp1(array.begin() + 0, array.begin() + 5);
+    // std::vector<int> temp2(array.begin() + 5, array.begin() + 9);
     // sort_bubble<int>(array);
     // sort_select<int>(array);
     // sort_insert<int>(array);
-    sort_quick_recursion<int>(array, 0, array.size() - 1);
+    // sort_quick_recursion<int>(array, 0, (int)array.size() - 1);
     // sort_quick_iterate<int>(array);
     // sort_heap<int>(array);
-    // sort_merge_recursion<int>(array);
+    // sort_merge_recursion<int>(array, std::vector<int>((int)array.size()), 0, (int)array.size() - 1);
     // sort_merge_iterate<int>(array);
-    // sort_bucket(array);
+    sort_bucket(array, 5);
     for (int i = 0; i < array.size(); i++)
     {
         std::cout << array[i] << " ";
