@@ -116,7 +116,7 @@ public:
 		auto task_ptr = std::make_shared<std::packaged_task<decltype(f(args...))()>>(func);
 
 		// 包裹任务
-		Task task = [task_ptr]()
+		Task task = [task_ptr]() -> void
 		{
 			(*task_ptr)();
 		};

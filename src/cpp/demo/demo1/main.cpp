@@ -1,6 +1,5 @@
 #include <functional>
 #include <iostream>
-#include <memory>
 
 void f(int n1, int n2, int n3, const int &n4, int n5)
 {

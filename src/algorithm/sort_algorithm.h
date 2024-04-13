@@ -466,6 +466,62 @@ void sort_merge_iterate(std::vector<T> &array)
     }
 }
 
+/** 希尔排序算法：
+        先将整个待排元素序列分割成若干个子序列（由相隔某个“增量”的元素组成的）分别进行直接插入排序，
+        然后依次缩减增量再进行排序，待整个序列中的元素基本有序（增量足够小）时，
+        再对全体元素进行一次直接插入排序
+
+    步骤：
+        1. 先取一个小于n的整数d1作为第一个增量，把文件的全部记录分成d1个组。
+        2. 所有距离为d1的倍数的记录放在同一个组中，在各组内进行直接插入排序。
+        3. 取第二个增量d2小于d1重复上述的分组和排序，直至所取的增量dt=1(dt小于dt-l小于…小于d2小于d1)，
+           即所有记录放在同一组中进行直接插入排序为止。
+
+
+    助记码：
+
+        shellSort(array)
+            n = array.length
+            d = n/2
+            while d > 0
+                for i = d to n-1
+                    temp = array[i]
+                    j = i
+                    while j >= d and array[j-d] > temp
+                        array[j] = array[j-d]
+                        j -= d
+                    array[j] = temp
+                d = d/2
+
+    时间复杂度：O(n^2)
+
+    空间复杂度：O(1)
+
+    稳定性：不稳定
+*/
+
+template <typename T>
+void sort_shell(std::vector<T> &array)
+{
+    int size = (int)array.size();
+
+    for (int d = size / 2; d > 0; d /= 2) // 步长不断减小
+    {
+        for (int i = d; i < size; i++) // 子数组大小
+        {
+            // 插入排序
+            T temp = array[i]; // 待插入元素
+            int j = i;
+            while (j >= d && array[j - d] > temp)
+            {
+                array[j] = array[j - d];
+                j -= d;
+            }
+            array[j] = temp;
+        }
+    }
+}
+
 /* 桶排序：
         将数组分到有限数量的桶里。每个桶再个别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排序）。
 
@@ -536,17 +592,12 @@ void sort_bucket(std::vector<T> &array, int bucketSize) // 桶排序
 
 /* 基数排序：
 
-        一种多关键字的排序算法，是桶排序的扩展。
+        一种非比较排序算法，是桶排序的一种特殊情况。
 
-        基本思想是：取得所有数的数位并统一为相同的长度，数位较短的数字前面补零。
-        从低位开始排序，分别放入0~9个队列中，然后采用先进先出的原则进行收集；
-        在按照高位排序，然后在收集；依次类推，直到最高位，最终得到排好序的数列。
-        对于数值偏小的一组序列，该算法速度非常快，时间复杂度可以达到线性。
+        基本思想是：将整数按位数切割成不同的数字，然后按每个位数分别进行排序。
+        这样做的好处是：由于整数的每一位都参与到排序中，因此，可以保证排序的稳定性。
 
-    理解：
 
-        1、没一次的排序，都是一次分组排序；使得当前位上的数据有序；
-        2、高位比低位权重更重，所以防止后面。
 
     步骤：
 
@@ -556,6 +607,137 @@ void sort_bucket(std::vector<T> &array, int bucketSize) // 桶排序
         4. 收集数据放在（0~9）号桶中的数据按顺序放到数组中；
         5. 重复3~4过程，直到最高位，即可完成排序。
 
+    助记码：
+
+        radixSort(array)
+            maxNum = findMax(array)
+            digit = findDigit(maxNum)
+            for i = 0 to digit-1
+                bucket[i] = []
+            for i = 0 to size-1
+                bucket[getDigit(array[i], i+1)] = bucket[getDigit(array[i], i+1)] + array[i]
+            for i = 0 to digit-1
+                bucket[i] = bucket[i] + bucket[i+1]
+            for i = size-1 to 0
+                array[i] = bucket[getDigit(array[i], 1)]
+                bucket[getDigit(array[i], 1)] = bucket[getDigit(array[i], 1)] - array[i]
+
+    时间复杂度：O(nk) k为数组中最大数的位数，最坏情况下为O(n^2)
+
+    空间复杂度：O(n+k)
+
+    稳定性：稳定
 */
+
+template <typename T>
+void sort_radix(std::vector<T> &array) // 基数排序
+{
+    int size = (int)array.size(); // 数组大小
+    if (size <= 1)
+        return;
+
+    // 取得数组中的最大数并取得位数
+    int maxNum = *std::max_element(array.begin(), array.end()); // 取得最大值
+    int digit = std::log10(maxNum) + 1;                         // 取得位数
+
+    // 创建桶
+    std::vector<std::vector<T>> buckets(10);
+
+    for (int i = 0; i < digit; i++) // 按位数分配
+    {
+        // 按位数分配
+        for (int j = 0; j < size; j++)
+        {
+            int index = (int)(array[j] / std::pow(10, i)) % 10; // 计算索引
+            buckets[index].push_back(array[j]);                 // 放入桶子
+        }
+
+        // 收集数据放在（0~9）号桶中的数据按顺序放到数组中
+        int index = 0;
+        for (int j = 0; j < 10; j++)
+        {
+            if (!buckets[j].empty())
+            {
+                for (int k = 0; k < (int)buckets[j].size(); k++)
+                {
+                    array[index] = buckets[j][k];
+                    index++;
+                }
+                buckets[j].clear(); // 清空桶
+            }
+        }
+    }
+}
+
+/* 计数排序：
+        统计小于等于该元素值的元素的个数i，于是该元素就放在目标数组的索引i位（i≥0）。
+
+    计数排序基于一个假设：
+        待排序数列的所有数均为整数，且出现在（0，k）的区间之内。
+        如果 k（待排数组的最大值） 过大则会引起较大的空间复杂度，一般是用来排序 0 到 100 之间的数字的最好的算法，但是它不适合按字母顺序排序人名。
+        计数排序不是比较排序，排序的速度快于任何比较排序算法。
+        时间复杂度为 O（n+k），空间复杂度为 O（n+k）
+
+    步骤：
+
+        1. 找出待排序的数组中最大和最小的元素
+        2. 统计数组中每个值为 i 的元素出现的次数，存入数组 C 的第 i 项
+        3. 对所有的计数累加（从 C 中的第一个元素开始，每一项和前一项相加）
+        4. 反向填充目标数组：将每个元素 i 放在新数组的第 C[i] 项，每放一个元素就将 C[i] 减去 1
+
+    助记码：
+
+        countSort(array, k)
+            C = [0] * (k+1)
+            for i = 0 to size-1
+                C[array[i]] = C[array[i]] + 1
+            for i = 1 to k
+                C[i] = C[i] + C[i-1]
+            for i = size-1 to 0
+                output[C[array[i]]] = array[i]
+                C[array[i]] = C[array[i]] - 1
+
+    时间复杂度：O(n+k)
+
+    空间复杂度：O(n+k)
+
+    稳定性：稳定
+
+*/
+
+template <typename T>
+void sort_count(std::vector<T> &array) // 计数排序
+{
+    int size = (int)array.size();
+    if (size <= 1)
+        return;
+
+    // 找出待排序的数组中最大和最小的元素
+    int minValue = *std::min_element(array.begin(), array.end());
+    int maxValue = *std::max_element(array.begin(), array.end());
+
+    // 统计数组中每个值为 i 的元素出现的次数，存入数组 C 的第 i 项
+    std::vector<int> count(maxValue - minValue + 1, 0);
+    for (int i = 0; i < size; i++)
+    {
+        count[array[i] - minValue]++;
+    }
+
+    // 对所有的计数累加（从 C 中的第一个元素开始，每一项和前一项相加）
+    for (int i = 1; i < (int)count.size(); i++)
+    {
+        count[i] += count[i - 1];
+    }
+
+    // 反向填充目标数组：将每个元素 i 放在新数组的第 C[i] 项，每放一个元素就将 C[i] 减去 1
+    std::vector<T> output(size);
+    for (int i = size - 1; i >= 0; i--)
+    {
+        output[count[array[i] - minValue] - 1] = array[i];
+        count[array[i] - minValue]--;
+    }
+
+    std::copy(output.begin(), output.end(), array.begin()); // 复制回原数组
+}
 
 #endif /* C07A091B_3CC3_46B0_9825_6A7FC17B6A33 */

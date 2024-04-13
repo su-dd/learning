@@ -416,7 +416,6 @@ void shell_sort(std::vector<T> array) {
 3. 对所有的计数累加（从 C 中的第一个元素开始，每一项和前一项相加）
 4. 反向填充目标数组：将每个元素 i 放在新数组的第 C[i] 项，每放一个元素就将 C[i] 减去 1
 
-[计数排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Count.h)
 
 ```cpp
 #include <vector>
@@ -515,7 +514,7 @@ void sort_bucket(std::vector<T> &array, int bucketSize) // 桶排序
 对于数值偏小的一组序列，该算法速度非常快，时间复杂度可以达到线性。
 
 **理解：**
-1. 没一次的排序，都是一次分组排序；使得当前位上的数据有序；
+1. 每一次的排序，都是一次分组排序；使得当前位上的数据有序；
 2. 高位比低位权重更重，所以防止后面。
 
 **步骤：**
@@ -527,71 +526,46 @@ void sort_bucket(std::vector<T> &array, int bucketSize) // 桶排序
 
 ![](img/data_structure/20240118181648.png)
 
-[基数排序](https://github.com/su-dd/learning/blob/main/src/algorithm/sort/Sort_Radix.h)
 
 ```cpp
-// 辅助函数，求数据的最大位数
-int maxbit(int data[], int n)
+template <typename T>
+void sort_radix(std::vector<T> &array) // 基数排序
 {
-    int maxData = data[0];		///< 最大数
-    /// 先求出最大数，再求其位数，这样有原先依次每个数判断其位数，稍微优化点。
-    for (int i = 1; i < n; ++i)
-    {
-        if (maxData < data[i])
-            maxData = data[i];
-    }
+    int size = (int)array.size(); // 数组大小
+    if (size <= 1)
+        return;
 
-    int d = 1;
-    int p = 10;
-    while (maxData >= p)
-    {
-        //p *= 10; // Maybe overflow
-        maxData /= 10;
-        ++d;
-    }
-    return d;
-}
+    // 取得数组中的最大数并取得位数
+    int maxNum = *std::max_element(array.begin(), array.end()); // 取得最大值
+    int digit = std::log10(maxNum) + 1;                         // 取得位数
 
-// 基数排序
-void sort_radix(int data[], int n)
-{
-    int d = maxbit(data, n);
-    int* tmp = new int[n];
-    int* count = new int[10]; //计数器
-    int index = 0;
-    int radix = 1;
-    for (int i = 1; i <= d; i++) //进行d次排序
+    // 创建桶
+    std::vector<std::vector<T>> buckets(10);
+
+    for (int i = 0; i < digit; i++) // 按位数分配
     {
-        //每次分配前清空计数器
+        // 按位数分配
+        for (int j = 0; j < size; j++)
+        {
+            int index = (int)(array[j] / std::pow(10, i)) % 10; // 计算索引
+            buckets[index].push_back(array[j]);                 // 放入桶子
+        }
+
+        // 收集数据放在（0~9）号桶中的数据按顺序放到数组中
+        int index = 0;
         for (int j = 0; j < 10; j++)
-            count[j] = 0; 
-
-        for (int j = 0; j < n; j++)
         {
-            index = (data[j] / radix) % 10; //统计每个桶中的记录数
-            count[index]++;
+            if (!buckets[j].empty())
+            {
+                for (int k = 0; k < (int)buckets[j].size(); k++)
+                {
+                    array[index] = buckets[j][k];
+                    index++;
+                }
+                buckets[j].clear(); // 清空桶
+            }
         }
-
-        for (int j = 1; j < 10; j++)
-        {
-            count[j] = count[j - 1] + count[j]; //将tmp中的位置依次分配给每个桶
-        }
-
-        for (int j = n - 1; j >= 0; j--) //将所有桶中记录依次收集到tmp中
-        {
-            index = (data[j] / radix) % 10;
-            tmp[count[index] - 1] = data[j];
-            count[index]--;
-        }
-
-        for (int j = 0; j < n; j++) //将临时数组的内容复制到data中
-        {
-            data[j] = tmp[j];
-        }
-        radix = radix * 10;
     }
-    delete[] tmp;
-    delete[] count;
 }
 ```
 
@@ -776,7 +750,6 @@ int InsertionSearch2(int a[], int value, int low, int high)
 ![](img/data_structure/20240119093239.png)
 
 **已经证明，斐波那契搜索是一种函数估值次数最少的最优搜索方法**
-
 
 [FibonacciSearch](https://github.com/huihut/interview/blob/master/Algorithm/FibonacciSearch.cpp)
 
@@ -968,6 +941,3 @@ bool SearchBST(BiTree T, KeyType key, BiTree f, BiTree &p){
 
 
 ### 令牌桶
-
-
-### 

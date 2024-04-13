@@ -8,5 +8,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON) # 要求使用C++14标准
 add_executable (
     algorithm
     "main.cpp"
-    "sort_algorithm.h"
+    # "sort_algorithm.h"
 )
