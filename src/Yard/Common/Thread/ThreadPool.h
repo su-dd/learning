@@ -9,7 +9,7 @@
 #include <functional>
 #include <iostream>
 
-namespace Common_Thread {
+namespace CommonThread {
 
 template <typename T>
 class SafeQueue
@@ -97,7 +97,7 @@ class ThreadPool
     };
 
 public:
-    explicit ThreadPool(int threadSize = 0) : m_ThreadSize(threadSize), m_done(false)
+    explicit ThreadPool(int threadSize = 0) : m_done(false), m_ThreadSize(threadSize)
     {
         if (m_ThreadSize <= 0)
         {

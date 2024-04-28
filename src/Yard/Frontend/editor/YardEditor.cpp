@@ -3,5 +3,5 @@
 YardEditor::YardEditor(QWidget *parent)
     : QAbstractScrollArea{parent}
 {
-
+    connect()
 }
