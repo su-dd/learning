@@ -22,7 +22,6 @@ INCLUDEPATH += \
 # 头文件
 HEADERS += \
     $$PWD/Thread/ThreadPool.h \
-    Signal/Plugin.h \
     Signal/Signal.h
 
 # 源文件
