@@ -3393,7 +3393,6 @@ B delete
 ```
 
 
-
 #### unique_ptr
 
 std::unique_ptr是一个独占型的智能指针，它不允许其它智能指针共享其内部指针，也不允许unique_ptr的拷贝和赋值。使用方法和shared_ptr类似，区别是不可以拷贝：
