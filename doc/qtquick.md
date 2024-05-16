@@ -453,11 +453,181 @@ ApplicationWindow{
 }
 ```
 
-### 组件和封装
+### 自定义组件
+
+**工程目录：**
+
+```txt
+------ Hello项目
+  |
+  ---- main.qml
+  |
+  ---- Custom
+    |
+    -- CircularButton.qml
+```
+
+自定义组件 CircularButton.qml
+```qml
+import QtQuick
+import QtQuick.Controls
+
+Button {
+    id: root
+    width: 100
+    height: 100
+    background: Rectangle {
+        radius: width / 2
+        color: root.pressed ? "lightgray" : "lightblue"
+        border.color: "blue"
+    }
+    contentItem: Text {
+        text: root.text
+        font.bold: true
+        font.pointSize: 14
+        color: "blue"
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        anchors.centerIn: parent
+    }
+}
+```
 
 
+使用的qml：main.qml
+```qml
+import QtQuick
+import QtQuick.Controls
+import "Custom" // 引入自定义控件所在的文件夹
 
-### 进阶学习
+ApplicationWindow {
+    visible: true
+    width: 200
+    height: 200
+
+    CircularButton {
+        text: "Click me!"
+        anchors.centerIn: parent
+    }
+}
+```
+
+### 动画和状态
+
+#### 1、NumberAnimation
+
+可以使用 `NumberAnimation` 来创建简单的数值动画，例如改变位置、大小或不透明度。下面是一个改变矩形的宽度的示例：
+
+```qml
+Rectangle {
+    width: 100
+    height: 100
+    color: "red"
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            widthAnimation.running = true
+        }
+    }
+
+    NumberAnimation on width {
+        id: widthAnimation
+        from: 100
+        to: 200
+        duration: 1000
+    }
+}
+```
+
+#### 2、PropertyAnimation
+
+更复杂的动画，你可以使用 `PropertyAnimation` 来同时改变多个属性。以下示例同时改变矩形的宽度和高度：
+
+```qml
+Rectangle {
+    width: 100
+    height: 100
+    color: "blue"
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            heightAnimation.running = true
+        }
+    }
+
+    PropertyAnimation on width {
+        from: 100
+        to: 200
+        duration: 1000
+    }
+
+    PropertyAnimation on height {
+        from: 100
+        to: 200
+        duration: 1000
+    }
+}
+```
+
+
+#### 3、State
+
+使用 `State` 和 `StateChangeScript` 定义不同的状态 ；可以使用 `State` 和 `StateChangeScript` 来实现状态转换的效果。
+
+transition 用于在状态之间进行平滑的过渡，使用户界面看起来更加流畅。在 QML 中，你可以使用 transition 元素来定义状态之间的转换动画。下面是一个简单的示例，演示了如何在 QML 中使用 transition。
+
+假设我们有一个简单的矩形，在不同的状态之间切换时需要应用过渡效果，我们可以使用 transition 元素来定义这种过渡效果。
+
+```qml
+import QtQuick
+import QtQuick.Controls
+Rectangle {
+    id: rect
+    width: 100
+    height: 100
+    color: "red"
+
+    states: [
+        State {
+            name: "active"
+            PropertyChanges { target: rect; color: "blue"; }
+        },
+        State {
+            name: "inactive"
+            PropertyChanges { target: rect; color: "red"; }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "active"
+            to: "inactive"
+            NumberAnimation { properties: "color"; duration: 300 }
+        },
+        Transition {
+            from: "inactive"
+            to: "active"
+            ColorAnimation {
+              from: "red"
+              to: "blue"
+            }
+        }
+    ]
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            if (rect.state === 'active')
+                rect.state = 'inactive';
+            else
+                rect.state = 'active';
+        }
+    }
+}
+```
+
 
 	- **布局和组件**：学习Qt Quick提供的各种布局组件和高级组件的使用，如GridLayout、StackLayout、Dialog等。
 	- **动画和状态**：掌握如何在Qt Quick中使用动画和状态，包括PropertyAnimation、State、Transition等，让UI更加生动。
