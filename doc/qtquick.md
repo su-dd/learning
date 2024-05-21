@@ -869,6 +869,296 @@ ApplicationWindow {
 
 ### QtQuick与C++交互
 
+#### 1、Qml中使用C++创建的对象
+
+通过`QQmlContext`将C++对象绑定到QML环境中一遍使用
+
+**C++类**
+```cpp
+#include <QObject>
+class MyCppObject : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
+public:
+    explicit MyCppObject(QObject *parent = nullptr)
+        : QObject(parent), m_value(0)
+    {
+    }
+
+    int value() const
+    {
+        return m_value;
+    }
+
+    void setValue(int newValue)
+    {
+        if (m_value != newValue) {
+            m_value = newValue;
+            emit valueChanged(newValue);
+        }
+    }
+signals:
+    void valueChanged(int newValue);
+private:
+    int m_value;
+};
+```
+
+**Main函数**
+```cpp
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QObject>
+#include <QQmlContext>
+#include <MyCppObject.h>
+
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+                     &app, []() { QCoreApplication::exit(-1); },
+    Qt::QueuedConnection);
+
+    MyCppObject myCppObject(nullptr);
+
+    engine.rootContext()->setContextProperty("myCppObject", &myCppObject); // 绑定c++创建的对象
+    engine.loadFromModule("untitled", "Main");
+
+    return app.exec();
+}
+```
+
+**Main.qml**
+```qml
+import QtQuick
+import QtQuick.Controls
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 300
+    title: "QML and C++ Integration Example"
+    Column {
+        anchors.centerIn: parent
+        Text {
+            text: "Value from C++: " + myCppObject.value
+            font.pointSize: 24
+        }
+        Slider {
+            value: myCppObject.value
+            onValueChanged: myCppObject.value = value
+        }
+    }
+}
+
+```
+
+
+#### 2、Qml中使用C++定义的类型
+
+在Qt中，将C++类型注册到QML中以供使用，可以通过以下几个宏来实现：
+1. `QML_ELEMENT`:
+这个宏用于注册一个可以被QML直接使用的C++类型。它将自动注册类到QML类型系统，并且可以在QML中直接使用，无需额外的注册代码。
+```cpp
+QML_ELEMENT
+class MyCppObject : public QObject {
+    // ...
+};
+```
+2. `QML_DECLARE_TYPE`:
+这个宏用于声明一个类型，但是不注册它。通常用于在QML中使用类的前置声明。
+```cpp
+QML_DECLARE_TYPE(MyCppObject)
+```
+3. `QML_DECLARE_INTERFACE`:
+这个宏用于声明一个接口类型，类似于`QML_DECLARE_TYPE`，但是用于接口类。
+```cpp
+QML_DECLARE_INTERFACE(MyCppObjectInterface)
+```
+4. `qmlRegisterType`:
+这个函数用于在运行时注册一个C++类型，以便在QML中使用。它是最常用的宏之一，尤其是在需要更多控制注册过程时。
+```cpp
+qmlRegisterType<MyCppObject>("MyCppObjectModule", 1, 0, "MyCppObject");
+```
+5. `qmlRegisterSingletonType`:
+这个函数用于注册一个单例类型，确保在QML中只创建一个实例。
+```cpp
+qmlRegisterSingletonType<MyCppObject>("MyCppObjectModule", 1, 0, "MyCppObject", [](QQmlEngine*, QJSEngine*) -> QObject* {
+    return new MyCppObject();
+});
+```
+6. `qmlRegisterUncreatableType`:
+这个函数用于注册一个不能在QML中创建实例的类型，通常用于基类或者接口。
+```cpp
+qmlRegisterUncreatableType<MyBaseClass>("MyCppObjectModule", 1, 0, "MyBaseClass", "MyBaseClass cannot be created in QML");
+```
+7. `QMLAttached`:
+这个宏用于注册一个附加属性或附加对象类型。
+```cpp
+QML_ATTACHED_PROPERTIES(MyCppObjectAttached)
+```
+8. `QML_REQUIRE_TYPE`:
+这个宏用于在QML类型系统中要求一个类型已经被注册。
+```cpp
+QML_REQUIRE_TYPE(MyCppObject)
+```
+这些宏和函数为C++类型提供了不同的注册方式，以满足不同的使用场景。在实际开发中，根据需要选择合适的宏或函数来注册C++类型，以便在QML中能够正确使用。
+
+
+
+实例：`qmlRegisterType`将c++类型注册到qml系统中。
+
+**C++类**
+```cpp
+#include <QObject>
+class MyCppObject : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
+public:
+    explicit MyCppObject(QObject *parent = nullptr)
+        : QObject(parent), m_value(0)
+    {
+    }
+
+    int value() const
+    {
+        return m_value;
+    }
+
+    void setValue(int newValue)
+    {
+        if (m_value != newValue) {
+            m_value = newValue;
+            emit valueChanged(newValue);
+        }
+    }
+signals:
+    void valueChanged(int newValue);
+public slots:
+    // 定义一个槽
+    void doSomething()
+    {
+        // 做一些操作，例如增加value的值
+        setValue(m_value + 1);
+    }
+private:
+    int m_value;
+};
+```
+
+**Main函数**
+```cpp
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <MyCppObject.h>
+
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+
+    // 注册MyCppObject类型
+    qmlRegisterType<MyCppObject>("com.myModule.MyCppObjectModule", 1, 0, "MyCppObject");
+
+    QQmlApplicationEngine engine;
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+                     &app, []() { QCoreApplication::exit(-1); },
+    Qt::QueuedConnection);
+    engine.loadFromModule("untitled", "Main");
+
+    return app.exec();
+}
+```
+
+**Main.qml**
+```qml
+import QtQuick
+import QtQuick.Controls
+import com.myModule.MyCppObjectModule 1.0
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 300
+    title: "QML and C++ Integration Example"
+    Column {
+        anchors.centerIn: parent
+        MyCppObject {
+            id: myCppObject
+            value: 42
+        }
+
+        Text {
+            text: "Value from C++: " + myCppObject.value
+            font.pointSize: 24
+        }
+
+        Button {
+            text: "Do Something"
+            onClicked: myCppObject.doSomething()
+        }
+    }
+}
+```
+
+
+#### 3、C++中使用Qml对象
+
+在C++中使用QML对象通常涉及到创建一个`QQmlEngine`，加载QML组件，并创建该组件的实例。
+
+然后，你可以通过C++与这些QML对象进行交互，包括调用方法、访问属性和连接信号。
+
+首先，假设你有一个名为`MyQmlObject.qml`的QML文件，其中定义了一个简单的对象：
+```qml
+import QtQuick 2.12
+QtObject {
+    id: root
+    property int myProperty: 42
+    signal mySignal(string message)
+    function myMethod() {
+        mySignal("Hello from QML")
+    }
+}
+```
+
+在C++中，你可以这样使用它：
+```cpp
+#include <QGuiApplication>
+#include <QQmlEngine>
+#include <QQmlComponent>
+#include <QDebug>
+int main(int argc, char *argv[]) {
+    QGuiApplication app(argc, argv);
+    QQmlEngine engine;
+    QQmlComponent component(&engine, "qrc:/MyQmlObject.qml");
+    // 创建QML对象的实例
+    QObject *qmlObject = component.create();
+    if (qmlObject) {
+        // 访问QML对象的属性
+        qDebug() << "Property value:" << qmlObject->property("myProperty").toInt();
+        // 调用QML对象的方法
+        qmlObject->setProperty("myProperty", 100);
+        qDebug() << "Updated property value:" << qmlObject->property("myProperty").toInt();
+        // 连接QML对象的信号
+        QObject::connect(qmlObject, SIGNAL(mySignal(QString)), [](const QString &message) {
+            qDebug() << "Signal received:" << message;
+        });
+        // 触发QML对象的方法，以发射信号
+        qmlObject->invokeMethod("myMethod", Qt::DirectConnection);
+    } else {
+        qDebug() << "Error creating QML object";
+    }
+    // 清理
+    delete qmlObject;
+    return app.exec();
+}
+```
+在这个示例中，我们创建了一个`QQmlEngine`，加载了一个QML组件，并创建了该组件的实例。然后，我们通过C++与这个QML对象进行了交互，包括读取和更新属性、调用方法以及连接信号。
+请注意，为了在C++中使用QML对象，你需要确保QML类型已经被正确注册，并且C++类与QML类型对应。此外，如果你想要在C++中使用QML对象中的特定类型或枚举，你可能需要在C++文件中包含相应的QML类型或枚举的定义。
+
+#### 4、C++中使用Qml类型
+
 
 
 ### 性能优化
