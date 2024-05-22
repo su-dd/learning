@@ -1122,43 +1122,64 @@ QtObject {
 }
 ```
 
-在C++中，你可以这样使用它：
+**Main.cpp**
 ```cpp
 #include <QGuiApplication>
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QDebug>
-int main(int argc, char *argv[]) {
+#include "PrintClass.h"
+
+int main(int argc, char *argv[])
+{
     QGuiApplication app(argc, argv);
+
     QQmlEngine engine;
-    QQmlComponent component(&engine, "qrc:/MyQmlObject.qml");
+    QQmlComponent component(&engine, "untitled", "Main");
     // 创建QML对象的实例
     QObject *qmlObject = component.create();
-    if (qmlObject) {
+    PrintClass* print = new PrintClass();
+    if (qmlObject)
+    {
         // 访问QML对象的属性
         qDebug() << "Property value:" << qmlObject->property("myProperty").toInt();
         // 调用QML对象的方法
         qmlObject->setProperty("myProperty", 100);
         qDebug() << "Updated property value:" << qmlObject->property("myProperty").toInt();
         // 连接QML对象的信号
-        QObject::connect(qmlObject, SIGNAL(mySignal(QString)), [](const QString &message) {
-            qDebug() << "Signal received:" << message;
-        });
+        QObject::connect(qmlObject, SIGNAL(mySignal(QString)),
+                         print, SLOT(printMessage(QString)));
         // 触发QML对象的方法，以发射信号
-        qmlObject->invokeMethod("myMethod", Qt::DirectConnection);
-    } else {
+        qmlObject->metaObject()->invokeMethod(qmlObject, "myMethod", Qt::DirectConnection);
+    }
+    else
+    {
         qDebug() << "Error creating QML object";
     }
-    // 清理
     delete qmlObject;
+    delete print;
+
     return app.exec();
 }
 ```
+
+**PrintClass.h**
+```cpp
+#include <QObject>
+#include <QDebug>
+class PrintClass : public QObject
+{
+    Q_OBJECT
+public slots:
+    void printMessage(QString message)
+    {
+        qDebug() << "Signal received:" << message;
+    }
+};
+```
+
 在这个示例中，我们创建了一个`QQmlEngine`，加载了一个QML组件，并创建了该组件的实例。然后，我们通过C++与这个QML对象进行了交互，包括读取和更新属性、调用方法以及连接信号。
 请注意，为了在C++中使用QML对象，你需要确保QML类型已经被正确注册，并且C++类与QML类型对应。此外，如果你想要在C++中使用QML对象中的特定类型或枚举，你可能需要在C++文件中包含相应的QML类型或枚举的定义。
-
-#### 4、C++中使用Qml类型
-
 
 
 ### 性能优化
