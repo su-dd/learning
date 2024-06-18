@@ -133,6 +133,8 @@ public:
 		{
 			if (m_threads.at(i).joinable()) // 判断线程是否在等待状态
 			{
+				pthread_join
+					m_threads.at(i);
 				m_threads.at(i).join(); // 将线程加入等待队列
 			}
 		}
