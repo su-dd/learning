@@ -20,6 +20,9 @@ void MyEditor::paintEvent(QPaintEvent *event)
 
 void MyEditor::scrollContentsBy(int dx, int dy)
 {
-
+    auto x = m_offset.x() + dx;
+    auto y = m_offset.y() + dy;
+    m_offset = QPoint(x, y);
+    viewport()->update();
 }
 
