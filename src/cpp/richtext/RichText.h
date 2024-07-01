@@ -6,27 +6,30 @@
 #include <QTimer>
 #include <QTextLayout>
 #include <memory>
-
-class Widget : public QAbstractScrollArea
+#include "TextSeletion.h"
+// 富文本组件
+class RichText : public QAbstractScrollArea
 {
     Q_OBJECT
-
 public:
-    Widget(QWidget *parent = nullptr);
-    ~Widget();
+    RichText(QWidget *parent = nullptr);
+    ~RichText();
 public slots:
     void toggleCursor();
+
 protected:
-    void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent *event) override;
     void scrollContentsBy(int dx, int dy) override;
     void mousePressEvent(QMouseEvent *event) override;
+
 private:
-    QPoint m_offset;
-    std::unique_ptr<QTextLayout> m_pTextLayout;
-    QTimer *m_pTimer;
-    bool m_bShowCursor;
     QString m_text;
     QFont m_font;
-    int m_nCursor;
+    QPoint m_offset;
+    std::unique_ptr<QTextLayout> m_pTextLayout;
+    std::unique_ptr<TextSeletion> m_pTextSeletion;
+    std::unique_ptr<QTimer> m_pTimer;
+    bool m_bShowCursor;
+    int m_nCursorIndex;
 };
 #endif // WIDGET_H
