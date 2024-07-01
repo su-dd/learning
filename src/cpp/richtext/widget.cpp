@@ -4,14 +4,10 @@
 #include <QPainter>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QDebug>
 
 Widget::Widget(QWidget *parent)
-    : QAbstractScrollArea(parent)
-    , m_offset(100, 100)
-    , m_pTimer(new QTimer())
-    , m_bShowCursor(true)
-    , m_pTextLayout(std::make_unique<QTextLayout>())
-    , m_nCursor(-1)
+    : QAbstractScrollArea(parent), m_offset(100, 100), m_pTimer(new QTimer()), m_bShowCursor(true), m_pTextLayout(std::make_unique<QTextLayout>()), m_nCursor(-1)
 {
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled);
@@ -19,7 +15,6 @@ Widget::Widget(QWidget *parent)
     connect(m_pTimer, &QTimer::timeout, this, &Widget::toggleCursor);
     m_pTimer->start(500); // 闪烁间隔为500毫秒
     m_text = QStringLiteral("这是一个示例文本，它可能会很长，需要换行显示。");
-    // m_text = QString::fromLocal8Bit("这是一个示例文本，它可能会很长，需要换行显示。");
     m_font.setFamily("JetBrains Mono");
     m_font.setPointSize(12);
     m_pTextLayout->setText(m_text);
@@ -82,7 +77,8 @@ void Widget::scrollContentsBy(int dx, int dy)
 void Widget::mousePressEvent(QMouseEvent *event)
 {
     // 鼠标点击事件
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton)
+    {
         // 计算点击位置对应的字符位置
         QPointF pos = event->localPos();
         qDebug() << "pos mousePressEvent: " << pos;
@@ -105,4 +101,3 @@ void Widget::mousePressEvent(QMouseEvent *event)
         viewport()->update(); // 更新显示
     }
 }
-
