@@ -2,9 +2,9 @@
 #define __TEXTSELETION_H__
 
 #include <QColor>
-#include <tuple>
-class TextSeletion
-{
+#include <utility>
+class TextSeletion {
+
 public:
     TextSeletion(int start, int end, QColor oColor);
     ~TextSeletion();
@@ -15,7 +15,7 @@ public:
     void setEnd(int n);
     void setColor(QColor m_oColor);
 
-    std::tuple<int, int> getSeletion();
+    std::pair<int, int> getSeletion();
     QColor getColor() const;
 
 private:

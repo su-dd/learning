@@ -1,44 +1,28 @@
 #include "TextSeletion.h"
 
 TextSeletion::TextSeletion(int start, int end, QColor color)
-    : m_nStart(start), m_nEnd(end), m_oColor(color)
+    : m_nStart(start)
+    , m_nEnd(end)
+    , m_oColor(color)
 {
 }
 
-TextSeletion::~TextSeletion()
-{
-}
+TextSeletion::~TextSeletion() { }
 
-bool TextSeletion::isVaild()
-{
-    return m_nStart != m_nEnd;
-}
+bool TextSeletion::isVaild() { return m_nStart != m_nEnd; }
 
-void TextSeletion::setStart(int n)
-{
-    m_nStart = n;
-}
+void TextSeletion::setStart(int n) { m_nStart = n; }
 
-void TextSeletion::setEnd(int n)
-{
-    m_nEnd = n;
-}
+void TextSeletion::setEnd(int n) { m_nEnd = n; }
 
-void TextSeletion::setColor(QColor color)
-{
-    m_oColor = color;
-}
+void TextSeletion::setColor(QColor color) { m_oColor = color; }
 
-std::tuple<int, int> TextSeletion::getSeletion()
+std::pair<int, int> TextSeletion::getSeletion()
 {
-    if (m_nStart > m_nEnd)
-    {
-        return std::make_tuple(m_nEnd, m_nStart);
+    if (m_nStart > m_nEnd) {
+        return std::make_pair(m_nEnd, m_nStart);
     }
-    return std::make_tuple(m_nStart, m_nEnd);
+    return std::make_pair(m_nStart, m_nEnd);
 }
 
-QColor TextSeletion::getColor() const
-{
-    return m_oColor;
-}
+QColor TextSeletion::getColor() const { return m_oColor; }
