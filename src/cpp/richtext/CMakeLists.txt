@@ -24,6 +24,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(richText
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        Widget.h Widget.cpp
+        RichTextNode.h RichTextNode.cpp
+        Paragraph.h Paragraph.cpp
+        ParagraphNode.h ParagraphNode.cpp
+        Node.h Node.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET untitled1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -8,7 +8,8 @@
 #include <QWidget>
 #include <memory>
 // 富文本组件
-class RichText : public QFrame {
+class RichText : public QFrame
+{
     Q_OBJECT
 public:
     RichText(QWidget* parent = nullptr);
@@ -20,9 +21,6 @@ protected:
     void paintEvent(QPaintEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
-
     int getTextIndexByPos(QPointF& pos);
 
 
@@ -33,7 +31,7 @@ private:
     std::unique_ptr<QTextLayout> m_pTextLayout;
     std::unique_ptr<TextSeletion> m_pTextSeletion;
     std::unique_ptr<QTimer> m_pTimer;
-    bool m_bShowCursor;
     int m_nCursorIndex;
+    bool m_bShowCursor;
 };
 #endif // WIDGET_H
