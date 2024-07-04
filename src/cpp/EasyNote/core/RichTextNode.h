@@ -11,7 +11,7 @@ class RichTextNode : public Node
 public:
     explicit RichTextNode(QFont font, QObject *parent = nullptr);
 
-    virtual fillInfo(QJsonObject object);
+    virtual void fillInfo(QJsonObject object);
     virtual QJsonObject saveInfo();
 
     const QFont &defaultFont() const;
@@ -23,7 +23,7 @@ public:
 private:
     QFont m_oDefaultfont;
     QString m_sText;
-    std::unique_ptr<TextSeletion> m_pTextSeletion;
+    // std::unique_ptr<TextSeletion> m_pTextSeletion;
     QList<QTextLayout::FormatRange> m_oFormatRange;
     int m_nCursorIndex;
     bool m_nIsActivating;

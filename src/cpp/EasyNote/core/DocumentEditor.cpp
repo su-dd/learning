@@ -1,14 +1,13 @@
-#include "Widget.h"
+#include "DocumentEditor.h"
+#include <QMouseEvent>
 
-Widget::Widget() {}
-
-Widget::Widget(QWidget *parent)
+DocumentEditor::DocumentEditor(QWidget *parent)
     :QWidget(parent)
 {
 
 }
 
-void Widget::mousePressEvent(QMouseEvent *event)
+void DocumentEditor::mousePressEvent(QMouseEvent *event)
 {
     // 鼠标点击事件
     if (event->button() == Qt::LeftButton) {
@@ -19,7 +18,7 @@ void Widget::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
-void Widget::mouseMoveEvent(QMouseEvent *event)
+void DocumentEditor::mouseMoveEvent(QMouseEvent *event)
 {
     // 鼠标移动事件
     if (event->buttons() & Qt::LeftButton) {

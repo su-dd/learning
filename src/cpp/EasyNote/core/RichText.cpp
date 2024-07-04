@@ -114,16 +114,6 @@ void RichText::mouseMoveEvent(QMouseEvent* event)
     QFrame::mouseMoveEvent(event);
 }
 
-void RichText::mouseReleaseEvent(QMouseEvent* event)
-{
-    QFrame::mouseReleaseEvent(event);
-}
-
-void RichText::keyPressEvent(QKeyEvent* event)
-{
-    QFrame::keyPressEvent(event);
-}
-
 int RichText::getTextIndexByPos(QPointF& pos)
 {
     int nTextIndex = -1;

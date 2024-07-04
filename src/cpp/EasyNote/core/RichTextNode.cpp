@@ -6,14 +6,14 @@ RichTextNode::RichTextNode(QFont font, QObject *parent)
 
 }
 
-RichTextNode::fillInfo(QJsonObject object)
+void RichTextNode::fillInfo(QJsonObject object)
 {
 
 }
 
 QJsonObject RichTextNode::saveInfo()
 {
-
+    return QJsonObject();
 }
 
 const QFont &RichTextNode::defaultFont() const

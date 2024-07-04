@@ -10,7 +10,7 @@ public:
     explicit Node(QObject *parent = nullptr);
     virtual ~Node();
 
-    virtual fillInfo(QJsonObject object) = 0;
+    virtual void fillInfo(QJsonObject object) = 0;
     virtual QJsonObject saveInfo() = 0;
 };
 
