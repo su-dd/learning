@@ -1,14 +1,17 @@
+#include <QCoreApplication>
 #include <QtTest>
+#include "Document.h"
 #include <QString>
+
 // add necessary includes here
 
-class Test_Document : public QObject
+class test_document : public QObject
 {
     Q_OBJECT
 
 public:
-    Test_Document();
-    ~Test_Document();
+    test_document();
+    ~test_document();
 
 private slots:
     void initTestCase();
@@ -16,19 +19,23 @@ private slots:
     void test_case1();
 };
 
-Test_Document::Test_Document() {}
+test_document::test_document() {}
 
-Test_Document::~Test_Document() {}
+test_document::~test_document() {}
 
-void Test_Document::initTestCase() {}
+void test_document::initTestCase() {}
 
-void Test_Document::cleanupTestCase() {}
+void test_document::cleanupTestCase() {}
 
-void Test_Document::test_case1()
+void test_document::test_case1()
 {
-    QVERIFY(true);
+    QString sDoc =
+        QStringLiteral("");
+
+    Document oDocument;
+    oDocument.init(sDoc);
 }
 
-QTEST_APPLESS_MAIN(Test_Document)
+QTEST_MAIN(test_document)
 
 #include "tst_test_document.moc"

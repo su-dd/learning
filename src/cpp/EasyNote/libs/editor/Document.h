@@ -16,6 +16,8 @@ public:
     QString save();
 
 
+
+
 private:
     QJsonDocument m_oJsonDocument;
 };
