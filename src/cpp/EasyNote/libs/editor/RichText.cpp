@@ -8,8 +8,8 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-RichText::RichText(QWidget* parent)
-    : QFrame(parent)
+RichTextFrame::RichTextFrame(QWidget* parent)
+    : NodeEditor(parent)
     , m_offset(10, 10)
     , m_pTextLayout(std::make_unique<QTextLayout>())
     , m_pTextSeletion(std::make_unique<TextSeletion>(0, 0, QColor(Qt::red)))
@@ -20,7 +20,7 @@ RichText::RichText(QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled);
     setMouseTracking(true);
-    connect(m_pTimer.get(), &QTimer::timeout, this, &RichText::toggleCursor);
+    connect(m_pTimer.get(), &QTimer::timeout, this, &RichTextFrame::toggleCursor);
     m_pTimer->start(500); // 闪烁间隔为500毫秒
     m_text = QStringLiteral(
         "这是一个示例文本，它可能会很长，需要换行显示。这是一个示例文本，它可能会很"
@@ -32,15 +32,15 @@ RichText::RichText(QWidget* parent)
     m_pTextLayout->setFont(m_font);
 }
 
-RichText::~RichText() { }
+RichTextFrame::~RichTextFrame() { }
 
-void RichText::toggleCursor()
+void RichTextFrame::toggleCursor()
 {
     m_bShowCursor = !m_bShowCursor;
     update(); // 触发重新绘制
 }
 
-void RichText::paintEvent(QPaintEvent* event)
+void RichTextFrame::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     painter.save();
@@ -84,7 +84,7 @@ void RichText::paintEvent(QPaintEvent* event)
     QFrame::paintEvent(event);
 }
 
-void RichText::mousePressEvent(QMouseEvent* event)
+void RichTextFrame::mousePressEvent(QMouseEvent* event)
 {
     // 鼠标点击事件
     if (event->button() == Qt::LeftButton) {
@@ -99,7 +99,7 @@ void RichText::mousePressEvent(QMouseEvent* event)
     QFrame::mousePressEvent(event);
 }
 
-void RichText::mouseMoveEvent(QMouseEvent* event)
+void RichTextFrame::mouseMoveEvent(QMouseEvent* event)
 {
     // 鼠标移动事件
     if (event->buttons() & Qt::LeftButton) {
@@ -114,7 +114,7 @@ void RichText::mouseMoveEvent(QMouseEvent* event)
     QFrame::mouseMoveEvent(event);
 }
 
-int RichText::getTextIndexByPos(QPointF& pos)
+int RichTextFrame::getTextIndexByPos(QPointF& pos)
 {
     int nTextIndex = -1;
     for (int i = 0; i < m_pTextLayout->lineCount(); ++i) {

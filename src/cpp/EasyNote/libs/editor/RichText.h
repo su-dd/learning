@@ -2,18 +2,43 @@
 #define WIDGET_H
 
 #include "TextSeletion.h"
+#include "Node.h"
 #include <QAbstractScrollArea>
 #include <QTextLayout>
 #include <QTimer>
-#include <QWidget>
 #include <memory>
-// 富文本组件
-class RichText : public QFrame
+
+class RichText : public Node
 {
     Q_OBJECT
 public:
-    RichText(QWidget* parent = nullptr);
-    ~RichText();
+    explicit RichText(QJsonObject object, QObject *parent = nullptr);
+
+    virtual void fillInfo(QJsonObject object);
+    virtual QJsonObject saveInfo();
+
+    const QFont &defaultFont() const;
+    const QString &text() const;
+    QList<QTextLayout::FormatRange> getFormatRange();
+
+    void insert();
+    void remove();
+private:
+    QFont m_oDefaultfont;
+    QString m_sText;
+    // std::unique_ptr<TextSeletion> m_pTextSeletion;
+    QList<QTextLayout::FormatRange> m_oFormatRange;
+    int m_nCursorIndex;
+    bool m_nIsActivating;
+};
+
+// 富文本组件
+class RichTextFrame : public NodeEditor
+{
+    Q_OBJECT
+public:
+    RichTextFrame(QWidget* parent = nullptr);
+    ~RichTextFrame();
 public slots:
     void toggleCursor();
 

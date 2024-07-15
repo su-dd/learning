@@ -1,11 +1,11 @@
+#include "Document.h"
 #include "RichText.h"
-
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    RichText text;
-    text.show();
+    RichTextFrame oFrame;
+    oFrame.show();
     return a.exec();
 }

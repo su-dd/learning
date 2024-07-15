@@ -13,15 +13,15 @@ endif ()
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+file(GLOB_RECURSE CPP_FILES *.cpp *.h) # file(GLOB_RECURSE <variable> <pattern> [...]) 将符合特定模式的文件列表存储在变量中，包括子目录中的文件。
+foreach (filepath ${CPP_FILES})
+    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
+    list(APPEND SOURCES_FILES ${filename})
+endforeach (filepath)
+
+#添加可执行文件
 set(PROJECT_SOURCES
-        RichText.h RichText.cpp
-        TextSeletion.h TextSeletion.cpp
-        DocumentEditor.h DocumentEditor.cpp
-        RichTextNode.h RichTextNode.cpp
-        Paragraph.h Paragraph.cpp
-        ParagraphNode.h ParagraphNode.cpp
-        Node.h Node.cpp
-        Document.h Document.cpp
+    ${SOURCES_FILES}
 )
 
 add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCES})

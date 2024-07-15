@@ -3,8 +3,8 @@
 
 #include <QColor>
 #include <utility>
-class TextSeletion {
-
+class TextSeletion
+{
 public:
     TextSeletion(int start, int end, QColor oColor);
     ~TextSeletion();

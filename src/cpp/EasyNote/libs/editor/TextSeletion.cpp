@@ -1,13 +1,11 @@
 #include "TextSeletion.h"
 
 TextSeletion::TextSeletion(int start, int end, QColor color)
-    : m_nStart(start)
-    , m_nEnd(end)
-    , m_oColor(color)
+    : m_nStart(start), m_nEnd(end), m_oColor(color)
 {
 }
 
-TextSeletion::~TextSeletion() { }
+TextSeletion::~TextSeletion() {}
 
 bool TextSeletion::isVaild() { return m_nStart != m_nEnd; }
 
@@ -19,7 +17,8 @@ void TextSeletion::setColor(QColor color) { m_oColor = color; }
 
 std::pair<int, int> TextSeletion::getSeletion()
 {
-    if (m_nStart > m_nEnd) {
+    if (m_nStart > m_nEnd)
+    {
         return std::make_pair(m_nEnd, m_nStart);
     }
     return std::make_pair(m_nStart, m_nEnd);

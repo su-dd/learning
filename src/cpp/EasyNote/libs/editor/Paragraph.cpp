@@ -1,3 +1,4 @@
 #include "Paragraph.h"
 
-Paragraph::Paragraph() {}
+ParagraphNode::ParagraphNode(QObject *parent)
+ {}
