@@ -12,31 +12,32 @@
 
 class Document : public QObject
 {
+    Q_OBJECT
 public:
     Document(QObject *parent = nullptr);
     ~Document();
 
-    void init(QString info);
-    QString save();
+    void initWithJson(QString info);
+    QString saveToJson();
 
 private:
-    QJsonDocument m_oJsonDocument;
+    NodePtr m_oNodePtr;
 };
 
 class DocumentEditor : public QWidget
 {
 public:
-    DocumentEditor(QWidget* parent = nullptr);
+    DocumentEditor(QWidget *parent = nullptr);
     void init(QString info);
     QString save();
+
 protected:
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     QPointer<Document> m_pDocument;
-    QList<QWidget*> m_oWidgetList;
+    QList<QWidget *> m_oWidgetList;
 };
-
 
 #endif // DOCUMENT_H

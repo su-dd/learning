@@ -7,6 +7,10 @@ class ParagraphNode : public Node
 {
 public:
     ParagraphNode(QObject *parent = nullptr);
+    virtual ~ParagraphNode();
+
+private:
+    NodePtr m_pNode;
 };
 REGISTER_NODE(ParagraphNode, "Paragraph");
 

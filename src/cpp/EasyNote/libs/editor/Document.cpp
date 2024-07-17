@@ -2,20 +2,25 @@
 
 Document::Document(QObject *parent)
 {
-
 }
 
 Document::~Document()
 {
-
 }
 
-void Document::init(QString info)
+void Document::initWithJson(QString info)
 {
-    // m_oJsonDocument = QJsonDocument::fromJson(info.to);
+    QJsonParseError oError;
+    m_oJsonDocument = QJsonDocument::fromJson(info.toUtf8(), &oError);
+    if (oError.error != NoError)
+    {
+        qDebug() << oError.errorString();
+        return;
+    }
+
 }
 
-QString Document::save()
+QString Document::saveToJson()
 {
     return nullptr;
 }

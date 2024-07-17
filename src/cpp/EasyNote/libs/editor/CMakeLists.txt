@@ -10,8 +10,8 @@ else ()
     set(APPLICATION_DIR_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 endif ()
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Gui Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Widgets)
 
 file(GLOB_RECURSE CPP_FILES *.cpp *.h) # file(GLOB_RECURSE <variable> <pattern> [...]) 将符合特定模式的文件列表存储在变量中，包括子目录中的文件。
 foreach (filepath ${CPP_FILES})

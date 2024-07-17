@@ -4,39 +4,41 @@
 #include <memory>
 #include <QObject>
 #include <QJsonObject>
-#include <QFrame>
+#include <QWidget>
 #include <functional>
 #include <map>
 #include <string>
 #include <memory>
 #include <QJsonObject>
 
-class Node : public QObject
-{
-public:
-    explicit Node(QObject *parent = nullptr)
-        : QObject(parent)
-    {
-    }
-    virtual ~Node() {}
-
-    virtual void init(QJsonObject object) {}
-    virtual QJsonObject toInfo() { return QJsonObject(); }
-};
-
-class NodeEditor : public QFrame
-{
-public:
-    explicit NodeEditor(QWidget *parent = nullptr)
-        : QFrame(parent)
-    {
-    }
-    virtual ~NodeEditor()
-    {
-    }
-};
+class Node;
+class NodeEditor;
 
 using NodePtr = std::shared_ptr<Node>;
+using NodeEditorPtr = std::shared_ptr<NodeEditor>;
+using NodePtrList = std::vector<NodePtr>;
+using NodeEditorPtrList = std::vector<NodeEditorPtr>;
+
+class Node : public QObject
+{
+    Q_OBJECT
+public:
+    explicit Node(QObject *parent = nullptr);
+    virtual ~Node();
+
+    virtual void initWithJson(QJsonObject &object) {}
+    virtual QJsonObject saveToJson() { return QJsonObject(); }
+
+protected:
+    NodePtrList m_oNodes;
+};
+
+class NodeEditor : public QWidget
+{
+public:
+    explicit NodeEditor(QWidget *parent = nullptr);
+    virtual ~NodeEditor();
+};
 
 class NodeFactory
 {
@@ -62,19 +64,7 @@ public:
         static NodeFactory instance;
         return instance;
     }
-
-    NodePtr createShape(QString info, QJsonObject object)
-    {
-        QString sKey = info.split("|").at(0);
-        auto it = m_oFactoryRegistry.find(sKey.toStdString());
-        if (it != m_oFactoryRegistry.end())
-        {
-            auto result = it->second();
-            result->init(object);
-            return result;
-        }
-        return nullptr;
-    }
+    NodePtr createNode(QString info, QJsonObject &object);
 
 private:
     // 类的构造函数注册表

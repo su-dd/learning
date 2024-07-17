@@ -81,7 +81,7 @@ void RichTextFrame::paintEvent(QPaintEvent* event)
     }
 
     painter.restore();
-    QFrame::paintEvent(event);
+    NodeEditor::paintEvent(event);
 }
 
 void RichTextFrame::mousePressEvent(QMouseEvent* event)
@@ -96,7 +96,7 @@ void RichTextFrame::mousePressEvent(QMouseEvent* event)
         m_pTextSeletion->setEnd(m_nCursorIndex);
         update(); // 更新显示
     }
-    QFrame::mousePressEvent(event);
+    NodeEditor::mousePressEvent(event);
 }
 
 void RichTextFrame::mouseMoveEvent(QMouseEvent* event)
@@ -111,7 +111,7 @@ void RichTextFrame::mouseMoveEvent(QMouseEvent* event)
             m_pTextSeletion->setEnd(m_nCursorIndex);
         update(); // 更新显示
     }
-    QFrame::mouseMoveEvent(event);
+    NodeEditor::mouseMoveEvent(event);
 }
 
 int RichTextFrame::getTextIndexByPos(QPointF& pos)

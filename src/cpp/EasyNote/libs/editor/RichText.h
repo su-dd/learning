@@ -23,10 +23,10 @@ public:
 
     void insert();
     void remove();
+
 private:
     QFont m_oDefaultfont;
     QString m_sText;
-    // std::unique_ptr<TextSeletion> m_pTextSeletion;
     QList<QTextLayout::FormatRange> m_oFormatRange;
     int m_nCursorIndex;
     bool m_nIsActivating;
@@ -37,17 +37,16 @@ class RichTextFrame : public NodeEditor
 {
     Q_OBJECT
 public:
-    RichTextFrame(QWidget* parent = nullptr);
+    RichTextFrame(QWidget *parent = nullptr);
     ~RichTextFrame();
 public slots:
     void toggleCursor();
 
 protected:
-    void paintEvent(QPaintEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    int getTextIndexByPos(QPointF& pos);
-
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    int getTextIndexByPos(QPointF &pos);
 
 private:
     QString m_text;
