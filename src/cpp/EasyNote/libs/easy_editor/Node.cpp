@@ -1,18 +1,31 @@
 #include "Node.h"
 
 Node::Node(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+    m_pEditorPtr(nullptr)
 {
 }
 
 Node::~Node()
 {
+    if (m_pEditorPtr)
+    {
+        delete m_pEditorPtr.data();
+    }
+}
 
+NodeEditorPtr Node::getEditor(QWidget *parent)
+{
+    if (m_pEditorPtr)
+    {
+        m_pEditorPtr = createEditor(parent);
+    }
+    return m_pEditorPtr;
 }
 
 void Node::initWithJson(QJsonObject &object)
 {
-
+    // do nothing
 }
 
 QJsonObject Node::saveToJson()
@@ -20,14 +33,14 @@ QJsonObject Node::saveToJson()
     return QJsonObject();
 }
 
-NodeEditorPtr Node::getEditor()
+NodeEditorPtr Node::createEditor(QWidget *parent)
 {
-    return NodeEditorPtr();
+    return new NodeEditor(this, parent);
 }
 
-
-NodeEditor::NodeEditor(QWidget *parent)
-    : QWidget(parent)
+NodeEditor::NodeEditor(Node *node, QWidget *parent)
+    : QWidget(parent),
+    m_oNodePtr(node)
 {
 }
 
@@ -37,10 +50,9 @@ NodeEditor::~NodeEditor()
 }
 
 
-NodePtr NodeFactory::createNode(QString info, QJsonObject &object)
+NodeSharedPtr NodeFactory::createNode(QString key, QJsonObject &object)
 {
-    QString sKey = info.split("|").at(0);
-    auto it = m_oFactoryRegistry.find(sKey.toStdString());
+    auto it = m_oFactoryRegistry.find(key.toStdString());
     if (it != m_oFactoryRegistry.end())
     {
         auto result = it->second();

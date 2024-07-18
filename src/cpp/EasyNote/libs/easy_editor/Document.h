@@ -20,23 +20,21 @@ public:
 public:
     void initWithJson(QJsonObject &object) override;
     QJsonObject saveToJson() override;
-    NodeEditorPtr getEditor() override;
+    NodeEditorPtr createEditor(QWidget *parent) override;
 private:
-    NodePtr m_oNodePtr;
+    NodeSharedPtr m_oNodeSharedPtr;
 };
 
 class DocumentEditor : public NodeEditor
 {
 public:
-    DocumentEditor(QWidget *parent = nullptr);
+    DocumentEditor(Node* node, QWidget *parent = nullptr);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-    QPointer<Document> m_pDocument;
-    QList<QWidget *> m_oWidgetList;
 };
 
 #endif // DOCUMENT_H

@@ -18,25 +18,34 @@ void Document::initWithJson(QString info)
         qDebug() << oError.errorString();
         return;
     }
-    initWithJson(oJsonDocument);
+    QJsonObject oObject = oJsonDocument.object();
+    initWithJson(oObject);
 }
 
 void Document::initWithJson(QJsonObject &object)
 {
-
+    QJsonObject oDocument = object.value(c_sEditor_Key_document).toObject();
+    if (!oDocument.isEmpty())
+    {
+        QString sType = oDocument.value(c_sEditor_Key_type).toString();
+        m_oNodeSharedPtr = NodeFactory::instance().createNode(sType, oDocument);
+    }
 }
 
 QJsonObject Document::saveToJson()
 {
-    return QJsonObject();
+    QJsonObject oObject;
+    oObject.insert(c_sEditor_Key_document, m_oNodeSharedPtr->saveToJson());
+    return oObject;
 }
 
-NodeEditorPtr Document::getEditor()
+NodeEditorPtr Document::createEditor(QWidget *parent)
 {
-
+    return new DocumentEditor(this, parent);
 }
 
-DocumentEditor::DocumentEditor(QWidget *parent)
+DocumentEditor::DocumentEditor(Node *node, QWidget *parent)
+    : NodeEditor(node, parent)
 {
 
 }

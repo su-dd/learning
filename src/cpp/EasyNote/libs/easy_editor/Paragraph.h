@@ -8,16 +8,19 @@ class ParagraphNode : public Node
 public:
     ParagraphNode(QObject *parent = nullptr);
     virtual ~ParagraphNode();
-
+public:
+    virtual void initWithJson(QJsonObject &object);
+    virtual QJsonObject saveToJson();
+    virtual NodeEditorPtr createEditor(QWidget *parent);
 private:
-    NodePtr m_pNode;
+    NodeSharedPtr m_oNodeSharedPtr;
 };
-REGISTER_NODE(ParagraphNode, "Paragraph");
+REGISTER_NODE(ParagraphNode, c_sEditor_node_type_paragraph.toStdString());
 
 class ParagraphEditor : public NodeEditor
 {
 public:
-    ParagraphEditor();
+    ParagraphEditor(Node* node, QWidget *parent = nullptr);
 };
 
 #endif // PARAGRAPH_H

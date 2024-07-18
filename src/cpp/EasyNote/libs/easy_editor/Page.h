@@ -11,19 +11,20 @@ class Page : public Node
 public:
     Page(QObject *parent = 0);
     ~Page();
-
+public:
     void initWithJson(QJsonObject &object) override;
     QJsonObject saveToJson() override;
+    NodeEditorPtr createEditor(QWidget *parent) override;
 
 private:
-    NodePtrList m_oNodePtrList;
+    NodeSharedPtrList m_oNodeSharedPtrList;
 };
 
-class PageEditor : public QFrame
+class PageEditor : public NodeEditor
 {
     Q_OBJECT
 public:
-    PageEditor();
+    PageEditor(Node* node, QWidget *parent = nullptr);
     ~PageEditor();
 };
 

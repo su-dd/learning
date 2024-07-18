@@ -1,5 +1,5 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef RICHTEXT_H
+#define RICHTEXT_H
 
 #include "TextSeletion.h"
 #include "Node.h"
@@ -8,21 +8,17 @@
 #include <QTimer>
 #include <memory>
 
-class RichText : public Node
+class RichTextNode : public Node
 {
     Q_OBJECT
 public:
-    explicit RichText(QJsonObject object, QObject *parent = nullptr);
+    explicit RichTextNode(QObject *parent = nullptr);
+    virtual ~RichTextNode();
 
-    virtual void fillInfo(QJsonObject object);
-    virtual QJsonObject saveInfo();
-
-    const QFont &defaultFont() const;
-    const QString &text() const;
-    QList<QTextLayout::FormatRange> getFormatRange();
-
-    void insert();
-    void remove();
+public:
+    void initWithJson(QJsonObject &object) override;
+    QJsonObject saveToJson() override;
+    NodeEditorPtr createEditor(QWidget *parent) override;
 
 private:
     QFont m_oDefaultfont;
@@ -31,13 +27,14 @@ private:
     int m_nCursorIndex;
     bool m_nIsActivating;
 };
+REGISTER_NODE(RichTextNode, c_sEditor_node_type_richText.toStdString());
 
 // 富文本组件
 class RichTextEditor : public NodeEditor
 {
     Q_OBJECT
 public:
-    RichTextEditor(QWidget *parent = nullptr);
+    RichTextEditor(Node* node, QWidget *parent = nullptr);
     ~RichTextEditor();
 public slots:
     void toggleCursor();
@@ -58,4 +55,4 @@ private:
     int m_nCursorIndex;
     bool m_bShowCursor;
 };
-#endif // WIDGET_H
+#endif // RICHTEXT_H

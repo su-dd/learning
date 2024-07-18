@@ -8,8 +8,36 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-RichTextEditor::RichTextEditor(QWidget* parent)
-    : NodeEditor(parent)
+
+RichTextNode::RichTextNode(QObject *parent)
+    : Node(parent)
+{
+
+}
+
+RichTextNode::~RichTextNode()
+{
+
+}
+
+void RichTextNode::initWithJson(QJsonObject &object)
+{
+
+}
+
+QJsonObject RichTextNode::saveToJson()
+{
+
+}
+
+NodeEditorPtr RichTextNode::createEditor(QWidget *parent)
+{
+    return new RichTextEditor(this, parent);
+}
+
+
+RichTextEditor::RichTextEditor(Node *node, QWidget* parent)
+    : NodeEditor(node, parent)
     , m_offset(10, 10)
     , m_pTextLayout(std::make_unique<QTextLayout>())
     , m_pTextSeletion(std::make_unique<TextSeletion>(0, 0, QColor(Qt::red)))

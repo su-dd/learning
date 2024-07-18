@@ -1,5 +1,5 @@
-#ifndef __TEXTSELETION_H__
-#define __TEXTSELETION_H__
+#ifndef TEXTSELETION_H
+#define TEXTSELETION_H
 
 #include <QColor>
 #include <utility>
@@ -23,4 +23,4 @@ private:
     int m_nEnd;
     QColor m_oColor;
 };
-#endif // __TEXTSELETION_H__
+#endif // TEXTSELETION_H

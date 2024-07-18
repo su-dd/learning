@@ -11,14 +11,20 @@
 #include <memory>
 #include <QJsonObject>
 #include <QPointer>
+#include <QList>
+#include "EditorConst.h"
 
 class Node;
 class NodeEditor;
 
-using NodePtr = std::shared_ptr<Node>;
+using NodeSharedPtr = std::shared_ptr<Node>;
+using NodeSharedPtrList = QList<NodeSharedPtr>;
+
+using NodePtr = QPointer<Node>;
+using NodePtrList = QList<NodeEditorPtr>;
+
 using NodeEditorPtr = QPointer<NodeEditor>;
-using NodePtrList = std::vector<NodePtr>;
-using NodeEditorPtrList = std::vector<NodeEditorPtr>;
+using NodeEditorPtrList = QList<NodeEditorPtr>;
 
 class Node : public QObject
 {
@@ -27,16 +33,23 @@ public:
     explicit Node(QObject *parent = nullptr);
     virtual ~Node();
 
+    NodeEditorPtr getEditor(QWidget *parent);
+public:
     virtual void initWithJson(QJsonObject &object);
     virtual QJsonObject saveToJson();
-    virtual NodeEditorPtr getEditor();
+    virtual NodeEditorPtr createEditor(QWidget *parent);
+
+private:
+    NodeEditorPtr m_pEditorPtr;
 };
 
 class NodeEditor : public QWidget
 {
 public:
-    explicit NodeEditor(QWidget *parent = nullptr);
+    explicit NodeEditor(Node* node, QWidget *parent = nullptr);
     virtual ~NodeEditor();
+protected:
+    NodePtr m_oNodePtr;
 };
 
 class NodeFactory
@@ -50,7 +63,7 @@ public:
         {
             NodeFactory::instance().m_oFactoryRegistry.emplace(
                 key,
-                []() -> NodePtr
+                []() -> NodeSharedPtr
                 {
                     return std::make_shared<T>();
                 });
@@ -63,7 +76,7 @@ public:
         static NodeFactory instance;
         return instance;
     }
-    NodePtr createNode(QString info, QJsonObject &object);
+    NodeSharedPtr createNode(QString key, QJsonObject &object);
 
 private:
     // 类的构造函数注册表
