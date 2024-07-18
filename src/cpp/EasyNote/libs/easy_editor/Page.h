@@ -14,6 +14,9 @@ public:
 
     void initWithJson(QJsonObject &object) override;
     QJsonObject saveToJson() override;
+
+private:
+    NodePtrList m_oNodePtrList;
 };
 
 class PageEditor : public QFrame

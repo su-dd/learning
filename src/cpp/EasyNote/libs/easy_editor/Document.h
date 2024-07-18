@@ -10,26 +10,25 @@
 #include <QWidget>
 #include <QPointer>
 
-class Document : public QObject
+class Document : public Node
 {
     Q_OBJECT
 public:
     Document(QObject *parent = nullptr);
     ~Document();
-
     void initWithJson(QString info);
-    QString saveToJson();
-
+public:
+    void initWithJson(QJsonObject &object) override;
+    QJsonObject saveToJson() override;
+    NodeEditorPtr getEditor() override;
 private:
     NodePtr m_oNodePtr;
 };
 
-class DocumentEditor : public QWidget
+class DocumentEditor : public NodeEditor
 {
 public:
     DocumentEditor(QWidget *parent = nullptr);
-    void init(QString info);
-    QString save();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

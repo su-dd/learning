@@ -29,11 +29,7 @@ void test_document::cleanupTestCase() {}
 
 void test_document::test_case1()
 {
-    QString sDoc =
-        QStringLiteral("");
 
-    Document oDocument;
-    oDocument.init(sDoc);
 }
 
 QTEST_MAIN(test_document)

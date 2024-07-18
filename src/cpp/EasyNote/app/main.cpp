@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    RichTextFrame oFrame;
+    RichTextEditor oFrame;
     oFrame.show();
     return a.exec();
 }

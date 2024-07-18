@@ -1,4 +1,5 @@
 #include "Node.h"
+
 Node::Node(QObject *parent)
     : QObject(parent)
 {
@@ -9,6 +10,20 @@ Node::~Node()
 
 }
 
+void Node::initWithJson(QJsonObject &object)
+{
+
+}
+
+QJsonObject Node::saveToJson()
+{
+    return QJsonObject();
+}
+
+NodeEditorPtr Node::getEditor()
+{
+    return NodeEditorPtr();
+}
 
 
 NodeEditor::NodeEditor(QWidget *parent)

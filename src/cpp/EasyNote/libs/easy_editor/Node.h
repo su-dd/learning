@@ -10,12 +10,13 @@
 #include <string>
 #include <memory>
 #include <QJsonObject>
+#include <QPointer>
 
 class Node;
 class NodeEditor;
 
 using NodePtr = std::shared_ptr<Node>;
-using NodeEditorPtr = std::shared_ptr<NodeEditor>;
+using NodeEditorPtr = QPointer<NodeEditor>;
 using NodePtrList = std::vector<NodePtr>;
 using NodeEditorPtrList = std::vector<NodeEditorPtr>;
 
@@ -26,11 +27,9 @@ public:
     explicit Node(QObject *parent = nullptr);
     virtual ~Node();
 
-    virtual void initWithJson(QJsonObject &object) {}
-    virtual QJsonObject saveToJson() { return QJsonObject(); }
-
-protected:
-    NodePtrList m_oNodes;
+    virtual void initWithJson(QJsonObject &object);
+    virtual QJsonObject saveToJson();
+    virtual NodeEditorPtr getEditor();
 };
 
 class NodeEditor : public QWidget

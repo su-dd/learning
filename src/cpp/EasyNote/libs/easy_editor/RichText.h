@@ -33,12 +33,12 @@ private:
 };
 
 // 富文本组件
-class RichTextFrame : public NodeEditor
+class RichTextEditor : public NodeEditor
 {
     Q_OBJECT
 public:
-    RichTextFrame(QWidget *parent = nullptr);
-    ~RichTextFrame();
+    RichTextEditor(QWidget *parent = nullptr);
+    ~RichTextEditor();
 public slots:
     void toggleCursor();
 
