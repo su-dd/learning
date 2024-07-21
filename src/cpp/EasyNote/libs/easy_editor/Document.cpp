@@ -1,4 +1,5 @@
 #include "Document.h"
+#include <QBoxLayout>
 
 Document::Document(QObject *parent)
     : Node(parent)
@@ -24,18 +25,19 @@ void Document::initWithJson(QString info)
 
 void Document::initWithJson(QJsonObject &object)
 {
-    QJsonObject oDocument = object.value(c_sEditor_Key_document).toObject();
-    if (!oDocument.isEmpty())
+    if (!object.isEmpty())
     {
-        QString sType = oDocument.value(c_sEditor_Key_type).toString();
-        m_oNodeSharedPtr = NodeFactory::instance().createNode(sType, oDocument);
+        QJsonObject oDataObject = object.value(c_sKey_data).toObject();
+        QString sType = oDataObject.value(c_sKey_type).toString();
+        m_oChildNodePtrList.push_back(NodeFactory::instance().createNode(sType, oDataObject));
     }
 }
 
 QJsonObject Document::saveToJson()
 {
     QJsonObject oObject;
-    oObject.insert(c_sEditor_Key_document, m_oNodeSharedPtr->saveToJson());
+    oObject.insert(c_sKey_type, c_sNode_document);
+    oObject.insert(c_sKey_data, m_oChildNodePtrList[0]->saveToJson());
     return oObject;
 }
 
@@ -45,17 +47,30 @@ NodeEditorPtr Document::createEditor(QWidget *parent)
 }
 
 DocumentEditor::DocumentEditor(Node *node, QWidget *parent)
-    : NodeEditor(node, parent)
+    : NodeEditor(node, parent),
+      m_pTimer(std::make_unique<QTimer>()),
+      m_bShowCursor(false)
 {
-
+    // 设置焦点策略为Qt::StrongFocus，表示编辑器可以获得键盘焦点
+    setFocusPolicy(Qt::StrongFocus);
+    // 启用输入法，允许在编辑器中使用输入法输入
+    setAttribute(Qt::WA_InputMethodEnabled);
+    // 开启鼠标追踪，以便在鼠标移动时发出mouseMoveEvent信号
+    setMouseTracking(true);
+    connect(m_pTimer.get(), &QTimer::timeout, this, &DocumentEditor::toggleCursor);
+    m_pTimer->start(500); // 闪烁间隔为500毫秒
 }
 
-void DocumentEditor::mousePressEvent(QMouseEvent *event)
+DocumentEditor::~DocumentEditor()
 {
-
 }
 
-void DocumentEditor::mouseMoveEvent(QMouseEvent *event)
+void DocumentEditor::toggleCursor()
 {
+    m_bShowCursor = !m_bShowCursor;
+    update();
+}
 
+void DocumentEditor::updateUi()
+{
 }

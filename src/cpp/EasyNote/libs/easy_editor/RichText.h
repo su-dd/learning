@@ -7,10 +7,13 @@
 #include <QTextLayout>
 #include <QTimer>
 #include <memory>
+#include <QColor>
+#include <QUrl>
 
 class RichTextNode : public Node
 {
     Q_OBJECT
+
 public:
     explicit RichTextNode(QObject *parent = nullptr);
     virtual ~RichTextNode();
@@ -20,22 +23,32 @@ public:
     QJsonObject saveToJson() override;
     NodeEditorPtr createEditor(QWidget *parent) override;
 
+public:
+    QString &getText();
+    QFont &getFont();
+    QPoint &getOffset();
+
 private:
     QFont m_oDefaultfont;
     QString m_sText;
+    QPoint m_offset;
     QList<QTextLayout::FormatRange> m_oFormatRange;
     int m_nCursorIndex;
     bool m_nIsActivating;
 };
-REGISTER_NODE(RichTextNode, c_sEditor_node_type_richText.toStdString());
+REGISTER_NODE(RichTextNode, c_sNode_richText.toStdString());
+
+using RichTextNodePtr = QPointer<RichTextNode>;
 
 // 富文本组件
 class RichTextEditor : public NodeEditor
 {
     Q_OBJECT
 public:
-    RichTextEditor(Node* node, QWidget *parent = nullptr);
+    RichTextEditor(Node *node, QWidget *parent = nullptr);
     ~RichTextEditor();
+    void updateUi() override;
+
 public slots:
     void toggleCursor();
 
@@ -46,12 +59,10 @@ protected:
     int getTextIndexByPos(QPointF &pos);
 
 private:
-    QString m_text;
-    QFont m_font;
+    RichTextNodePtr m_pRichTextNodeptr;
     QPoint m_offset;
     std::unique_ptr<QTextLayout> m_pTextLayout;
     std::unique_ptr<TextSeletion> m_pTextSeletion;
-    std::unique_ptr<QTimer> m_pTimer;
     int m_nCursorIndex;
     bool m_bShowCursor;
 };

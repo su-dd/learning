@@ -4,17 +4,15 @@
 Page::Page(QObject *parent)
     : Node(parent)
 {
-
 }
 
 Page::~Page()
 {
-
 }
 
 void Page::initWithJson(QJsonObject &json)
 {
-    QJsonArray oArray = json.value(c_sEditor_Key_children).toArray();
+    QJsonArray oArray = json.value(c_sKey_children).toArray();
     if (oArray.isEmpty())
     {
         return;
@@ -23,21 +21,21 @@ void Page::initWithJson(QJsonObject &json)
     for (int index = 0; index < oArray.count(); index++)
     {
         QJsonObject oJsonObject = oArray.at(index).toObject();
-        QString sType = oJsonObject.value(c_sEditor_Key_type).toString();
-        m_oNodeSharedPtrList.push_back(NodeFactory::instance().createNode(sType, oJsonObject));
+        QString sType = oJsonObject.value(c_sKey_type).toString();
+        m_oChildNodePtrList.push_back(NodeFactory::instance().createNode(sType, oJsonObject));
     }
 }
 
 QJsonObject Page::saveToJson()
 {
     QJsonObject oObject;
-    oObject.insert(c_sEditor_Key_type, c_sEditor_node_type_page);
+    oObject.insert(c_sKey_type, c_sNode_page);
     QJsonArray oChildArray;
-    for (auto ptr : m_oNodeSharedPtrList)
+    for (auto ptr : m_oChildNodePtrList)
     {
         oChildArray.push_back(ptr->saveToJson());
     }
-    oObject.insert(c_sEditor_Key_children, oChildArray);
+    oObject.insert(c_sKey_children, oChildArray);
 
     return oObject;
 }
@@ -48,12 +46,10 @@ NodeEditorPtr Page::createEditor(QWidget *parent)
 }
 
 PageEditor::PageEditor(Node *node, QWidget *parent)
-    :NodeEditor(node, parent)
+    : NodeEditor(node, parent)
 {
-
 }
 
 PageEditor::~PageEditor()
 {
-
 }

@@ -11,15 +11,16 @@ ParagraphNode::~ParagraphNode()
 
 void ParagraphNode::initWithJson(QJsonObject &object)
 {
-    QJsonObject oDataObject = object.value(c_sEditor_Key_data).toObject();
-    m_oNodeSharedPtr = NodeFactory::instance().createNode(sType, oDataObject);
+    QJsonObject oDataObject = object.value(c_sKey_data).toObject();
+    QString sType = oDataObject.value(c_sKey_type).toString();
+    m_oChildNodePtrList.push_back(NodeFactory::instance().createNode(sType, oDataObject));
 }
 
 QJsonObject ParagraphNode::saveToJson()
 {
     QJsonObject oObject;
-    oObject.insert(c_sEditor_Key_type, c_sEditor_node_type_paragraph);
-    oObject.insert(c_sEditor_Key_data, m_oNodeSharedPtr->saveToJson());
+    oObject.insert(c_sKey_type, c_sNode_paragraph);
+    oObject.insert(c_sKey_data, m_oChildNodePtrList[0]->saveToJson());
     return oObject;
 }
 
@@ -31,5 +32,12 @@ NodeEditorPtr ParagraphNode::createEditor(QWidget *parent)
 ParagraphEditor::ParagraphEditor(Node *node, QWidget *parent)
     : NodeEditor(node, parent)
 {
+}
 
+ParagraphEditor::~ParagraphEditor()
+{
+}
+
+void ParagraphEditor::updateUi()
+{
 }
